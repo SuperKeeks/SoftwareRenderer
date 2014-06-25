@@ -14,18 +14,7 @@
 		218494F41958D21100E6FCF7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 218494F31958D21100E6FCF7 /* AppDelegate.m */; };
 		218494F71958D21100E6FCF7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 218494F51958D21100E6FCF7 /* MainMenu.xib */; };
 		218494F91958D21100E6FCF7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218494F81958D21100E6FCF7 /* Images.xcassets */; };
-		218495011958D21100E6FCF7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218494E01958D21100E6FCF7 /* Cocoa.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		218495021958D21100E6FCF7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 218494D51958D21100E6FCF7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 218494DC1958D21100E6FCF7;
-			remoteInfo = SoftwareRenderer;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		218494DD1958D21100E6FCF7 /* SoftwareRenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoftwareRenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,7 +31,6 @@
 		218494F31958D21100E6FCF7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		218494F61958D21100E6FCF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		218494F81958D21100E6FCF7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		218494FE1958D21100E6FCF7 /* SoftwareRendererTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoftwareRendererTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,14 +39,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				218494E11958D21100E6FCF7 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		218494FB1958D21100E6FCF7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				218495011958D21100E6FCF7 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +58,6 @@
 			isa = PBXGroup;
 			children = (
 				218494DD1958D21100E6FCF7 /* SoftwareRenderer.app */,
-				218494FE1958D21100E6FCF7 /* SoftwareRendererTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,24 +125,6 @@
 			productReference = 218494DD1958D21100E6FCF7 /* SoftwareRenderer.app */;
 			productType = "com.apple.product-type.application";
 		};
-		218494FD1958D21100E6FCF7 /* SoftwareRendererTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 218495111958D21100E6FCF7 /* Build configuration list for PBXNativeTarget "SoftwareRendererTests" */;
-			buildPhases = (
-				218494FA1958D21100E6FCF7 /* Sources */,
-				218494FB1958D21100E6FCF7 /* Frameworks */,
-				218494FC1958D21100E6FCF7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				218495031958D21100E6FCF7 /* PBXTargetDependency */,
-			);
-			name = SoftwareRendererTests;
-			productName = SoftwareRendererTests;
-			productReference = 218494FE1958D21100E6FCF7 /* SoftwareRendererTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -172,11 +133,6 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Enrique Alcor Martín";
-				TargetAttributes = {
-					218494FD1958D21100E6FCF7 = {
-						TestTargetID = 218494DC1958D21100E6FCF7;
-					};
-				};
 			};
 			buildConfigurationList = 218494D81958D21100E6FCF7 /* Build configuration list for PBXProject "SoftwareRenderer" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -192,7 +148,6 @@
 			projectRoot = "";
 			targets = (
 				218494DC1958D21100E6FCF7 /* SoftwareRenderer */,
-				218494FD1958D21100E6FCF7 /* SoftwareRendererTests */,
 			);
 		};
 /* End PBXProject section */
@@ -209,13 +164,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		218494FC1958D21100E6FCF7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -228,22 +176,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		218494FA1958D21100E6FCF7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		218495031958D21100E6FCF7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 218494DC1958D21100E6FCF7 /* SoftwareRenderer */;
-			targetProxy = 218495021958D21100E6FCF7 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		218494E91958D21100E6FCF7 /* InfoPlist.strings */ = {
@@ -369,46 +302,6 @@
 			};
 			name = Release;
 		};
-		218495121958D21100E6FCF7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SoftwareRenderer.app/Contents/MacOS/SoftwareRenderer";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SoftwareRenderer/SoftwareRenderer-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "SoftwareRendererTests/SoftwareRendererTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		218495131958D21100E6FCF7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/SoftwareRenderer.app/Contents/MacOS/SoftwareRenderer";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-					"$(inherited)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SoftwareRenderer/SoftwareRenderer-Prefix.pch";
-				INFOPLIST_FILE = "SoftwareRendererTests/SoftwareRendererTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -426,15 +319,6 @@
 			buildConfigurations = (
 				2184950F1958D21100E6FCF7 /* Debug */,
 				218495101958D21100E6FCF7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		218495111958D21100E6FCF7 /* Build configuration list for PBXNativeTarget "SoftwareRendererTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				218495121958D21100E6FCF7 /* Debug */,
-				218495131958D21100E6FCF7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
