@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		218494E11958D21100E6FCF7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218494E01958D21100E6FCF7 /* Cocoa.framework */; };
-		218494EB1958D21100E6FCF7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 218494E91958D21100E6FCF7 /* InfoPlist.strings */; };
-		218494ED1958D21100E6FCF7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 218494EC1958D21100E6FCF7 /* main.m */; };
-		218494F11958D21100E6FCF7 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 218494EF1958D21100E6FCF7 /* Credits.rtf */; };
-		218494F41958D21100E6FCF7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 218494F31958D21100E6FCF7 /* AppDelegate.m */; };
-		218494F71958D21100E6FCF7 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 218494F51958D21100E6FCF7 /* MainMenu.xib */; };
-		218494F91958D21100E6FCF7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 218494F81958D21100E6FCF7 /* Images.xcassets */; };
+		EBAA7622195C4A0500534532 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7620195C4A0500534532 /* main.cpp */; };
+		EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7623195C4A5700534532 /* stdafx.cpp */; };
+		EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7626195C4A7500534532 /* sys_osx.cpp */; };
+		EBAA762A195C4AC500534532 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAA7629195C4AC500534532 /* OpenGL.framework */; };
+		EBAA762C195C4ACA00534532 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAA762B195C4ACA00534532 /* OpenAL.framework */; };
+		EBAA762E195C4AD200534532 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAA762D195C4AD200534532 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,14 +23,15 @@
 		218494E41958D21100E6FCF7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		218494E51958D21100E6FCF7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		218494E81958D21100E6FCF7 /* SoftwareRenderer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SoftwareRenderer-Info.plist"; sourceTree = "<group>"; };
-		218494EA1958D21100E6FCF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		218494EC1958D21100E6FCF7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		218494EE1958D21100E6FCF7 /* SoftwareRenderer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SoftwareRenderer-Prefix.pch"; sourceTree = "<group>"; };
-		218494F01958D21100E6FCF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		218494F21958D21100E6FCF7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		218494F31958D21100E6FCF7 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		218494F61958D21100E6FCF7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		218494F81958D21100E6FCF7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		EBAA7620195C4A0500534532 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		EBAA7623195C4A5700534532 /* stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdafx.cpp; sourceTree = "<group>"; };
+		EBAA7624195C4A5700534532 /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
+		EBAA7626195C4A7500534532 /* sys_osx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sys_osx.cpp; sourceTree = "<group>"; };
+		EBAA7629195C4AC500534532 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		EBAA762B195C4ACA00534532 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		EBAA762D195C4AD200534532 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		EBAA7630195C4DDF00534532 /* base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = base.h; sourceTree = "<group>"; };
+		EBDD4D9A195AFB9800512D87 /* sys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sys.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,7 +39,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBAA762C195C4ACA00534532 /* OpenAL.framework in Frameworks */,
+				EBAA762A195C4AC500534532 /* OpenGL.framework in Frameworks */,
 				218494E11958D21100E6FCF7 /* Cocoa.framework in Frameworks */,
+				EBAA762E195C4AD200534532 /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +69,9 @@
 		218494DF1958D21100E6FCF7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EBAA762D195C4AD200534532 /* IOKit.framework */,
+				EBAA762B195C4ACA00534532 /* OpenAL.framework */,
+				EBAA7629195C4AC500534532 /* OpenGL.framework */,
 				218494E01958D21100E6FCF7 /* Cocoa.framework */,
 				218494E21958D21100E6FCF7 /* Other Frameworks */,
 			);
@@ -84,10 +91,8 @@
 		218494E61958D21100E6FCF7 /* SoftwareRenderer */ = {
 			isa = PBXGroup;
 			children = (
-				218494F21958D21100E6FCF7 /* AppDelegate.h */,
-				218494F31958D21100E6FCF7 /* AppDelegate.m */,
-				218494F51958D21100E6FCF7 /* MainMenu.xib */,
-				218494F81958D21100E6FCF7 /* Images.xcassets */,
+				EBAA7631195C4F2500534532 /* Base */,
+				EBAA7620195C4A0500534532 /* main.cpp */,
 				218494E71958D21100E6FCF7 /* Supporting Files */,
 			);
 			path = SoftwareRenderer;
@@ -97,12 +102,20 @@
 			isa = PBXGroup;
 			children = (
 				218494E81958D21100E6FCF7 /* SoftwareRenderer-Info.plist */,
-				218494E91958D21100E6FCF7 /* InfoPlist.strings */,
-				218494EC1958D21100E6FCF7 /* main.m */,
-				218494EE1958D21100E6FCF7 /* SoftwareRenderer-Prefix.pch */,
-				218494EF1958D21100E6FCF7 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EBAA7631195C4F2500534532 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				EBAA7630195C4DDF00534532 /* base.h */,
+				EBAA7624195C4A5700534532 /* stdafx.h */,
+				EBAA7623195C4A5700534532 /* stdafx.cpp */,
+				EBDD4D9A195AFB9800512D87 /* sys.h */,
+				EBAA7626195C4A7500534532 /* sys_osx.cpp */,
+			);
+			name = Base;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,10 +170,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				218494EB1958D21100E6FCF7 /* InfoPlist.strings in Resources */,
-				218494F91958D21100E6FCF7 /* Images.xcassets in Resources */,
-				218494F11958D21100E6FCF7 /* Credits.rtf in Resources */,
-				218494F71958D21100E6FCF7 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,39 +180,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				218494F41958D21100E6FCF7 /* AppDelegate.m in Sources */,
-				218494ED1958D21100E6FCF7 /* main.m in Sources */,
+				EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */,
+				EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */,
+				EBAA7622195C4A0500534532 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		218494E91958D21100E6FCF7 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				218494EA1958D21100E6FCF7 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		218494EF1958D21100E6FCF7 /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				218494F01958D21100E6FCF7 /* en */,
-			);
-			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
-		218494F51958D21100E6FCF7 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				218494F61958D21100E6FCF7 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2184950C1958D21100E6FCF7 /* Debug */ = {
@@ -282,8 +265,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SoftwareRenderer/SoftwareRenderer-Prefix.pch";
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				INFOPLIST_FILE = "SoftwareRenderer/SoftwareRenderer-Info.plist";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = "-lglfw";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -295,8 +285,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "SoftwareRenderer/SoftwareRenderer-Prefix.pch";
+				GCC_PREFIX_HEADER = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
 				INFOPLIST_FILE = "SoftwareRenderer/SoftwareRenderer-Info.plist";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_LDFLAGS = "-lglfw";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
