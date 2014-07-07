@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		218494E11958D21100E6FCF7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218494E01958D21100E6FCF7 /* Cocoa.framework */; };
+		218A900B19696F8F00F32339 /* SoftwareRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */; };
 		EBAA7622195C4A0500534532 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7620195C4A0500534532 /* main.cpp */; };
 		EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7623195C4A5700534532 /* stdafx.cpp */; };
 		EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7626195C4A7500534532 /* sys_osx.cpp */; };
@@ -23,6 +24,9 @@
 		218494E41958D21100E6FCF7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		218494E51958D21100E6FCF7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		218494E81958D21100E6FCF7 /* SoftwareRenderer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SoftwareRenderer-Info.plist"; sourceTree = "<group>"; };
+		218A900819696F6000F32339 /* SoftwareRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwareRenderer.h; sourceTree = "<group>"; };
+		218A900919696F6000F32339 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoftwareRenderer.cpp; sourceTree = "<group>"; };
 		EBAA7620195C4A0500534532 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EBAA7623195C4A5700534532 /* stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdafx.cpp; sourceTree = "<group>"; };
 		EBAA7624195C4A5700534532 /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
@@ -92,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				EBAA7631195C4F2500534532 /* Base */,
+				218A900719696F4700F32339 /* Renderer */,
 				EBAA7620195C4A0500534532 /* main.cpp */,
 				218494E71958D21100E6FCF7 /* Supporting Files */,
 			);
@@ -104,6 +109,16 @@
 				218494E81958D21100E6FCF7 /* SoftwareRenderer-Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		218A900719696F4700F32339 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				218A900819696F6000F32339 /* SoftwareRenderer.h */,
+				218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */,
+				218A900919696F6000F32339 /* Utils.h */,
+			);
+			name = Renderer;
 			sourceTree = "<group>";
 		};
 		EBAA7631195C4F2500534532 /* Base */ = {
@@ -183,6 +198,7 @@
 				EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */,
 				EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */,
 				EBAA7622195C4A0500534532 /* main.cpp in Sources */,
+				218A900B19696F8F00F32339 /* SoftwareRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
