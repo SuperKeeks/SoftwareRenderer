@@ -25,10 +25,13 @@ namespace omb
 	{
 		m_width = width;
 		m_height = height;
+		m_initialised = true;
 	}
 	
 	void SoftwareRenderer::clear(const Color& clearColor)
 	{
+		OMBAssert(m_initialised, "Not initialised!");
+	
 		for (int i = 0; i < m_width * m_height * 4; ++i)
 		{
 			if (i % 4 == 0)
