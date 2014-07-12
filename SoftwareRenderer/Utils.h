@@ -2,6 +2,50 @@
 
 namespace omb
 {
+	
+struct Vector2
+{
+	float m_x;
+	float m_y;
+	
+	Vector2(const float x, const float y)
+	: m_x(x)
+	, m_y(y)
+	{}
+	
+	Vector2 operator+(const Vector2& rhs) const
+	{
+		return Vector2(m_x + rhs.m_x, m_y + rhs.m_y);
+	}
+	
+	Vector2 operator-(const Vector2& rhs) const
+	{
+		return Vector2(m_x - rhs.m_x, m_y - rhs.m_y);
+	}
+	
+	Vector2 operator*(const Vector2& rhs) const
+	{
+		return Vector2(m_x * rhs.m_x, m_y * rhs.m_y);
+	}
+};
+	
+struct Vector3
+{
+	float m_x;
+	float m_y;
+	float m_z;
+	
+	Vector3(const float x, const float y, const float z)
+	: m_x(x)
+	, m_y(y)
+	, m_z(z)
+	{}
+	
+	operator Vector2() const
+	{
+		return Vector2(m_x, m_y);
+	}
+};
 
 struct Color
 {
@@ -15,6 +59,18 @@ struct Color
 	, m_g(g)
 	, m_b(b)
 	, m_a(a)
+	{
+	}
+};
+	
+struct Vertex
+{
+	Vector3 m_pos;
+	Color m_color;
+	
+	Vertex(const Vector3& pos, const Color& color)
+	: m_pos(pos)
+	, m_color(color)
 	{
 	}
 };

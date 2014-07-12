@@ -15,7 +15,7 @@
 
 // Portrait 2:3 aspect ratio
 #define SYS_WIDTH  512
-#define SYS_HEIGHT 768
+#define SYS_HEIGHT 512
 #define SYS_FULLSCREEN 0
 
 // Main game coordinate system: width is 1000, height is 1500. Origin bottom left
