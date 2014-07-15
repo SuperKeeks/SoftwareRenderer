@@ -158,7 +158,7 @@ namespace omb
 						const Color color(distToA/totalDist * a.m_color.r + distToB/totalDist * b.m_color.r + distToC/totalDist * c.m_color.r,
 										  distToA/totalDist * a.m_color.g + distToB/totalDist * b.m_color.g + distToC/totalDist * c.m_color.g,
 										  distToA/totalDist * a.m_color.b + distToB/totalDist * b.m_color.b + distToC/totalDist * c.m_color.b,
-										  255);						
+										  255);
 						setPixelColor(candidate, color);
 					}
 				}
