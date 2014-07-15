@@ -1,74 +1,162 @@
+#pragma once
+
+#include <cmath>
 #include <cstdio>
+#include <stdint.h>
 
 namespace omb
 {
 	
-struct Vector2
+struct Vector2i
 {
-	float m_x;
-	float m_y;
+	int x;
+	int y;
 	
-	Vector2(const float x, const float y)
-	: m_x(x)
-	, m_y(y)
+	Vector2i()
+	{
+	}
+	
+	Vector2i(const int x, const int y)
+	: x(x)
+	, y(y)
 	{}
 	
-	Vector2 operator+(const Vector2& rhs) const
+	double getLength() const
 	{
-		return Vector2(m_x + rhs.m_x, m_y + rhs.m_y);
+		return sqrt(x*x + y*y);
 	}
 	
-	Vector2 operator-(const Vector2& rhs) const
+	void normalize()
 	{
-		return Vector2(m_x - rhs.m_x, m_y - rhs.m_y);
+		const double length = getLength();
+		
+		x /= length;
+		y /= length;
 	}
 	
-	Vector2 operator*(const Vector2& rhs) const
+	Vector2i operator-(const Vector2i& rhs) const
 	{
-		return Vector2(m_x * rhs.m_x, m_y * rhs.m_y);
+		return Vector2i(x - rhs.x, y - rhs.y);
 	}
 };
 	
-struct Vector3
+struct Vector2f
 {
-	float m_x;
-	float m_y;
-	float m_z;
+	float x;
+	float y;
 	
-	Vector3(const float x, const float y, const float z)
-	: m_x(x)
-	, m_y(y)
-	, m_z(z)
+	Vector2f()
+	{
+	}
+	
+	Vector2f(const float x, const float y)
+	: x(x)
+	, y(y)
 	{}
 	
-	operator Vector2() const
+	double getLength() const
 	{
-		return Vector2(m_x, m_y);
+		return sqrt(x*x + y*y);
+	}
+	
+	void normalize()
+	{
+		const double length = getLength();
+		
+		x /= length;
+		y /= length;
+	}
+	
+	operator Vector2i() const
+	{
+		return Vector2i(x, y);
+	}
+	
+	Vector2f operator+(const Vector2f& rhs) const
+	{
+		return Vector2f(x + rhs.x, y + rhs.y);
+	}
+	
+	Vector2f operator-(const Vector2f& rhs) const
+	{
+		return Vector2f(x - rhs.x, y - rhs.y);
+	}
+	
+	Vector2f operator*(const Vector2f& rhs) const
+	{
+		return Vector2f(x * rhs.x, y * rhs.y);
+	}
+};
+	
+struct Vector3f
+{
+	float x;
+	float y;
+	float z;
+	
+	Vector3f(const float x, const float y, const float z)
+	: x(x)
+	, y(y)
+	, z(z)
+	{}
+	
+	double getLength() const
+	{
+		return sqrt(x*x + y*y + z*z);
+	}
+	
+	void normalize()
+	{
+		const double length = getLength();
+		
+		x /= length;
+		y /= length;
+		z /= length;
+	}
+	
+	operator Vector2f() const
+	{
+		return Vector2f(x, y);
+	}
+	
+	Vector3f operator+(const Vector3f& rhs) const
+	{
+		return Vector3f(x + rhs.x, y + rhs.y, z + rhs.z);
+	}
+	
+	Vector3f operator-(const Vector3f& rhs) const
+	{
+		return Vector3f(x - rhs.x, y - rhs.y, z - rhs.z);
+	}
+	
+	Vector3f operator*(const float rhs) const
+	{
+		return Vector3f(x * rhs, y * rhs, z * rhs);
 	}
 };
 
 struct Color
 {
-	uint8_t m_r;
-	uint8_t m_g;
-	uint8_t m_b;
-	uint8_t m_a;
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
 	
 	Color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
-	: m_r(r)
-	, m_g(g)
-	, m_b(b)
-	, m_a(a)
+	: r(r)
+	, g(g)
+	, b(b)
+	, a(a)
 	{
 	}
 };
 	
 struct Vertex
 {
-	Vector3 m_pos;
+	Vector3f m_pos;
 	Color m_color;
 	
-	Vertex(const Vector3& pos, const Color& color)
+	Vertex(const Vector3f& pos, const Color& color)
 	: m_pos(pos)
 	, m_color(color)
 	{

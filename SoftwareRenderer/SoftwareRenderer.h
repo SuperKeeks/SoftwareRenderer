@@ -1,3 +1,7 @@
+#pragma once
+
+#include "Utils.h"
+
 #include <stdint.h>
 #include <vector>
 
@@ -34,8 +38,12 @@ private:
 	
 	bool m_initialised = false;
 	uint8_t m_frameBuffer[kMaxWidth * kMaxHeight * kBytesPerPixel];
-	int m_width;
-	int m_height;
+	Vector2i m_size;
+	Vector2i m_halfSize;
+	
+	Vector2f ndcCoordToFBCoord(const Vector2f& ndcCoord);
+	void setPixelColor(const Vector2i& pos, const Color& color);
+	void drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color);
 };
 
 }

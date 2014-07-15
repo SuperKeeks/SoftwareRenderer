@@ -43,11 +43,12 @@ void Render()
 	renderer.clear(omb::Color(0, 0, 0, 255));
 	
 	std::vector<Vertex> vertices;
-	vertices.push_back(Vertex(Vector3(-0.5f, -0.5f, 0), Color(255, 0, 0, 255)));
-	vertices.push_back(Vertex(Vector3(0.5f, -0.5f, 0), Color(0, 255, 0, 255)));
-	vertices.push_back(Vertex(Vector3(0, 0.5f, 0), Color(0, 0, 255, 255)));
+	vertices.push_back(Vertex(Vector3f(-0.5f, -0.5f, 0), Color(255, 0, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, 0), Color(0, 255, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(0, 0.5f, 0), Color(0, 0, 255, 255)));
 	
-	renderer.drawPoints(vertices);
+	//renderer.drawPoints(vertices);
+	renderer.drawTriangleStrip(vertices);
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);
