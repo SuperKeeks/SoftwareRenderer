@@ -14,6 +14,54 @@
 
 namespace omb
 {
+	namespace
+	{
+		float sign(const Vector2f& p1, const Vector2f& p2, const Vector2f& p3)
+		{
+			return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+		}
+		
+		// From: http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
+		// For a more efficient implementation, check Andreas Brinck's answer
+		bool isPointInTriangle(const Vector2f& point, const Vector2f& trV1, const Vector2f& trV2, const Vector2f& trV3)
+		{
+			bool b1, b2, b3;
+			
+			b1 = sign(point, trV1, trV2) < 0.0f;
+			b2 = sign(point, trV2, trV3) < 0.0f;
+			b3 = sign(point, trV3, trV1) < 0.0f;
+			
+			return ((b1 == b2) && (b2 == b3));
+		}
+		
+		float getSmallestValue(const float values[], const int size)
+		{
+			float smallest = std::numeric_limits<float>::max();
+			for (int i = 0; i < size; ++i)
+			{
+				if (values[i] < smallest)
+				{
+					smallest = values[i];
+				}
+			}
+			
+			return smallest;
+		}
+		
+		float getBiggestValue(const float values[], const int size)
+		{
+			float biggest = std::numeric_limits<float>::min();
+			for (int i = 0; i < size; ++i)
+			{
+				if (values[i] > biggest)
+				{
+					biggest = values[i];
+				}
+			}
+			
+			return biggest;
+		}
+	}
 	
 	SoftwareRenderer::SoftwareRenderer()
 	{
@@ -86,9 +134,35 @@ namespace omb
 			const Vector2f bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
 			const Vector2f cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
 			
-			drawLine(aFB, bFB, a.m_color);
-			drawLine(bFB, cFB, b.m_color);
-			drawLine(cFB, aFB, c.m_color);
+			// In order to avoid checking all the points in the surface, we just check those inside the imaginary bounding box surrounding the triangle
+			const float xValues[] = {aFB.x, bFB.x, cFB.x};
+			const float yValues[] = {aFB.y, bFB.y, cFB.y};
+			
+			const float leftMostX = getSmallestValue(xValues, sizeofarray(xValues));
+			const float rightMostX = getBiggestValue(xValues, sizeofarray(xValues));
+			const float upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
+			const float lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
+			
+			for (int i = leftMostX; i <= rightMostX; ++i)
+			{
+				for (int j = upperMostY; j >= lowerMostY; --j)
+				{
+					Vector2f candidate(i, j);
+					if (isPointInTriangle(candidate, aFB, bFB, cFB))
+					{
+						const float distToA = (candidate - aFB).getLength();
+						const float distToB = (candidate - bFB).getLength();
+						const float distToC = (candidate - cFB).getLength();
+						const float totalDist = distToA + distToB + distToC;
+						
+						const Color color(distToA/totalDist * a.m_color.r + distToB/totalDist * b.m_color.r + distToC/totalDist * c.m_color.r,
+										  distToA/totalDist * a.m_color.g + distToB/totalDist * b.m_color.g + distToC/totalDist * c.m_color.g,
+										  distToA/totalDist * a.m_color.b + distToB/totalDist * b.m_color.b + distToC/totalDist * c.m_color.b,
+										  255);						
+						setPixelColor(candidate, color);
+					}
+				}
+			}
 		}
 	}
 	

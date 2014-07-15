@@ -7,6 +7,8 @@
 namespace omb
 {
 	
+#define sizeofarray(x) (sizeof(x) / sizeof(x[0]))
+	
 struct Vector2i
 {
 	int x;
