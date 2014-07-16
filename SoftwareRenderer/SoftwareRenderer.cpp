@@ -150,14 +150,15 @@ namespace omb
 					Vector2f candidate(i, j);
 					if (isPointInTriangle(candidate, aFB, bFB, cFB))
 					{
-						const float distToA = (candidate - aFB).getLength();
-						const float distToB = (candidate - bFB).getLength();
-						const float distToC = (candidate - cFB).getLength();
-						const float totalDist = distToA + distToB + distToC;
+						// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
+						const float totalArea = fabsf((aFB.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - aFB.y) + cFB.x*(aFB.y - bFB.y))/2);
+						const float pabArea = fabsf((candidate.x*(aFB.y - bFB.y) + aFB.x*(bFB.y - candidate.y) + bFB.x*(candidate.y - aFB.y))/2);
+						const float pacArea = fabsf((candidate.x*(aFB.y - cFB.y) + aFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - aFB.y))/2);
+						const float pbcArea = fabsf((candidate.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - bFB.y))/2);
 						
-						const Color color(distToA/totalDist * a.m_color.r + distToB/totalDist * b.m_color.r + distToC/totalDist * c.m_color.r,
-										  distToA/totalDist * a.m_color.g + distToB/totalDist * b.m_color.g + distToC/totalDist * c.m_color.g,
-										  distToA/totalDist * a.m_color.b + distToB/totalDist * b.m_color.b + distToC/totalDist * c.m_color.b,
+						const Color color(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r,
+										  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
+										  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
 										  255);
 						setPixelColor(candidate, color);
 					}
