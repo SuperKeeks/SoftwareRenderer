@@ -159,7 +159,7 @@ namespace omb
 						const Color color(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r,
 										  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
 										  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
-										  255);
+										  pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a);
 						setPixelColor(candidate, color);
 					}
 				}
