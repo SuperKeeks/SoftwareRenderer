@@ -103,7 +103,6 @@ int Main(void)
 		RunGame();
 		SYS_Show();
 		SYS_Pump();
-		SYS_Sleep(16);
 		g_time += 1.f/60.f;
 	}
 	EndGame();

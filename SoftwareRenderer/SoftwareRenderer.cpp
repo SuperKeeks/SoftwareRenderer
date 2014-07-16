@@ -198,6 +198,8 @@ namespace omb
 		m_frameBuffer[pos.y * (m_size.x * kBytesPerPixel) + (pos.x * kBytesPerPixel) + 3] = color.a;
 	}
 	
+	// This is not the function I'm using to draw lines, but can be interesting to implement at some point:
+	// http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
 	void SoftwareRenderer::drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color)
 	{
 		Vector2f aToB = bFB - aFB;
