@@ -27,6 +27,7 @@
 		218A900819696F6000F32339 /* SoftwareRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwareRenderer.h; sourceTree = "<group>"; };
 		218A900919696F6000F32339 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoftwareRenderer.cpp; sourceTree = "<group>"; };
+		EB64B6C01976ACFB00611ED0 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
 		EBAA7620195C4A0500534532 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		EBAA7623195C4A5700534532 /* stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdafx.cpp; sourceTree = "<group>"; };
 		EBAA7624195C4A5700534532 /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
@@ -114,6 +115,7 @@
 		218A900719696F4700F32339 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				EB64B6C01976ACFB00611ED0 /* Matrix.h */,
 				218A900819696F6000F32339 /* SoftwareRenderer.h */,
 				218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */,
 				218A900919696F6000F32339 /* Utils.h */,
