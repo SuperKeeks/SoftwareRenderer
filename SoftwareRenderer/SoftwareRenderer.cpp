@@ -16,14 +16,14 @@ namespace omb
 {
 	namespace
 	{
-		float sign(const Vector2f& p1, const Vector2f& p2, const Vector2f& p3)
+		float sign(const Vector2i& p1, const Vector2i& p2, const Vector2i& p3)
 		{
-			return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+			return (double)(p1.x - p3.x) * (p2.y - p3.y) - (double)(p2.x - p3.x) * (p1.y - p3.y);
 		}
 		
 		// From: http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-triangle
 		// For a more efficient implementation, check Andreas Brinck's answer
-		bool isPointInTriangle(const Vector2f& point, const Vector2f& trV1, const Vector2f& trV2, const Vector2f& trV3)
+		bool isPointInTriangle(const Vector2i& point, const Vector2i& trV1, const Vector2i& trV2, const Vector2i& trV3)
 		{
 			bool b1, b2, b3;
 			
@@ -34,9 +34,9 @@ namespace omb
 			return ((b1 == b2) && (b2 == b3));
 		}
 		
-		float getSmallestValue(const float values[], const int size)
+		float getSmallestValue(const int values[], const int size)
 		{
-			float smallest = std::numeric_limits<float>::max();
+			int smallest = std::numeric_limits<int>::max();
 			for (int i = 0; i < size; ++i)
 			{
 				if (values[i] < smallest)
@@ -48,9 +48,9 @@ namespace omb
 			return smallest;
 		}
 		
-		float getBiggestValue(const float values[], const int size)
+		float getBiggestValue(const int values[], const int size)
 		{
-			float biggest = std::numeric_limits<float>::min();
+			int biggest = std::numeric_limits<int>::min();
 			for (int i = 0; i < size; ++i)
 			{
 				if (values[i] > biggest)
@@ -78,7 +78,7 @@ namespace omb
 		
 		m_size.x = width;
 		m_size.y = height;
-		m_halfSize = Vector2i(m_size.x/2, m_size.y/2);
+		m_halfSize = Vector2i((m_size.x-1)/2, (m_size.y-1)/2);
 		m_initialised = true;
 	}
 	
@@ -127,27 +127,27 @@ namespace omb
 		for (int i = 0; i < vertices.size() - 2; ++i)
 		{
 			const Vertex& a = vertices[i + 0];
-			const Vertex& b = vertices[i + 1];
-			const Vertex& c = vertices[i + 2];
+			const Vertex& b = vertices[i + ((i % 2 == 0) ? 2 : 1)];
+			const Vertex& c = vertices[i + ((i % 2 == 0) ? 1 : 2)];
 			
-			const Vector2f aFB = ndcCoordToFBCoord((Vector2f)a.m_pos);
-			const Vector2f bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
-			const Vector2f cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
+			const Vector2i aFB = ndcCoordToFBCoord((Vector2f)a.m_pos);
+			const Vector2i bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
+			const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
 			
 			// In order to avoid checking all the points in the surface, we just check those inside the imaginary bounding box surrounding the triangle
-			const float xValues[] = {aFB.x, bFB.x, cFB.x};
-			const float yValues[] = {aFB.y, bFB.y, cFB.y};
+			const int xValues[] = {aFB.x, bFB.x, cFB.x};
+			const int yValues[] = {aFB.y, bFB.y, cFB.y};
 			
 			const float leftMostX = getSmallestValue(xValues, sizeofarray(xValues));
 			const float rightMostX = getBiggestValue(xValues, sizeofarray(xValues));
 			const float upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
 			const float lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
 			
-			for (int i = leftMostX; i <= rightMostX; ++i)
+			for (int j = leftMostX; j <= rightMostX; ++j)
 			{
-				for (int j = upperMostY; j >= lowerMostY; --j)
+				for (int k = upperMostY; k >= lowerMostY; --k)
 				{
-					Vector2f candidate(i, j);
+					Vector2f candidate(j, k);
 					if (isPointInTriangle(candidate, aFB, bFB, cFB))
 					{
 						// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
@@ -167,22 +167,11 @@ namespace omb
 		}
 	}
 	
-	Vector2f SoftwareRenderer::ndcCoordToFBCoord(const Vector2f& ndcCoord)
+	Vector2i SoftwareRenderer::ndcCoordToFBCoord(const Vector2f& ndcCoord)
 	{
-		Vector2f fbCoord;
-		fbCoord.x = m_halfSize.x + ndcCoord.x * m_halfSize.x;
-		fbCoord.y = m_halfSize.y + ndcCoord.y * m_halfSize.y;
-		
-		// Refactor (round)
-		if (fbCoord.x - (int)fbCoord.x >= 0.5f)
-		{
-			fbCoord.x = (int)fbCoord.x + 1;
-		}
-		
-		if (fbCoord.y - (int)fbCoord.y >= 0.5f)
-		{
-			fbCoord.y = (int)fbCoord.y + 1;
-		}
+		Vector2i fbCoord;
+		fbCoord.x = round(m_halfSize.x + ndcCoord.x * m_halfSize.x);
+		fbCoord.y = round(m_halfSize.y + ndcCoord.y * m_halfSize.y);
 		
 		return fbCoord;
 	}

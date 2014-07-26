@@ -41,7 +41,7 @@ private:
 	Vector2i m_size;
 	Vector2i m_halfSize;
 	
-	Vector2f ndcCoordToFBCoord(const Vector2f& ndcCoord);
+	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
 	void setPixelColor(const Vector2i& pos, const Color& color);
 	void drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color);
 };
