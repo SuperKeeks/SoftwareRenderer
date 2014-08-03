@@ -46,7 +46,7 @@ void Render()
 	++colorValue;
 	
 	std::vector<Vertex> vertices;
-	vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
+	/*vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, 0, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(-0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
@@ -64,6 +64,11 @@ void Render()
 	vertices.push_back(Vertex(Vector3f(0, 0, 0), Color(0, 0, colorValue, 255)));
 	vertices.push_back(Vertex(Vector3f(-0.5f, 1.0f, 0), Color(0, 0, colorValue, 255)));
 	vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(0, 0, colorValue, 255)));
+	renderer.drawTriangleStrip(vertices);*/
+	
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.3f, 0), Color(0, 255, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));
 	renderer.drawTriangleStrip(vertices);
 	
 	const vec2 p0 = vmake(0, 0);

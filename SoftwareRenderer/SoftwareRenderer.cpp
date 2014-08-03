@@ -34,9 +34,10 @@ namespace omb
 			return ((b1 == b2) && (b2 == b3));
 		}
 		
-		int getSmallestValue(const int values[], const int size)
+		template <typename T>
+		T getSmallestValue(const T values[], const size_t size)
 		{
-			int smallest = std::numeric_limits<int>::max();
+			T smallest = std::numeric_limits<T>::max();
 			for (int i = 0; i < size; ++i)
 			{
 				if (values[i] < smallest)
@@ -48,9 +49,10 @@ namespace omb
 			return smallest;
 		}
 		
-		int getBiggestValue(const int values[], const int size)
+		template <typename T>
+		T getBiggestValue(const T values[], const size_t size)
 		{
-			int biggest = std::numeric_limits<int>::min();
+			T biggest = std::numeric_limits<T>::min();
 			for (int i = 0; i < size; ++i)
 			{
 				if (values[i] > biggest)
@@ -236,7 +238,72 @@ namespace omb
 	
 	void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c)
 	{
-		drawSubTriangle(a, b, c);
+		if (a.m_pos.y == b.m_pos.y ||
+			a.m_pos.y == c.m_pos.y ||
+			b.m_pos.y == c.m_pos.y)
+		{
+			drawSubTriangle(a, b, c);
+		}
+		else
+		{
+			const Vertex* top;
+			const Vertex* middle;
+			const Vertex* bottom;
+			
+			const float yValues[] = {a.m_pos.y, b.m_pos.y, c.m_pos.y};
+			const float upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
+			const float lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
+			
+			if (a.m_pos.y == upperMostY)
+			{
+				top = &a;
+			}
+			else if (b.m_pos.y == upperMostY)
+			{
+				top = &b;
+			}
+			else
+			{
+				top = &c;
+			}
+			
+			if (a.m_pos.y == lowerMostY)
+			{
+				bottom = &a;
+			}
+			else if (b.m_pos.y == lowerMostY)
+			{
+				bottom = &b;
+			}
+			else
+			{
+				bottom = &c;
+			}
+			
+			if (a.m_pos.y != upperMostY && a.m_pos.y != lowerMostY)
+			{
+				middle = &a;
+			}
+			else if (b.m_pos.y != upperMostY && b.m_pos.y != lowerMostY)
+			{
+				middle = &b;
+			}
+			else
+			{
+				middle = &c;
+			}
+			
+			OMBAssert(top != middle && top != bottom && middle != bottom, "Assigned some vertex twice!");
+			OMBAssert(top->m_pos.y > middle->m_pos.y && top->m_pos.y > bottom->m_pos.y && middle->m_pos.y > bottom->m_pos.y, "Vertices are not sorted!");
+			
+			const float slopeTopToBottom = (bottom->m_pos.x - top->m_pos.x) / (bottom->m_pos.y - top->m_pos.y);
+			const float factorTopToBottom = - (slopeTopToBottom * top->m_pos.y) + top->m_pos.x;
+			const float auxPointX = (slopeTopToBottom * middle->m_pos.y) + factorTopToBottom;
+			const Vertex auxVertex(Vector3f(auxPointX, middle->m_pos.y, middle->m_pos.z), middle->m_color); // TODO: interpolate Z and color
+			
+			drawSubTriangle(*top, auxVertex, *middle);
+			drawSubTriangle(auxVertex, *bottom, *middle);
+		}
 	}
 	
 	void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c)
