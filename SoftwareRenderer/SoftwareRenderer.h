@@ -44,6 +44,9 @@ private:
 	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
 	void setPixelColor(const Vector2i& pos, const Color& color);
 	void drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color);
+	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);
+	void drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c);
+	void drawSubTriangle(const Vertex& a, const Vertex& b, const Vertex& c); // This is for being used with drawTriangleFaster
 };
 
 }

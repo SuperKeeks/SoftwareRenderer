@@ -66,15 +66,6 @@ void Render()
 	vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(0, 0, colorValue, 255)));
 	renderer.drawTriangleStrip(vertices);
 	
-//	vertices.clear();
-//	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, 0), Color(255, 0, 0, 255)));
-//	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
-//	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
-//	renderer.drawTriangleStrip(vertices);
-	
-	//renderer.drawPoints(vertices);
-	
-	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);
 	

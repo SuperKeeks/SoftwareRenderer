@@ -34,7 +34,7 @@ namespace omb
 			return ((b1 == b2) && (b2 == b3));
 		}
 		
-		float getSmallestValue(const int values[], const int size)
+		int getSmallestValue(const int values[], const int size)
 		{
 			int smallest = std::numeric_limits<int>::max();
 			for (int i = 0; i < size; ++i)
@@ -48,7 +48,7 @@ namespace omb
 			return smallest;
 		}
 		
-		float getBiggestValue(const int values[], const int size)
+		int getBiggestValue(const int values[], const int size)
 		{
 			int biggest = std::numeric_limits<int>::min();
 			for (int i = 0; i < size; ++i)
@@ -130,40 +130,8 @@ namespace omb
 			const Vertex& b = vertices[i + ((i % 2 == 0) ? 2 : 1)];
 			const Vertex& c = vertices[i + ((i % 2 == 0) ? 1 : 2)];
 			
-			const Vector2i aFB = ndcCoordToFBCoord((Vector2f)a.m_pos);
-			const Vector2i bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
-			const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
-			
-			// In order to avoid checking all the points in the surface, we just check those inside the imaginary bounding box surrounding the triangle
-			const int xValues[] = {aFB.x, bFB.x, cFB.x};
-			const int yValues[] = {aFB.y, bFB.y, cFB.y};
-			
-			const float leftMostX = getSmallestValue(xValues, sizeofarray(xValues));
-			const float rightMostX = getBiggestValue(xValues, sizeofarray(xValues));
-			const float upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
-			const float lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
-			
-			for (int j = leftMostX; j <= rightMostX; ++j)
-			{
-				for (int k = upperMostY; k >= lowerMostY; --k)
-				{
-					Vector2f candidate(j, k);
-					if (isPointInTriangle(candidate, aFB, bFB, cFB))
-					{
-						// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
-						const float totalArea = fabsf((aFB.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - aFB.y) + cFB.x*(aFB.y - bFB.y))/2);
-						const float pabArea = fabsf((candidate.x*(aFB.y - bFB.y) + aFB.x*(bFB.y - candidate.y) + bFB.x*(candidate.y - aFB.y))/2);
-						const float pacArea = fabsf((candidate.x*(aFB.y - cFB.y) + aFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - aFB.y))/2);
-						const float pbcArea = fabsf((candidate.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - bFB.y))/2);
-						
-						const Color color(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r,
-										  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
-										  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
-										  pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a);
-						setPixelColor(candidate, color);
-					}
-				}
-			}
+			//drawTriangleSlow(a, b, c);
+			drawTriangleFaster(a, b, c);
 		}
 	}
 	
@@ -202,6 +170,112 @@ namespace omb
 			fragment.y = aFB.y + round(aToB.y * i);
 			
 			setPixelColor(fragment, color);
+		}
+	}
+	
+	void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const Vertex& c)
+	{
+		OMBAssert(a.m_pos.y == b.m_pos.y ||
+				  a.m_pos.y == c.m_pos.y ||
+				  b.m_pos.y == c.m_pos.y, "Condition of this function: 2 vertices need to share same y");
+		
+		const Vector2i aFB = ndcCoordToFBCoord((Vector2f)a.m_pos);
+		const Vector2i bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
+		const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
+		
+		const int yValues[] = {aFB.y, bFB.y, cFB.y};
+		const int upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
+		const int lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
+		
+		const Vector2i* peak = nullptr;
+		const Vector2i* baseA = nullptr;
+		const Vector2i* baseB = nullptr;
+		
+		if (aFB.y == bFB.y)
+		{
+			peak = &cFB;
+			baseA = &aFB;
+			baseB = &bFB;
+		}
+		else if (aFB.y == cFB.y)
+		{
+			peak = &bFB;
+			baseA = &aFB;
+			baseB = &cFB;
+		}
+		else
+		{
+			peak = &aFB;
+			baseA = &bFB;
+			baseB = &cFB;
+		}
+		
+		if (baseB->x < baseA->x)
+		{
+			const Vector2i* temp = baseA;
+			baseA = baseB;
+			baseB = temp;
+		}
+		
+		const float slopePBA = (float)(baseA->x - peak->x) / (baseA->y - peak->y);
+		const float slopePBB = (float)(baseB->x - peak->x) / (baseB->y - peak->y);
+		const float factorPBA = - (slopePBA * peak->y) + peak->x;
+		const float factorPBB = - (slopePBB * peak->y) + peak->x;
+		
+		for (int y = upperMostY; y >= lowerMostY; --y)
+		{
+			const int minX = (slopePBA * y) + factorPBA;
+			const int maxX = (slopePBB * y) + factorPBB;
+			
+			for (int x = minX; x <= maxX; ++x)
+			{
+				setPixelColor(Vector2i(x, y), a.m_color);
+			}
+		}
+	}
+	
+	void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c)
+	{
+		drawSubTriangle(a, b, c);
+	}
+	
+	void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c)
+	{
+		const Vector2i aFB = ndcCoordToFBCoord((Vector2f)a.m_pos);
+		const Vector2i bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
+		const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
+		
+		// In order to avoid checking all the points in the surface, we just check those inside the imaginary bounding box surrounding the triangle
+		const int xValues[] = {aFB.x, bFB.x, cFB.x};
+		const int yValues[] = {aFB.y, bFB.y, cFB.y};
+		
+		const int leftMostX = getSmallestValue(xValues, sizeofarray(xValues));
+		const int rightMostX = getBiggestValue(xValues, sizeofarray(xValues));
+		const int upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
+		const int lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
+		
+		const float totalArea = fabsf((aFB.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - aFB.y) + cFB.x*(aFB.y - bFB.y))/2);
+		
+		for (int j = leftMostX; j <= rightMostX; ++j)
+		{
+			for (int k = upperMostY; k >= lowerMostY; --k)
+			{
+				Vector2f candidate(j, k);
+				if (isPointInTriangle(candidate, aFB, bFB, cFB))
+				{
+					// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
+					const float pabArea = fabsf((candidate.x*(aFB.y - bFB.y) + aFB.x*(bFB.y - candidate.y) + bFB.x*(candidate.y - aFB.y))/2);
+					const float pacArea = fabsf((candidate.x*(aFB.y - cFB.y) + aFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - aFB.y))/2);
+					const float pbcArea = fabsf((candidate.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - bFB.y))/2);
+					
+					const Color color(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r,
+									  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
+									  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
+									  pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a);
+					//const Color color(255, 0, 0, 255);
+					setPixelColor(candidate, color);
+				}
+			}
 		}
 	}
 
