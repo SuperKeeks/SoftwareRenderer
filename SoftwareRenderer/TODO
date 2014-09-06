@@ -1,4 +1,3 @@
--Fix color interpolation in drawTriangleFaster
 -3D! (process z value)
 -Z buffer
 -Discard triangle back faces

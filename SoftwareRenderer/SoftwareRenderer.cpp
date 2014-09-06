@@ -255,8 +255,8 @@ namespace omb
 		
 		for (int y = upperMostY; y >= lowerMostY; --y)
 		{
-			const int minX = (slopePBA * y) + factorPBA;
-			const int maxX = (slopePBB * y) + factorPBB;
+			const int minX = round((slopePBA * y) + factorPBA);
+			const int maxX = round((slopePBB * y) + factorPBB);
 			
 			for (int x = minX; x <= maxX; ++x)
 			{
