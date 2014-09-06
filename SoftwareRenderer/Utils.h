@@ -168,7 +168,7 @@ struct Vertex
 // Assert function inspired by http://cnicholson.net/2009/02/stupid-c-tricks-adventures-in-assert/
 #if !DEBUG
 
-#define OMBAssert(condition, errmsg, ...) do { (void)sizeof(x); } while(0)
+#define OMBAssert(condition, errmsg, ...) do { (void)sizeof(condition); } while(0)
 
 #else
 
