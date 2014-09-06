@@ -63,6 +63,22 @@ namespace omb
 			
 			return biggest;
 		}
+		
+		Color interpolateColor(const Vector2f& point, const Vertex& a, const Vertex& b, const Vertex& c)
+		{
+			// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
+			const float totalArea = fabsf((a.m_pos.x*(b.m_pos.y - c.m_pos.y) + b.m_pos.x*(c.m_pos.y - a.m_pos.y) + c.m_pos.x*(a.m_pos.y - b.m_pos.y))/2);
+			const float pabArea = fabsf((point.x*(a.m_pos.y - b.m_pos.y) + a.m_pos.x*(b.m_pos.y - point.y) + b.m_pos.x*(point.y - a.m_pos.y))/2);
+			const float pacArea = fabsf((point.x*(a.m_pos.y - c.m_pos.y) + a.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - a.m_pos.y))/2);
+			const float pbcArea = fabsf((point.x*(b.m_pos.y - c.m_pos.y) + b.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - b.m_pos.y))/2);
+			
+			const Color color(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r,
+							  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
+							  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
+							  pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a);
+			
+			return color;
+		}
 	}
 	
 	SoftwareRenderer::SoftwareRenderer()
@@ -233,6 +249,10 @@ namespace omb
 		const float factorPBA = - (slopePBA * peak->y) + peak->x;
 		const float factorPBB = - (slopePBB * peak->y) + peak->x;
 		
+		const Vertex aFBAsVertex(Vector3f(aFB.x, aFB.y, 0), a.m_color);
+		const Vertex bFBAsVertex(Vector3f(bFB.x, bFB.y, 0), b.m_color);
+		const Vertex cFBAsVertex(Vector3f(cFB.x, cFB.y, 0), c.m_color);
+		
 		for (int y = upperMostY; y >= lowerMostY; --y)
 		{
 			const int minX = (slopePBA * y) + factorPBA;
@@ -240,7 +260,9 @@ namespace omb
 			
 			for (int x = minX; x <= maxX; ++x)
 			{
-				setPixelColor(Vector2i(x, y), a.m_color);
+				const Vector2i position(x, y);
+				const Color color = interpolateColor(Vector2f(position.x, position.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
+				setPixelColor(position, color);
 			}
 		}
 	}
@@ -335,7 +357,8 @@ namespace omb
 			const float slopeTopToBottom = (bottom->m_pos.x - top->m_pos.x) / (bottom->m_pos.y - top->m_pos.y);
 			const float factorTopToBottom = - (slopeTopToBottom * top->m_pos.y) + top->m_pos.x;
 			const float auxPointX = (slopeTopToBottom * middle->m_pos.y) + factorTopToBottom;
-			const Vertex auxVertex(Vector3f(auxPointX, middle->m_pos.y, middle->m_pos.z), middle->m_color); // TODO: interpolate Z and color
+			const Color auxPointColor = interpolateColor(Vector2f(auxPointX, middle->m_pos.y), a, b, c);
+			const Vertex auxVertex(Vector3f(auxPointX, middle->m_pos.y, middle->m_pos.z), auxPointColor);
 			
 			drawSubTriangle(*top, auxVertex, *middle);
 			drawSubTriangle(auxVertex, *bottom, *middle);
@@ -364,24 +387,18 @@ namespace omb
 		const int upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
 		const int lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
 		
-		const float totalArea = fabsf((aFB.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - aFB.y) + cFB.x*(aFB.y - bFB.y))/2);
+		const Vertex aFBAsVertex(Vector3f(aFB.x, aFB.y, 0), a.m_color);
+		const Vertex bFBAsVertex(Vector3f(bFB.x, bFB.y, 0), b.m_color);
+		const Vertex cFBAsVertex(Vector3f(cFB.x, cFB.y, 0), c.m_color);
 		
 		for (int j = leftMostX; j <= rightMostX; ++j)
 		{
 			for (int k = upperMostY; k >= lowerMostY; --k)
 			{
-				Vector2f candidate(j, k);
+				Vector2i candidate(j, k);
 				if (isPointInTriangle(candidate, aFB, bFB, cFB))
 				{
-					// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
-					const float pabArea = fabsf((candidate.x*(aFB.y - bFB.y) + aFB.x*(bFB.y - candidate.y) + bFB.x*(candidate.y - aFB.y))/2);
-					const float pacArea = fabsf((candidate.x*(aFB.y - cFB.y) + aFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - aFB.y))/2);
-					const float pbcArea = fabsf((candidate.x*(bFB.y - cFB.y) + bFB.x*(cFB.y - candidate.y) + cFB.x*(candidate.y - bFB.y))/2);
-					
-					const Color color(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r,
-									  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
-									  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
-									  pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a);
+					const Color color = interpolateColor(Vector2f(candidate.x, candidate.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
 					setPixelColor(candidate, color);
 				}
 			}
