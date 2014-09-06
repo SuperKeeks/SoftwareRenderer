@@ -46,7 +46,12 @@ private:
 	void drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color);
 	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c);
-	void drawSubTriangle(const Vertex& a, const Vertex& b, const Vertex& c); // This is for being used with drawTriangleFaster
+	
+	// This is for being used with drawTriangleFaster
+	// The only condition is that 2 points have to share the same Y coordinate (flat top or flat bottom of the triangle)
+	// If a triangle doesn't meet this condition, it would need to be split in 2 smaller triangles that meet it and then
+	// this function can be called twice to draw them independently
+	void drawSubTriangle(const Vertex& a, const Vertex& b, const Vertex& c);
 };
 
 }

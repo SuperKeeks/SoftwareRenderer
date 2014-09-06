@@ -177,6 +177,15 @@ namespace omb
 	
 	void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const Vertex& c)
 	{
+		/*
+			This function does the following to paint a triangle:
+				-Finds which vertex (or vertices) is on the top
+				-Finds which vertex (or vertices) is on the bottom
+				-It draws the triangle line by line from top to bottom (Y coord)
+				     -For each line, the left and right limits are calculated
+					 -Then it fills the pixels that are between those limits
+		*/
+	
 		OMBAssert(a.m_pos.y == b.m_pos.y ||
 				  a.m_pos.y == c.m_pos.y ||
 				  b.m_pos.y == c.m_pos.y, "Condition of this function: 2 vertices need to share same y");
@@ -242,10 +251,37 @@ namespace omb
 			a.m_pos.y == c.m_pos.y ||
 			b.m_pos.y == c.m_pos.y)
 		{
+			// The triangle has a flat surface on top or bottom
+			/*                        ______
+						/\            \    /
+					   /  \     or     \  /
+					  /____\            \/
+			*/
+			
 			drawSubTriangle(a, b, c);
 		}
 		else
 		{
+			/* If it doesn't we'll need to split it into 2 smaller triangles.
+			   To do that, we take the vertex that is in the middle (in Y coordinate) and project it onto the opposite side
+			   (the line formed by the union of the other 2 vertices). We call the projection "auxPoint"
+			   Once that projected point is calculated, we can use it as a 4th vertex to draw 2 triangles with flat bottom and flat top respectively
+			   
+						  A                   A
+			             /|                  /|
+			            / |                 / |
+					   /  |		           /  |                   A          B ______ auxPoint
+			          /   |               /   |                  /|		       \    |
+				   B /    |      =>    B /____| auxPoint =>     / |      +      \   |
+					 \    |		         \    |		           /  |              \  |
+			          \   |               \   |               /   |               \ |
+			           \  |                \  |            B /____| auxPoint       \|
+			            \ |                 \ |                                     C
+			             \|                  \|
+			              C                   C
+			*/
+			
+			
 			const Vertex* top;
 			const Vertex* middle;
 			const Vertex* bottom;
@@ -308,6 +344,13 @@ namespace omb
 	
 	void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c)
 	{
+		/*
+			This was the first aproach to draw a triangle I could think of and is based in brute force.
+			First, it calculates the bounding box that contains the triangle.
+			Then, for each point inside the box, it checks wether or not is inside the triangle, and fills the pixel if it is.
+			This method is fine to draw a triangle, but it is extremely inefficient.
+		*/
+	
 		const Vector2i aFB = ndcCoordToFBCoord((Vector2f)a.m_pos);
 		const Vector2i bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
 		const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
@@ -339,7 +382,6 @@ namespace omb
 									  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
 									  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
 									  pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a);
-					//const Color color(255, 0, 0, 255);
 					setPixelColor(candidate, color);
 				}
 			}
