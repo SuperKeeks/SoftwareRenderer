@@ -8,7 +8,12 @@
 
 #include "SoftwareRenderer.h"
 
-#include "Utils.h"
+#include "Assert.h"
+#include "Color.h"
+#include "SizeOfArray.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vertex.h"
 
 #include <cmath>
 

@@ -1,7 +1,10 @@
 // Inspired by http://jonbho.net/2013/08/26/spacecrash-day-1-of-7-game-skeleton/
 
+#include "Assert.h"
+#include "Color.h"
 #include "SoftwareRenderer.h"
-#include "Utils.h"
+#include "Vector3.h"
+#include "Vertex.h"
 
 #include "stdafx.h"
 #include "base.h"
@@ -46,7 +49,7 @@ void Render()
 	++colorValue;
 	
 	std::vector<Vertex> vertices;
-	/*vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, 0, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(-0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
@@ -64,12 +67,12 @@ void Render()
 	vertices.push_back(Vertex(Vector3f(0, 0, 0), Color(0, 0, colorValue, 255)));
 	vertices.push_back(Vertex(Vector3f(-0.5f, 1.0f, 0), Color(0, 0, colorValue, 255)));
 	vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(0, 0, colorValue, 255)));
-	renderer.drawTriangleStrip(vertices);*/
+	renderer.drawTriangleStrip(vertices);
 	
-	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
+	/*vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, 0.3f, 0), Color(0, 255, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));
-	renderer.drawTriangleStrip(vertices);
+	renderer.drawTriangleStrip(vertices);*/
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);

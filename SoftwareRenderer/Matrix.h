@@ -9,7 +9,7 @@
 namespace omb
 {
 
-template <int rows, int cols>
+template <unsigned int rows, unsigned int cols>
 class Matrix
 {
 public:
@@ -25,14 +25,14 @@ private:
 
 typedef Matrix<3, 3> Matrix33;
 
-template <int rows, int cols>
+template <unsigned int rows, unsigned int cols>
 Matrix<rows, cols>::Matrix()
 : m_rows(rows)
 , m_cols(cols)
 {
 }
 
-template <int rows, int cols>
+template <unsigned int rows, unsigned int cols>
 const float Matrix<rows, cols>::operator()(size_t row, size_t col) const
 {
 	OMBAssert(row < m_rows, "Row index is out of bounds! (max = %lu, actual = %zu)", m_rows-1, row);
@@ -40,7 +40,7 @@ const float Matrix<rows, cols>::operator()(size_t row, size_t col) const
 	return m_matrix[row][col];
 }
 
-template <int rows, int cols>
+template <unsigned int rows, unsigned int cols>
 float& Matrix<rows, cols>::operator()(size_t row, size_t col)
 {
 	OMBAssert(row < m_rows, "Row index is out of bounds! (max = %lu, actual = %zu)", m_rows-1, row);
