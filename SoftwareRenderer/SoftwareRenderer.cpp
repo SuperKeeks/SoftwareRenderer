@@ -104,24 +104,13 @@ namespace omb
 	{
 		OMBAssert(m_initialised, "Uninitialized!");
 	
-		for (int i = 0; i < m_size.x * m_size.y * kBytesPerPixel; ++i)
+		for (int i = 0; i < m_size.x * m_size.y; ++i)
 		{
-			if (i % kBytesPerPixel == 0)
-			{
-				m_frameBuffer[i] = clearColor.r;
-			}
-			else if (i % kBytesPerPixel == 1)
-			{
-				m_frameBuffer[i] = clearColor.g;
-			}
-			else if (i % kBytesPerPixel == 2)
-			{
-				m_frameBuffer[i] = clearColor.b;
-			}
-			else if (i % kBytesPerPixel == 3)
-			{
-				m_frameBuffer[i] = clearColor.a;
-			}
+			const int baseIndex = i * kBytesPerPixel;
+			m_frameBuffer[baseIndex + 0] = clearColor.r;
+			m_frameBuffer[baseIndex + 1] = clearColor.g;
+			m_frameBuffer[baseIndex + 2] = clearColor.b;
+			m_frameBuffer[baseIndex + 3] = clearColor.a;
 		}
 	}
 	
