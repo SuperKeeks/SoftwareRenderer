@@ -238,10 +238,10 @@ namespace omb
 			baseB = temp;
 		}
 		
-		const float slopePBA = (float)(baseA->x - peak->x) / (baseA->y - peak->y);
-		const float slopePBB = (float)(baseB->x - peak->x) / (baseB->y - peak->y);
-		const float factorPBA = - (slopePBA * peak->y) + peak->x;
-		const float factorPBB = - (slopePBB * peak->y) + peak->x;
+		const double slopePBA = (float)(baseA->x - peak->x) / (baseA->y - peak->y);
+		const double slopePBB = (float)(baseB->x - peak->x) / (baseB->y - peak->y);
+		const double factorPBA = - (slopePBA * peak->y) + peak->x;
+		const double factorPBB = - (slopePBB * peak->y) + peak->x;
 		
 		const Vertex aFBAsVertex(Vector3f(aFB.x, aFB.y, 0), a.m_color);
 		const Vertex bFBAsVertex(Vector3f(bFB.x, bFB.y, 0), b.m_color);
@@ -249,8 +249,8 @@ namespace omb
 		
 		for (int y = upperMostY; y >= lowerMostY; --y)
 		{
-			const int minX = round((slopePBA * y) + factorPBA);
-			const int maxX = round((slopePBB * y) + factorPBB);
+			const int minX = ceil((slopePBA * y) + factorPBA);
+			const int maxX = floor((slopePBB * y) + factorPBB);
 			
 			for (int x = minX; x <= maxX; ++x)
 			{

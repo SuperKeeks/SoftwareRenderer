@@ -2,9 +2,10 @@
 
 #pragma once
 
-#include "Utils.h"
+#include "Assert.h"
 
 #include <cstdio>
+#include <cstring>
 
 namespace omb
 {
@@ -23,13 +24,12 @@ private:
 	size_t m_cols;
 };
 
-typedef Matrix<3, 3> Matrix33;
-
 template <unsigned int rows, unsigned int cols>
 Matrix<rows, cols>::Matrix()
 : m_rows(rows)
 , m_cols(cols)
 {
+	memset(m_matrix, 0, sizeof(float) * m_rows * m_cols);
 }
 
 template <unsigned int rows, unsigned int cols>
@@ -46,6 +46,14 @@ float& Matrix<rows, cols>::operator()(size_t row, size_t col)
 	OMBAssert(row < m_rows, "Row index is out of bounds! (max = %lu, actual = %zu)", m_rows-1, row);
 	OMBAssert(col < m_cols, "Column index is out of bounds! (max = %lu, actual = %zu)", m_cols-1, col);
 	return m_matrix[row][col];
+}
+
+typedef Matrix<3, 3> Matrix33;
+typedef Matrix<4, 4> Matrix44;
+	
+namespace MatrixUtils
+{
+	Matrix44 CreateScaleMatrix(const float scale);
 }
 
 }

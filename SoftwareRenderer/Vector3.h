@@ -9,6 +9,8 @@
 #ifndef SoftwareRenderer_Vector3_h
 #define SoftwareRenderer_Vector3_h
 
+#include "Matrix.h"
+
 namespace omb
 {
 	
@@ -29,6 +31,8 @@ struct Vector3f
 	Vector3f operator+(const Vector3f& rhs) const;
 	Vector3f operator-(const Vector3f& rhs) const;
 	Vector3f operator*(const float rhs) const;
+	Vector3f operator*(const Matrix44& rhs) const;
+	void operator*=(const Matrix44& rhs);
 };
 	
 }

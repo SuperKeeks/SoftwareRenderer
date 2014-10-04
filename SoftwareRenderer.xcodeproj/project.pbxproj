@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2183CFB819E07F2300B1F481 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2183CFB719E07F2300B1F481 /* Vector2.cpp */; };
 		2183CFBA19E0804D00B1F481 /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2183CFB919E0804D00B1F481 /* Vector3.cpp */; };
+		2183CFC019E083C600B1F481 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2183CFBF19E083C600B1F481 /* Matrix.cpp */; };
 		218494E11958D21100E6FCF7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218494E01958D21100E6FCF7 /* Cocoa.framework */; };
 		218A900B19696F8F00F32339 /* SoftwareRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */; };
 		EBAA7622195C4A0500534532 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7620195C4A0500534532 /* main.cpp */; };
@@ -29,6 +30,7 @@
 		2183CFBC19E080EA00B1F481 /* Color.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		2183CFBD19E0818700B1F481 /* SizeOfArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SizeOfArray.h; sourceTree = "<group>"; };
 		2183CFBE19E0819E00B1F481 /* Assert.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assert.h; sourceTree = "<group>"; };
+		2183CFBF19E083C600B1F481 /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
 		218494DD1958D21100E6FCF7 /* SoftwareRenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoftwareRenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		218494E01958D21100E6FCF7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		218494E31958D21100E6FCF7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -64,6 +66,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2183CFC119E0853100B1F481 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2183CFBE19E0819E00B1F481 /* Assert.h */,
+				2183CFBC19E080EA00B1F481 /* Color.h */,
+				EB64B6C01976ACFB00611ED0 /* Matrix.h */,
+				2183CFBF19E083C600B1F481 /* Matrix.cpp */,
+				2183CFBD19E0818700B1F481 /* SizeOfArray.h */,
+				2183CFB519E07EA500B1F481 /* Vector2.h */,
+				2183CFB719E07F2300B1F481 /* Vector2.cpp */,
+				2183CFB619E07EE500B1F481 /* Vector3.h */,
+				2183CFB919E0804D00B1F481 /* Vector3.cpp */,
+				2183CFBB19E080C700B1F481 /* Vertex.h */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		218494D41958D21100E6FCF7 = {
 			isa = PBXGroup;
 			children = (
@@ -126,17 +145,9 @@
 		218A900719696F4700F32339 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
-				2183CFBE19E0819E00B1F481 /* Assert.h */,
-				2183CFBC19E080EA00B1F481 /* Color.h */,
-				EB64B6C01976ACFB00611ED0 /* Matrix.h */,
+				2183CFC119E0853100B1F481 /* Utils */,
 				218A900819696F6000F32339 /* SoftwareRenderer.h */,
 				218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */,
-				2183CFB519E07EA500B1F481 /* Vector2.h */,
-				2183CFB719E07F2300B1F481 /* Vector2.cpp */,
-				2183CFB619E07EE500B1F481 /* Vector3.h */,
-				2183CFB919E0804D00B1F481 /* Vector3.cpp */,
-				2183CFBB19E080C700B1F481 /* Vertex.h */,
-				2183CFBD19E0818700B1F481 /* SizeOfArray.h */,
 			);
 			name = Renderer;
 			sourceTree = "<group>";
@@ -215,6 +226,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2183CFC019E083C600B1F481 /* Matrix.cpp in Sources */,
 				EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */,
 				EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */,
 				2183CFB819E07F2300B1F481 /* Vector2.cpp in Sources */,
