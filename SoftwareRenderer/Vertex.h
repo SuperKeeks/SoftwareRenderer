@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
 //
 
-#ifndef SoftwareRenderer_Vertex_h
-#define SoftwareRenderer_Vertex_h
+#pragma once
 
 #include "Color.h"
 #include "Vector3.h"
@@ -28,5 +27,3 @@ struct Vertex
 };
 	
 }
-
-#endif

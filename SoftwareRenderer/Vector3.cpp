@@ -8,12 +8,16 @@
 
 #include "Vector3.h"
 
+#include "Matrix44.h"
 #include "Vector2.h"
 
 #include <cmath>
 
 namespace omb
 {
+	
+Vector3f::Vector3f()
+{}
 
 Vector3f::Vector3f(const float x, const float y, const float z)
 : x(x)
@@ -53,20 +57,6 @@ Vector3f Vector3f::operator-(const Vector3f& rhs) const
 Vector3f Vector3f::operator*(const float rhs) const
 {
 	return Vector3f(x * rhs, y * rhs, z * rhs);
-}
-
-Vector3f Vector3f::operator*(const Matrix44& rhs) const
-{
-	return Vector3f(x * rhs(0, 0) + x * rhs(0, 1) + x * rhs(0, 2),
-					y * rhs(1, 0) + y * rhs(1, 1) + y * rhs(1, 2),
-					z * rhs(2, 0) + z * rhs(2, 1) + z * rhs(2, 2));
-}
-	
-void Vector3f::operator*=(const Matrix44& rhs)
-{
-	x = x * rhs(0, 0) + x * rhs(0, 1) + x * rhs(0, 2) + 1 * rhs(0, 3);
-	y = y * rhs(1, 0) + y * rhs(1, 1) + y * rhs(1, 2) + 1 * rhs(1, 3);
-	z = z * rhs(2, 0) + z * rhs(2, 1) + z * rhs(2, 2) + 1 * rhs(2, 3);
 }
 
 }

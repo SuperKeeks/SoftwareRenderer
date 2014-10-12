@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
 //
 
-#ifndef SoftwareRenderer_Color_h
-#define SoftwareRenderer_Color_h
+#pragma once
 
 #include <stdint.h>
 
@@ -31,5 +30,3 @@ struct Color
 };
 	
 }
-
-#endif

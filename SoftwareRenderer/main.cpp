@@ -2,7 +2,9 @@
 
 #include "Assert.h"
 #include "Color.h"
-#include "Matrix.h"
+#include "Matrix33.h"
+#include "MathUtils.h"
+#include "Quaternion.h"
 #include "SoftwareRenderer.h"
 #include "Vector3.h"
 #include "Vertex.h"
@@ -55,16 +57,26 @@ void Render()
 	{
 		scale = 0.01f;
 	}
-	const auto scaleMatrix = MatrixUtils::CreateScaleMatrix(scale);
+	
+	static float rotation = 0;
+	rotation += 0.5f;
+	if (rotation > 360)
+	{
+		rotation = 0;
+	}
+	printf("\nRotation: %.1f", rotation);
+	
+	//const Matrix33 transMatrix = MathUtils::CreateScaleMatrix(scale);
+	const Matrix33 transMatrix = Quaternion(Vector3f(0, 0, 1.0f), MathUtils::DegToRad(rotation));
 	
 	std::vector<Vertex> vertices;
-	vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
+	/*vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, 0, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(-0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
 	for (int i = 0; i < vertices.size(); ++i)
 	{
-		vertices[i].m_pos *= scaleMatrix;
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
 	}
 	renderer.drawTriangleStrip(vertices);
 	
@@ -75,7 +87,7 @@ void Render()
 	vertices.push_back(Vertex(Vector3f(0.5f, 1.0f, 0), Color(0, colorValue, 0, 255)));
 	for (int i = 0; i < vertices.size(); ++i)
 	{
-		vertices[i].m_pos *= scaleMatrix;
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
 	}
 	renderer.drawTriangleStrip(vertices);
 	
@@ -86,14 +98,27 @@ void Render()
 	vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(0, 0, colorValue, 255)));
 	for (int i = 0; i < vertices.size(); ++i)
 	{
-		vertices[i].m_pos *= scaleMatrix;
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
 	}
-	renderer.drawTriangleStrip(vertices);
+	renderer.drawTriangleStrip(vertices);*/
 	
 	/*vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, 0.3f, 0), Color(0, 255, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
 	renderer.drawTriangleStrip(vertices);*/
+	
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);

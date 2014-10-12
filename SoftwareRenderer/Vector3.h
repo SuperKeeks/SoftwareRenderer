@@ -6,14 +6,11 @@
 //  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
 //
 
-#ifndef SoftwareRenderer_Vector3_h
-#define SoftwareRenderer_Vector3_h
-
-#include "Matrix.h"
+#pragma once
 
 namespace omb
 {
-	
+
 struct Vector2f;
 
 struct Vector3f
@@ -22,6 +19,7 @@ struct Vector3f
 	float y;
 	float z;
 	
+	Vector3f();
 	Vector3f(const float x, const float y, const float z);
 	
 	double getLength() const;
@@ -31,10 +29,6 @@ struct Vector3f
 	Vector3f operator+(const Vector3f& rhs) const;
 	Vector3f operator-(const Vector3f& rhs) const;
 	Vector3f operator*(const float rhs) const;
-	Vector3f operator*(const Matrix44& rhs) const;
-	void operator*=(const Matrix44& rhs);
 };
 	
 }
-
-#endif

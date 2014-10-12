@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
 //
 
-#ifndef SoftwareRenderer_Vector2_h
-#define SoftwareRenderer_Vector2_h
+#pragma once
 
 namespace omb
 {
@@ -45,5 +44,3 @@ struct Vector2f
 };
 	
 }
-
-#endif

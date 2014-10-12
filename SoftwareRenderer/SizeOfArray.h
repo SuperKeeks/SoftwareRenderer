@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
 //
 
-#ifndef SoftwareRenderer_SizeOfArray_h
-#define SoftwareRenderer_SizeOfArray_h
+#pragma once
 
 namespace omb
 {
@@ -15,5 +14,3 @@ namespace omb
 #define sizeofarray(x) (sizeof(x) / sizeof(x[0]))
 
 }
-
-#endif

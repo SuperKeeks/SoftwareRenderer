@@ -42,8 +42,8 @@ namespace omb
 		template <typename T>
 		T getSmallestValue(const T values[], const size_t size)
 		{
-			T smallest = std::numeric_limits<T>::max();
-			for (int i = 0; i < size; ++i)
+			T smallest = values[0];
+			for (int i = 1; i < size; ++i)
 			{
 				if (values[i] < smallest)
 				{
@@ -57,8 +57,8 @@ namespace omb
 		template <typename T>
 		T getBiggestValue(const T values[], const size_t size)
 		{
-			T biggest = std::numeric_limits<T>::min();
-			for (int i = 0; i < size; ++i)
+			T biggest = values[0];
+			for (int i = 1; i < size; ++i)
 			{
 				if (values[i] > biggest)
 				{
@@ -346,7 +346,9 @@ namespace omb
 			}
 			
 			OMBAssert(top != middle && top != bottom && middle != bottom, "Assigned some vertex twice!");
-			OMBAssert(top->m_pos.y > middle->m_pos.y && top->m_pos.y > bottom->m_pos.y && middle->m_pos.y > bottom->m_pos.y, "Vertices are not sorted!");
+			OMBAssert(top->m_pos.y > middle->m_pos.y &&
+					  top->m_pos.y > bottom->m_pos.y &&
+					  middle->m_pos.y > bottom->m_pos.y, "Vertices are not sorted!");
 			
 			const float slopeTopToBottom = (bottom->m_pos.x - top->m_pos.x) / (bottom->m_pos.y - top->m_pos.y);
 			const float factorTopToBottom = - (slopeTopToBottom * top->m_pos.y) + top->m_pos.x;

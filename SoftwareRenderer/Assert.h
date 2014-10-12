@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
 //
 
-#ifndef SoftwareRenderer_Assert_h
-#define SoftwareRenderer_Assert_h
+#pragma once
 
 #include <cstdio>
 
@@ -29,7 +28,5 @@ do \
 		asm("int $3"); \
 	} \
 } while(0) \
-
-#endif
 
 #endif
