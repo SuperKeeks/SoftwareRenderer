@@ -238,10 +238,33 @@ namespace omb
 			baseB = temp;
 		}
 		
-		const double slopePBA = (float)(baseA->x - peak->x) / (baseA->y - peak->y);
-		const double slopePBB = (float)(baseB->x - peak->x) / (baseB->y - peak->y);
-		const double factorPBA = - (slopePBA * peak->y) + peak->x;
-		const double factorPBB = - (slopePBB * peak->y) + peak->x;
+		double slopePBA;
+		double slopePBB;
+		double factorPBA;
+		double factorPBB;
+		
+		// Vertical lines have no slope, so we do a trick to avoid a division by 0
+		if (baseA->y - peak->y != 0)
+		{
+			slopePBA = (float)(baseA->x - peak->x) / (baseA->y - peak->y);
+			factorPBA = - (slopePBA * peak->y) + peak->x;
+		}
+		else
+		{
+			slopePBA = 0;
+			factorPBA = std::min(baseA->x, peak->x);
+		}
+		
+		if (baseB->y - peak->y != 0)
+		{
+			slopePBB = (float)(baseB->x - peak->x) / (baseB->y - peak->y);
+			factorPBB = - (slopePBB * peak->y) + peak->x;
+		}
+		else
+		{
+			slopePBB = 0;
+			factorPBB = std::min(baseB->x, peak->x);
+		}
 		
 		const Vertex aFBAsVertex(Vector3f(aFB.x, aFB.y, 0), a.m_color);
 		const Vertex bFBAsVertex(Vector3f(bFB.x, bFB.y, 0), b.m_color);
