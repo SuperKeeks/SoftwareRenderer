@@ -142,6 +142,23 @@ namespace omb
 			const Vertex& b = vertices[i + ((i % 2 == 0) ? 2 : 1)];
 			const Vertex& c = vertices[i + ((i % 2 == 0) ? 1 : 2)];
 			
+			const float position = (b.m_pos.x - a.m_pos.x) * (c.m_pos.y - a.m_pos.y) - (b.m_pos.y - a.m_pos.y) * (c.m_pos.x - a.m_pos.x);
+	
+			// Omit back faces based on triangle winding
+// CW (Clock Wise) winding
+#if 1
+			if (position > 0)
+			{
+				continue;
+			}
+// CCW (Counter Clock Wise) winding
+#else
+			if (position < 0)
+			{
+				continue;
+			}
+#endif
+			
 			//drawTriangleSlow(a, b, c);
 			drawTriangleFaster(a, b, c);
 		}

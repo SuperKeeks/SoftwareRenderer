@@ -58,16 +58,20 @@ void Render()
 		scale = 0.01f;
 	}
 	
-	static float rotation = 0;
-	rotation += 0.5f;
-	if (rotation > 360)
+	static float rotationDeg = 0;
+	rotationDeg += 0.5f;
+	if (rotationDeg > 360)
 	{
-		rotation = 0;
+		rotationDeg = 0;
 	}
-	printf("\nRotation: %.1f", rotation);
+	printf("\nRotation: %.1f", rotationDeg);
 	
 	//const Matrix33 transMatrix = MathUtils::CreateScaleMatrix(scale);
-	const Matrix33 transMatrix = Quaternion(Vector3f(0, 0, 1.0f), MathUtils::DegToRad(rotation));
+	Quaternion rotationTrans(Vector3f(0, 1.0f, 0), MathUtils::DegToRad(rotationDeg));
+	//rotationTrans *= Quaternion(Vector3f(0, 1.0f, 0), -MathUtils::DegToRad(rotationDeg));
+	
+	const Matrix33 transMatrix = rotationTrans;
+	//const Matrix33 transMatrix = Quaternion(Vector3f(0, 0, 1.0f), MathUtils::DegToRad(rotationDeg));
 	
 	std::vector<Vertex> vertices;
 	/*vertices.push_back(Vertex(Vector3f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
@@ -111,9 +115,12 @@ void Render()
 	}
 	renderer.drawTriangleStrip(vertices);*/
 	
-	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
+	/*vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
+	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));*/
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
 	for (int i = 0; i < vertices.size(); ++i)
 	{
 		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
