@@ -60,15 +60,15 @@ void Render()
 	
 	static float rotationDeg = 0;
 	rotationDeg += 0.5f;
-	if (rotationDeg > 360)
+	/*if (rotationDeg > 360)
 	{
 		rotationDeg = 0;
-	}
+	}*/
 	printf("\nRotation: %.1f", rotationDeg);
 	
 	//const Matrix33 transMatrix = MathUtils::CreateScaleMatrix(scale);
 	Quaternion rotationTrans(Vector3f(0, 1.0f, 0), MathUtils::DegToRad(rotationDeg));
-	//rotationTrans *= Quaternion(Vector3f(0, 1.0f, 0), -MathUtils::DegToRad(rotationDeg));
+	rotationTrans *= Quaternion(Vector3f(1.0f, 0, 0), MathUtils::DegToRad(rotationDeg/2));
 	
 	const Matrix33 transMatrix = rotationTrans;
 	//const Matrix33 transMatrix = Quaternion(Vector3f(0, 0, 1.0f), MathUtils::DegToRad(rotationDeg));
@@ -115,12 +115,86 @@ void Render()
 	}
 	renderer.drawTriangleStrip(vertices);*/
 	
+	// Beautiful triangle
 	/*vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));*/
-	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
+	/*vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
 	vertices.push_back(Vertex(Vector3f(0, -0.5f, 0), Color(0, 0, 255, 255)));
 	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);*/
+	
+	// Cube
+	const Color red(255, 0, 0, 255);
+	const Color green(0, 255, 0, 255);
+	const Color blue(0, 0, 255, 255);
+	const Color yellow(255, 255, 0, 255);
+	const Color orange(255, 69, 0, 255);
+	const Color pink(255, 20, 147, 255);
+	// Front
+	vertices.push_back(Vertex(Vector3f(-0.5f, -0.5f, 0.5f), red));
+	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, 0.5f), red));
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0.5f), red));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0.5f), red));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	// Top
+	vertices.clear();
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0.5f), blue));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0.5f), blue));
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, -0.5f), blue));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, -0.5f), blue));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	// Back
+	vertices.clear();
+	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, -0.5f), green));
+	vertices.push_back(Vertex(Vector3f(-0.5f, -0.5f, -0.5f), green));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, -0.5f), green));
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, -0.5f), green));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	// Bottom
+	vertices.clear();
+	vertices.push_back(Vertex(Vector3f(-0.5f, -0.5f, -0.5f), yellow));
+	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, -0.5f), yellow));
+	vertices.push_back(Vertex(Vector3f(-0.5f, -0.5f, 0.5f), yellow));
+	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, 0.5f), yellow));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	// Left
+	vertices.clear();
+	vertices.push_back(Vertex(Vector3f(-0.5f, -0.5f, -0.5f), orange));
+	vertices.push_back(Vertex(Vector3f(-0.5f, -0.5f, 0.5f), orange));
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, -0.5f), orange));
+	vertices.push_back(Vertex(Vector3f(-0.5f, 0.5f, 0.5f), orange));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	// Right
+	vertices.clear();
+	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, 0.5f), pink));
+	vertices.push_back(Vertex(Vector3f(0.5f, -0.5f, -0.5f), pink));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, 0.5f), pink));
+	vertices.push_back(Vertex(Vector3f(0.5f, 0.5f, -0.5f), pink));
 	for (int i = 0; i < vertices.size(); ++i)
 	{
 		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
@@ -183,7 +257,7 @@ int Main(void)
 		SYS_Pump();
 		g_time += 1.f/60.f;
 		const clock_t endTime = clock();
-		printf("\nFPS: %.1f", 1/(((float)(endTime - startTime)) / CLOCKS_PER_SEC));
+		//printf("\nFPS: %.1f", 1/(((float)(endTime - startTime)) / CLOCKS_PER_SEC));
 	}
 	EndGame();
 	

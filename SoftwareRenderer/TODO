@@ -1,9 +1,9 @@
 -3D! (process z value)
 -Z buffer
--Discard triangle back faces
 -Discard triangles completely out of screen
 -Clip triangles that are partially out of screen
 -Logic for rotating and scaling objects (in main.cpp)
+-Triangle strip with indices
 -Draw complex objects by creating an exporter/importer
 -Support for textures
 -Wireframe/retro mode for fun

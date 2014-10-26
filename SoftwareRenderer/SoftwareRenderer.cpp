@@ -141,10 +141,10 @@ namespace omb
 			const Vertex& a = vertices[i + 0];
 			const Vertex& b = vertices[i + ((i % 2 == 0) ? 2 : 1)];
 			const Vertex& c = vertices[i + ((i % 2 == 0) ? 1 : 2)];
-			
-			const float position = (b.m_pos.x - a.m_pos.x) * (c.m_pos.y - a.m_pos.y) - (b.m_pos.y - a.m_pos.y) * (c.m_pos.x - a.m_pos.x);
 	
-			// Omit back faces based on triangle winding
+			// Omit back faces based on triangle winding based on the sign of the determinant of vectors
+			// For more info check: http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
+			const float position = (b.m_pos.x - a.m_pos.x) * (c.m_pos.y - a.m_pos.y) - (b.m_pos.y - a.m_pos.y) * (c.m_pos.x - a.m_pos.x);
 // CW (Clock Wise) winding
 #if 1
 			if (position > 0)
