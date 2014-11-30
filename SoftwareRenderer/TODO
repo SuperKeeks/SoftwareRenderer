@@ -1,5 +1,4 @@
--3D! (process z value)
--Z buffer
+-Add Z-buffer support in drawTriangleFaster() (currently only in drawTriangleSlow)
 -Discard triangles completely out of screen
 -Clip triangles that are partially out of screen
 -Logic for rotating and scaling objects (in main.cpp)

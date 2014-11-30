@@ -4,12 +4,12 @@
 
 #include "Assert.h"
 
-#include "Vector3.h"
-
 #include <cstring>
 
 namespace omb
 {
+	
+struct Vector3f;
 
 struct Matrix33
 {

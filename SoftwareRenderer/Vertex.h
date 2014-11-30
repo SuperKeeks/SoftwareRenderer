@@ -9,17 +9,17 @@
 #pragma once
 
 #include "Color.h"
-#include "Vector3.h"
+#include "Vector4.h"
 
 namespace omb
 {
 
 struct Vertex
 {
-	Vector3f m_pos;
+	Vector4f m_pos;
 	Color m_color;
 	
-	Vertex(const Vector3f& pos, const Color& color)
+	Vertex(const Vector4f& pos, const Color& color)
 	: m_pos(pos)
 	, m_color(color)
 	{

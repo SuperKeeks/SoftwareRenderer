@@ -38,11 +38,14 @@ private:
 	
 	bool m_initialised = false;
 	uint8_t m_frameBuffer[kMaxWidth * kMaxHeight * kBytesPerPixel];
+	float m_zBuffer[kMaxWidth * kMaxHeight];
 	Vector2i m_size;
 	Vector2i m_halfSize;
 	
 	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
 	void setPixelColor(const Vector2i& pos, const Color& color);
+	void setPixelZ(const Vector2i& pos, const float z);
+	float getPixelZ(const Vector2i& pos);
 	void drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color);
 	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c);

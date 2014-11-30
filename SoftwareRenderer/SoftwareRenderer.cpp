@@ -69,20 +69,36 @@ namespace omb
 			return biggest;
 		}
 		
-		Color interpolateColor(const Vector2f& point, const Vertex& a, const Vertex& b, const Vertex& c)
+		struct InterpolateResult
 		{
+			Color m_color;
+			float m_z;
+			
+			InterpolateResult()
+			: m_color(0, 0, 0, 0)
+			, m_z(0)
+			{
+			}
+		};
+		
+		InterpolateResult interpolate(const Vector2f& point, const Vertex& a, const Vertex& b, const Vertex& c)
+		{
+			InterpolateResult res;
+			
 			// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
 			const float totalArea = fabsf((a.m_pos.x*(b.m_pos.y - c.m_pos.y) + b.m_pos.x*(c.m_pos.y - a.m_pos.y) + c.m_pos.x*(a.m_pos.y - b.m_pos.y))/2);
 			const float pabArea = fabsf((point.x*(a.m_pos.y - b.m_pos.y) + a.m_pos.x*(b.m_pos.y - point.y) + b.m_pos.x*(point.y - a.m_pos.y))/2);
 			const float pacArea = fabsf((point.x*(a.m_pos.y - c.m_pos.y) + a.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - a.m_pos.y))/2);
 			const float pbcArea = fabsf((point.x*(b.m_pos.y - c.m_pos.y) + b.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - b.m_pos.y))/2);
 			
-			const Color color(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r,
-							  pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g,
-							  pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b,
-							  pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a);
+			res.m_color.r = pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r;
+			res.m_color.g = pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g;
+			res.m_color.b = pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b;
+			res.m_color.a = pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a;
 			
-			return color;
+			res.m_z = pbcArea/totalArea * a.m_pos.z + pacArea/totalArea * b.m_pos.z + pabArea/totalArea * c.m_pos.z;
+			
+			return res;
 		}
 	}
 	
@@ -116,6 +132,8 @@ namespace omb
 			m_frameBuffer[baseIndex + 1] = clearColor.g;
 			m_frameBuffer[baseIndex + 2] = clearColor.b;
 			m_frameBuffer[baseIndex + 3] = clearColor.a;
+			
+			m_zBuffer[i] = std::numeric_limits<float>::max();
 		}
 	}
 	
@@ -141,12 +159,19 @@ namespace omb
 			const Vertex& a = vertices[i + 0];
 			const Vertex& b = vertices[i + ((i % 2 == 0) ? 2 : 1)];
 			const Vertex& c = vertices[i + ((i % 2 == 0) ? 1 : 2)];
+			
+			Vertex divA = a;
+			Vertex divB = b;
+			Vertex divC = c;
+			divA.m_pos = divA.m_pos / divA.m_pos.w;
+			divB.m_pos = divB.m_pos / divB.m_pos.w;
+			divC.m_pos = divC.m_pos / divC.m_pos.w;
 	
 			// Omit back faces based on triangle winding based on the sign of the determinant of vectors
 			// For more info check: http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
-			const float position = (b.m_pos.x - a.m_pos.x) * (c.m_pos.y - a.m_pos.y) - (b.m_pos.y - a.m_pos.y) * (c.m_pos.x - a.m_pos.x);
+			const float position = (divB.m_pos.x - divA.m_pos.x) * (divC.m_pos.y - divA.m_pos.y) - (divB.m_pos.y - divA.m_pos.y) * (divC.m_pos.x - divA.m_pos.x);
 // CW (Clock Wise) winding
-#if 1
+#if 0
 			if (position > 0)
 			{
 				continue;
@@ -159,8 +184,8 @@ namespace omb
 			}
 #endif
 			
-			//drawTriangleSlow(a, b, c);
-			drawTriangleFaster(a, b, c);
+			//drawTriangleSlow(divA, divB, divC);
+			drawTriangleFaster(divA, divB, divC);
 		}
 	}
 	
@@ -182,6 +207,16 @@ namespace omb
 		m_frameBuffer[pos.y * (m_size.x * kBytesPerPixel) + (pos.x * kBytesPerPixel) + 1] = color.g;
 		m_frameBuffer[pos.y * (m_size.x * kBytesPerPixel) + (pos.x * kBytesPerPixel) + 2] = color.b;
 		m_frameBuffer[pos.y * (m_size.x * kBytesPerPixel) + (pos.x * kBytesPerPixel) + 3] = color.a;
+	}
+	
+	void SoftwareRenderer::setPixelZ(const Vector2i& pos, const float z)
+	{
+		m_zBuffer[pos.y * m_size.x + pos.x] = z;
+	}
+	
+	float SoftwareRenderer::getPixelZ(const Vector2i& pos)
+	{
+		return m_zBuffer[pos.y * m_size.x + pos.x];
 	}
 	
 	// This is not the function I'm using to draw lines, but can be interesting to implement at some point:
@@ -283,9 +318,9 @@ namespace omb
 			factorPBB = std::min(baseB->x, peak->x);
 		}
 		
-		const Vertex aFBAsVertex(Vector3f(aFB.x, aFB.y, 0), a.m_color);
-		const Vertex bFBAsVertex(Vector3f(bFB.x, bFB.y, 0), b.m_color);
-		const Vertex cFBAsVertex(Vector3f(cFB.x, cFB.y, 0), c.m_color);
+		const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, 0), a.m_color);
+		const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, 0), b.m_color);
+		const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, 0), c.m_color);
 		
 		for (int y = upperMostY; y >= lowerMostY; --y)
 		{
@@ -295,8 +330,8 @@ namespace omb
 			for (int x = minX; x <= maxX; ++x)
 			{
 				const Vector2i position(x, y);
-				const Color color = interpolateColor(Vector2f(position.x, position.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
-				setPixelColor(position, color);
+				const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
+				setPixelColor(position, intRes.m_color);
 			}
 		}
 	}
@@ -393,8 +428,8 @@ namespace omb
 			const float slopeTopToBottom = (bottom->m_pos.x - top->m_pos.x) / (bottom->m_pos.y - top->m_pos.y);
 			const float factorTopToBottom = - (slopeTopToBottom * top->m_pos.y) + top->m_pos.x;
 			const float auxPointX = (slopeTopToBottom * middle->m_pos.y) + factorTopToBottom;
-			const Color auxPointColor = interpolateColor(Vector2f(auxPointX, middle->m_pos.y), a, b, c);
-			const Vertex auxVertex(Vector3f(auxPointX, middle->m_pos.y, middle->m_pos.z), auxPointColor);
+			const Color auxPointColor = interpolate(Vector2f(auxPointX, middle->m_pos.y), a, b, c).m_color;
+			const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, middle->m_pos.z), auxPointColor);
 			
 			drawSubTriangle(*top, auxVertex, *middle);
 			drawSubTriangle(auxVertex, *bottom, *middle);
@@ -423,9 +458,9 @@ namespace omb
 		const int upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
 		const int lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
 		
-		const Vertex aFBAsVertex(Vector3f(aFB.x, aFB.y, 0), a.m_color);
-		const Vertex bFBAsVertex(Vector3f(bFB.x, bFB.y, 0), b.m_color);
-		const Vertex cFBAsVertex(Vector3f(cFB.x, cFB.y, 0), c.m_color);
+		const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color);
+		const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color);
+		const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color);
 		
 		for (int j = leftMostX; j <= rightMostX; ++j)
 		{
@@ -434,8 +469,12 @@ namespace omb
 				Vector2i candidate(j, k);
 				if (isPointInTriangle(candidate, aFB, bFB, cFB))
 				{
-					const Color color = interpolateColor(Vector2f(candidate.x, candidate.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
-					setPixelColor(candidate, color);
+					const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
+					if (intRes.m_z < getPixelZ(candidate))
+					{
+						setPixelColor(candidate, intRes.m_color);
+						setPixelZ(candidate, intRes.m_z);
+					}
 				}
 			}
 		}

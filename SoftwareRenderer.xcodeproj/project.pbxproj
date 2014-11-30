@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		216CABFE19E967D200AFF1DF /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 216CABFC19E967D200AFF1DF /* MathUtils.cpp */; };
+		217D0D5C1A2B9AA600620485 /* Vector4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 217D0D5A1A2B9AA600620485 /* Vector4.cpp */; };
 		2183CFB819E07F2300B1F481 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2183CFB719E07F2300B1F481 /* Vector2.cpp */; };
 		2183CFBA19E0804D00B1F481 /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2183CFB919E0804D00B1F481 /* Vector3.cpp */; };
 		218494E11958D21100E6FCF7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218494E01958D21100E6FCF7 /* Cocoa.framework */; };
@@ -28,6 +29,8 @@
 		216CABFC19E967D200AFF1DF /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		216CABFD19E967D200AFF1DF /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
 		217ADC0C19BB70510010BB44 /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; path = TODO; sourceTree = "<group>"; };
+		217D0D5A1A2B9AA600620485 /* Vector4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector4.cpp; sourceTree = "<group>"; };
+		217D0D5B1A2B9AA600620485 /* Vector4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector4.h; sourceTree = "<group>"; };
 		2183CFB519E07EA500B1F481 /* Vector2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector2.h; sourceTree = "<group>"; };
 		2183CFB619E07EE500B1F481 /* Vector3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector3.h; sourceTree = "<group>"; };
 		2183CFB719E07F2300B1F481 /* Vector2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2.cpp; sourceTree = "<group>"; };
@@ -93,6 +96,8 @@
 				2183CFB719E07F2300B1F481 /* Vector2.cpp */,
 				2183CFB619E07EE500B1F481 /* Vector3.h */,
 				2183CFB919E0804D00B1F481 /* Vector3.cpp */,
+				217D0D5B1A2B9AA600620485 /* Vector4.h */,
+				217D0D5A1A2B9AA600620485 /* Vector4.cpp */,
 				2183CFBB19E080C700B1F481 /* Vertex.h */,
 			);
 			name = Utils;
@@ -250,6 +255,7 @@
 				EBAA7622195C4A0500534532 /* main.cpp in Sources */,
 				21B5051519E95B4C0088E33B /* Quaternion.cpp in Sources */,
 				2183CFBA19E0804D00B1F481 /* Vector3.cpp in Sources */,
+				217D0D5C1A2B9AA600620485 /* Vector4.cpp in Sources */,
 				218A900B19696F8F00F32339 /* SoftwareRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

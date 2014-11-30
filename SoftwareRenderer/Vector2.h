@@ -41,6 +41,8 @@ struct Vector2f
 	Vector2f operator+(const Vector2f& rhs) const;
 	Vector2f operator-(const Vector2f& rhs) const;
 	Vector2f operator*(const Vector2f& rhs) const;
+	Vector2f operator*(const float rhs) const;
+	Vector2f operator/(const float rhs) const;
 };
 	
 }
