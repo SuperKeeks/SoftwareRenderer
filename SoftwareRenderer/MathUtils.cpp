@@ -8,7 +8,7 @@
 
 #include "MathUtils.h"
 
-#include "Matrix33.h"
+#include "Matrix44.h"
 
 #include <math.h>
 
@@ -20,13 +20,14 @@ float MathUtils::DegToRad(float deg)
 	return deg * M_PI / 180;
 }
 	
-Matrix33 MathUtils::CreateScaleMatrix(const float scale)
+Matrix44 MathUtils::CreateScaleMatrix(const float scale)
 {
-	Matrix33 scaleMatrix;
+	Matrix44 scaleMatrix;
 	
 	scaleMatrix(0, 0) = scale;
 	scaleMatrix(1, 1) = scale;
 	scaleMatrix(2, 2) = scale;
+	scaleMatrix(3, 3) = 1;
 	
 	return scaleMatrix;
 }

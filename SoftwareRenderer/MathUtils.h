@@ -11,13 +11,13 @@
 namespace omb
 {
 
-struct Matrix33;
+struct Matrix44;
 
 namespace MathUtils
 {
 	float DegToRad(float deg);
 	
-	Matrix33 CreateScaleMatrix(const float scale);
+	Matrix44 CreateScaleMatrix(const float scale);
 }
 	
 }
