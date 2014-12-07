@@ -221,134 +221,134 @@ void Render()
 	
 	
 	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, green));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, green));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, yellow));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, yellow));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	
-	
-	
-	
 	/*vertices.clear();
 	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
 	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, green));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, green));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, green));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, green));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, green));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, green));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, yellow));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, yellow));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);*/
+	
+	
+	
+	
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
 	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
 	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
@@ -386,7 +386,7 @@ void Render()
 	{
 		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
 	}
-	renderer.drawTriangles(vertices);*/
+	renderer.drawTriangles(vertices);
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);

@@ -359,9 +359,9 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		factorPBB = std::min(baseB->x, peak->x);
 	}
 	
-	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, 0), a.m_color);
-	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, 0), b.m_color);
-	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, 0), c.m_color);
+	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color);
+	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color);
+	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color);
 	
 	for (int y = upperMostY; y >= lowerMostY; --y)
 	{
@@ -372,7 +372,11 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		{
 			const Vector2i position(x, y);
 			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
-			setPixelColor(position, intRes.m_color);
+			if (intRes.m_z < getPixelZ(position))
+			{
+				setPixelColor(position, intRes.m_color);
+				setPixelZ(position, intRes.m_z);
+			}
 		}
 	}
 }
@@ -469,8 +473,8 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 		const float slopeTopToBottom = (bottom->m_pos.x - top->m_pos.x) / (bottom->m_pos.y - top->m_pos.y);
 		const float factorTopToBottom = - (slopeTopToBottom * top->m_pos.y) + top->m_pos.x;
 		const float auxPointX = (slopeTopToBottom * middle->m_pos.y) + factorTopToBottom;
-		const Color auxPointColor = interpolate(Vector2f(auxPointX, middle->m_pos.y), a, b, c).m_color;
-		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, middle->m_pos.z), auxPointColor);
+		const InterpolateResult intRes = interpolate(Vector2f(auxPointX, middle->m_pos.y), a, b, c);
+		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, intRes.m_z), intRes.m_color);
 		
 		drawSubTriangle(*top, auxVertex, *middle);
 		drawSubTriangle(auxVertex, *bottom, *middle);
