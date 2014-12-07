@@ -31,5 +31,21 @@ Matrix44 MathUtils::CreateScaleMatrix(const float scale)
 	
 	return scaleMatrix;
 }
+	
+Matrix44 MathUtils::CreateTranslationMatrix(const float transX, const float transY, const float transZ)
+{
+	Matrix44 translateMatrix;
+	
+	translateMatrix(0, 0) = 1;
+	translateMatrix(1, 1) = 1;
+	translateMatrix(2, 2) = 1;
+	translateMatrix(3, 3) = 1;
+	
+	translateMatrix(0, 3) = transX;
+	translateMatrix(1, 3) = transY;
+	translateMatrix(2, 3) = transZ;
+	
+	return translateMatrix;
+}
 
 }
