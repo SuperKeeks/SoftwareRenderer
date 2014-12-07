@@ -26,6 +26,9 @@ public:
 	// Draws a set of single pixel points
 	void drawPoints(const std::vector<Vertex>& vertices);
 	
+	// Draws triangle using the "classic" OpenGL GL_TRIANGLES primitive
+	void drawTriangles(const std::vector<Vertex>& vertices);
+	
 	// Draws triangle using the "classic" OpenGL GL_TRIANGLE_STRIP primitive
 	void drawTriangleStrip(const std::vector<Vertex>& vertices);
 	
