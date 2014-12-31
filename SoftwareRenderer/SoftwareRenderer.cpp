@@ -17,6 +17,8 @@
 
 #include <cmath>
 
+#define USE_SLOW_TRIANGLE_METHOD 1
+
 namespace omb
 {
 
@@ -33,9 +35,9 @@ namespace
 	{
 		bool b1, b2, b3;
 		
-		b1 = sign(point, trV1, trV2) < 0.0f;
-		b2 = sign(point, trV2, trV3) < 0.0f;
-		b3 = sign(point, trV3, trV1) < 0.0f;
+		b1 = sign(point, trV1, trV2) <= 0.0f;
+		b2 = sign(point, trV2, trV3) <= 0.0f;
+		b3 = sign(point, trV3, trV1) <= 0.0f;
 		
 		return ((b1 == b2) && (b2 == b3));
 	}
@@ -198,8 +200,11 @@ void SoftwareRenderer::drawTriangles(const std::vector<Vertex>& vertices)
 			divB.m_pos = divB.m_pos / divB.m_pos.w;
 			divC.m_pos = divC.m_pos / divC.m_pos.w;
 			
-			//drawTriangleSlow(divA, divB, divC);
+#if USE_SLOW_TRIANGLE_METHOD
+			drawTriangleSlow(divA, divB, divC);
+#else
 			drawTriangleFaster(divA, divB, divC);
+#endif
 		}
 	}
 }
@@ -224,8 +229,11 @@ void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices)
 			divB.m_pos = divB.m_pos / divB.m_pos.w;
 			divC.m_pos = divC.m_pos / divC.m_pos.w;
 			
-			//drawTriangleSlow(divA, divB, divC);
+#if USE_SLOW_TRIANGLE_METHOD
+			drawTriangleSlow(divA, divB, divC);
+#else
 			drawTriangleFaster(divA, divB, divC);
+#endif
 		}
 	}
 }
