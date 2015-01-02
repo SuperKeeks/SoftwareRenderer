@@ -15,6 +15,9 @@
 #include "Vector3.h"
 #include "Vertex.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "externals/stb_image.h"
+
 #include <cmath>
 
 #define USE_SLOW_TRIANGLE_METHOD 1
@@ -72,9 +75,19 @@ namespace
 		return biggest;
 	}
 	
+	int clamp(float value, int min, int max)
+	{
+		int result = value;
+		result = std::max(result, min);
+		result = std::min(result, max);
+		
+		return result;
+	}
+	
 	struct InterpolateResult
 	{
 		Color m_color;
+		Vector2f m_texCoord;
 		float m_z;
 		
 		InterpolateResult()
@@ -84,7 +97,7 @@ namespace
 		}
 	};
 	
-	InterpolateResult interpolate(const Vector2f& point, const Vertex& a, const Vertex& b, const Vertex& c)
+	InterpolateResult interpolate(const Vector2f& point, const Vertex& a, const Vertex& b, const Vertex& c, const TextureInfo& texInfo)
 	{
 		InterpolateResult res;
 		
@@ -94,10 +107,27 @@ namespace
 		const float pacArea = fabsf((point.x*(a.m_pos.y - c.m_pos.y) + a.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - a.m_pos.y))/2);
 		const float pbcArea = fabsf((point.x*(b.m_pos.y - c.m_pos.y) + b.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - b.m_pos.y))/2);
 		
-		res.m_color.r = pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r;
-		res.m_color.g = pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g;
-		res.m_color.b = pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b;
-		res.m_color.a = pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a;
+		if (texInfo.m_data)
+		{
+			res.m_texCoord.x = pbcArea/totalArea * a.m_texCoord.x + pacArea/totalArea * b.m_texCoord.x + pabArea/totalArea * c.m_texCoord.x;
+			res.m_texCoord.y = pbcArea/totalArea * a.m_texCoord.y + pacArea/totalArea * b.m_texCoord.y + pabArea/totalArea * c.m_texCoord.y;
+			
+			const int xCoordAbs = clamp((texInfo.m_size.x - 1) * res.m_texCoord.x, 0, texInfo.m_size.x - 1);
+			const int yCoordAbs = clamp((texInfo.m_size.y - 1) * res.m_texCoord.y, 0, texInfo.m_size.y - 1);
+			
+			const int baseIndex = yCoordAbs * texInfo.m_size.x * texInfo.m_bytesPerPixel + xCoordAbs * texInfo.m_bytesPerPixel;
+			res.m_color.r = texInfo.m_data[baseIndex + 0];
+			res.m_color.g = texInfo.m_data[baseIndex + 1];
+			res.m_color.b = texInfo.m_data[baseIndex + 2];
+			res.m_color.a = texInfo.m_data[baseIndex + 3];
+		}
+		else
+		{
+			res.m_color.r = pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r;
+			res.m_color.g = pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g;
+			res.m_color.b = pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b;
+			res.m_color.a = pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a;
+		}
 		
 		res.m_z = pbcArea/totalArea * a.m_pos.z + pacArea/totalArea * b.m_pos.z + pabArea/totalArea * c.m_pos.z;
 		
@@ -147,6 +177,7 @@ void SoftwareRenderer::init(const int width, const int height)
 	m_size.x = width;
 	m_size.y = height;
 	m_halfSize = Vector2i((m_size.x-1)/2, (m_size.y-1)/2);
+	
 	m_initialised = true;
 }
 
@@ -207,6 +238,67 @@ void SoftwareRenderer::drawTriangles(const std::vector<Vertex>& vertices)
 #endif
 		}
 	}
+}
+	
+int16_t SoftwareRenderer::loadTexture(const char* fileName)
+{
+	int16_t textureId = SoftwareRendererConsts::kInvalidTextureId;
+	
+	for (int i = 0; i < kMaxTextures; ++i)
+	{
+		if (!m_textures[i].m_data)
+		{
+			int defaultComp;
+			TextureInfo& textureInfo = m_textures[i];
+			textureId = i;
+			textureInfo.m_data = stbi_load(fileName, &textureInfo.m_size.x, &textureInfo.m_size.y, &defaultComp, kBytesPerPixel);
+			textureInfo.m_bytesPerPixel = kBytesPerPixel;
+			
+			OMBAssert(textureInfo.m_data, "Can't load texture (%s)", stbi_failure_reason());
+			
+			break;
+		}
+	}
+	
+	OMBAssert(textureId != SoftwareRendererConsts::kInvalidTextureId, "Can't load texture (too many textures loaded)");
+	
+	return textureId;
+}
+
+void SoftwareRenderer::unloadTexture(int16_t textureId)
+{
+	OMBAssert(textureId >= 0 && textureId < kMaxTextures, "Invalid textureId!");
+	
+	TextureInfo& textureInfo = m_textures[textureId];
+	stbi_image_free(textureInfo.m_data);
+	textureInfo.m_data = nullptr;
+	textureInfo.m_bytesPerPixel = 0;
+	textureInfo.m_size.x = 0;
+	textureInfo.m_size.y = 0;
+}
+
+void SoftwareRenderer::bindTexture(int16_t textureId)
+{
+	if (textureId >= 0 && textureId < kMaxTextures)
+	{
+		if (m_textures[textureId].m_data)
+		{
+			m_bindedTextureId = textureId;
+		}
+		else
+		{
+			OMBAssert(false, "Texture has no data!");
+		}
+	}
+	else
+	{
+		OMBAssert(false, "Invalid textureId!");
+	}
+}
+
+void SoftwareRenderer::unbindTexture()
+{
+	m_bindedTextureId = SoftwareRendererConsts::kInvalidTextureId;
 }
 
 void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices)
@@ -367,9 +459,9 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		factorPBB = std::min(baseB->x, peak->x);
 	}
 	
-	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color);
-	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color);
-	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color);
+	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color, a.m_texCoord);
+	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color, b.m_texCoord);
+	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color, c.m_texCoord);
 	
 	for (int y = upperMostY; y >= lowerMostY; --y)
 	{
@@ -379,7 +471,13 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		for (int x = minX; x <= maxX; ++x)
 		{
 			const Vector2i position(x, y);
-			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
+			TextureInfo texInfo;
+			if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
+			{
+				texInfo = m_textures[m_bindedTextureId];
+			}
+			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aFBAsVertex, bFBAsVertex, cFBAsVertex, texInfo);
+			
 			if (intRes.m_z < getPixelZ(position))
 			{
 				setPixelColor(position, intRes.m_color);
@@ -481,8 +579,14 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 		const float slopeTopToBottom = (bottom->m_pos.x - top->m_pos.x) / (bottom->m_pos.y - top->m_pos.y);
 		const float factorTopToBottom = - (slopeTopToBottom * top->m_pos.y) + top->m_pos.x;
 		const float auxPointX = (slopeTopToBottom * middle->m_pos.y) + factorTopToBottom;
-		const InterpolateResult intRes = interpolate(Vector2f(auxPointX, middle->m_pos.y), a, b, c);
-		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, intRes.m_z), intRes.m_color);
+		
+		TextureInfo texInfo;
+		if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
+		{
+			texInfo = m_textures[m_bindedTextureId];
+		}
+		const InterpolateResult intRes = interpolate(Vector2f(auxPointX, middle->m_pos.y), a, b, c, texInfo);
+		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, intRes.m_z), intRes.m_color, intRes.m_texCoord);
 		
 		drawSubTriangle(*top, auxVertex, *middle);
 		drawSubTriangle(auxVertex, *bottom, *middle);
@@ -494,7 +598,7 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 	/*
 		This was the first aproach to draw a triangle I could think of and is based in brute force.
 		First, it calculates the bounding box that contains the triangle.
-		Then, for each point inside the box, it checks wether or not is inside the triangle, and fills the pixel if it is.
+		Then, for each point inside the box, it checks whether or not is inside the triangle, and fills the pixel if it is.
 		This method is fine to draw a triangle, but it is extremely inefficient.
 	*/
 
@@ -511,9 +615,15 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 	const int upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
 	const int lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
 	
-	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color);
-	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color);
-	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color);
+	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color, a.m_texCoord);
+	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color, b.m_texCoord);
+	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color, c.m_texCoord);
+	
+	TextureInfo texInfo;
+	if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
+	{
+		texInfo = m_textures[m_bindedTextureId];
+	}
 	
 	for (int j = leftMostX; j <= rightMostX; ++j)
 	{
@@ -522,7 +632,7 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 			Vector2i candidate(j, k);
 			if (isPointInTriangle(candidate, aFB, bFB, cFB))
 			{
-				const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aFBAsVertex, bFBAsVertex, cFBAsVertex);
+				const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aFBAsVertex, bFBAsVertex, cFBAsVertex, texInfo);
 				if (intRes.m_z < getPixelZ(candidate))
 				{
 					setPixelColor(candidate, intRes.m_color);

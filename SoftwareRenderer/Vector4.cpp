@@ -17,6 +17,10 @@ namespace omb
 {
 	
 Vector4f::Vector4f()
+: x(0)
+, y(0)
+, z(0)
+, w(0)
 {}
 
 Vector4f::Vector4f(const float x, const float y, const float z, const float w)

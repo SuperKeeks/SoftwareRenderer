@@ -20,6 +20,14 @@ struct Color
 	uint8_t b;
 	uint8_t a;
 	
+	Color()
+	: r(0)
+	, g(0)
+	, b(0)
+	, a(0)
+	{
+	}
+	
 	Color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a)
 	: r(r)
 	, g(g)

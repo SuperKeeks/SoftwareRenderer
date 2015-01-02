@@ -11,6 +11,18 @@ namespace omb
 // Forward declarations
 struct Color;
 struct Vertex;
+	
+struct TextureInfo
+{
+	unsigned char* m_data = nullptr;
+	Vector2i m_size;
+	uint8_t m_bytesPerPixel = 0;
+};
+	
+namespace SoftwareRendererConsts
+{
+	static const int16_t kInvalidTextureId = -1;
+}
 
 class SoftwareRenderer
 {
@@ -32,18 +44,26 @@ public:
 	// Draws triangle using the "classic" OpenGL GL_TRIANGLE_STRIP primitive
 	void drawTriangleStrip(const std::vector<Vertex>& vertices);
 	
+	int16_t loadTexture(const char* fileName);
+	void unloadTexture(int16_t textureId);
+	void bindTexture(int16_t textureId);
+	void unbindTexture();
+	
 	uint8_t* getFrameBuffer() { return m_frameBuffer; }
 
 private:
-	static const int kBytesPerPixel = 4;
+	static const uint8_t kBytesPerPixel = 4;
 	static const int kMaxWidth = 2048;
 	static const int kMaxHeight = 2048;
+	static const uint8_t kMaxTextures = 128;
 	
 	bool m_initialised = false;
 	uint8_t m_frameBuffer[kMaxWidth * kMaxHeight * kBytesPerPixel];
 	float m_zBuffer[kMaxWidth * kMaxHeight];
+	TextureInfo m_textures[kMaxTextures];
 	Vector2i m_size;
 	Vector2i m_halfSize;
+	int16_t m_bindedTextureId = SoftwareRendererConsts::kInvalidTextureId;
 	
 	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
 	void setPixelColor(const Vector2i& pos, const Color& color);

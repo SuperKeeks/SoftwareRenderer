@@ -16,6 +16,8 @@ namespace omb
 // Vector2i
 
 Vector2i::Vector2i()
+: x(0)
+, y(0)
 {
 }
 
@@ -45,6 +47,8 @@ Vector2i Vector2i::operator-(const Vector2i& rhs) const
 // Vector2f
 
 Vector2f::Vector2f()
+: x(0)
+, y(0)
 {
 }
 

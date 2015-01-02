@@ -16,6 +16,9 @@ namespace omb
 {
 	
 Vector3f::Vector3f()
+: x(0)
+, y(0)
+, z(0)
 {}
 
 Vector3f::Vector3f(const float x, const float y, const float z)

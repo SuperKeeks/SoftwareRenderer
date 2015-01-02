@@ -13,6 +13,7 @@
 		2183CFBA19E0804D00B1F481 /* Vector3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2183CFB919E0804D00B1F481 /* Vector3.cpp */; };
 		218494E11958D21100E6FCF7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 218494E01958D21100E6FCF7 /* Cocoa.framework */; };
 		218A900B19696F8F00F32339 /* SoftwareRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */; };
+		21A06CB51A569EEE008F321F /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = 21A06CB41A569EEE008F321F /* Resources */; };
 		21B5051519E95B4C0088E33B /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21B5051419E95B4C0088E33B /* Quaternion.cpp */; };
 		21CBB23D19EAEAF500E6E4ED /* Matrix33.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CBB23C19EAEAF500E6E4ED /* Matrix33.cpp */; };
 		21CBB23F19EAEB0300E6E4ED /* Matrix44.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CBB23E19EAEB0300E6E4ED /* Matrix44.cpp */; };
@@ -47,6 +48,8 @@
 		218494E81958D21100E6FCF7 /* SoftwareRenderer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SoftwareRenderer-Info.plist"; sourceTree = "<group>"; };
 		218A900819696F6000F32339 /* SoftwareRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoftwareRenderer.h; sourceTree = "<group>"; };
 		218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoftwareRenderer.cpp; sourceTree = "<group>"; };
+		21A06CAF1A569D6C008F321F /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = externals/stb_image.h; sourceTree = "<group>"; };
+		21A06CB41A569EEE008F321F /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		21B5051319E95B450088E33B /* Quaternion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Quaternion.h; sourceTree = "<group>"; };
 		21B5051419E95B4C0088E33B /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quaternion.cpp; sourceTree = "<group>"; };
 		21CBB23C19EAEAF500E6E4ED /* Matrix33.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix33.cpp; sourceTree = "<group>"; };
@@ -165,11 +168,21 @@
 		218A900719696F4700F32339 /* Renderer */ = {
 			isa = PBXGroup;
 			children = (
+				21A06CAE1A569D3E008F321F /* Externals */,
+				21A06CB41A569EEE008F321F /* Resources */,
 				2183CFC119E0853100B1F481 /* Utils */,
 				218A900819696F6000F32339 /* SoftwareRenderer.h */,
 				218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */,
 			);
 			name = Renderer;
+			sourceTree = "<group>";
+		};
+		21A06CAE1A569D3E008F321F /* Externals */ = {
+			isa = PBXGroup;
+			children = (
+				21A06CAF1A569D6C008F321F /* stb_image.h */,
+			);
+			name = Externals;
 			sourceTree = "<group>";
 		};
 		EBAA7631195C4F2500534532 /* Base */ = {
@@ -236,6 +249,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21A06CB51A569EEE008F321F /* Resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
