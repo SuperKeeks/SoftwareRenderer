@@ -22,6 +22,8 @@ const dword width_pow2 = 512;
 const dword height_pow2 = 512;
 const dword width = 512;
 const sdword height = 512;
+float rotationDeg = 0;
+float scale = 1.0f;
 
 //-----------------------------------------------------------------------------
 void StartGame()
@@ -70,39 +72,7 @@ void Render()
 	/*static GLubyte colorValue = 255;
 	++colorValue;*/
 	
-	static bool countFwd = true;
-	static float scale = 0;
-	
-	if (countFwd)
-	{
-		scale += 0.01f;
-	}
-	else
-	{
-		scale -= 0.01f;
-	}
-	
-	if (scale > 1.0f)
-	{
-		scale = 1.0f;
-		countFwd = false;
-	}
-	else if (scale < 0)
-	{
-		scale = 0;
-		countFwd = true;
-	}
-	printf("\nScale: %.1f", scale);
-	
-	static float rotationDeg = 0;
-	rotationDeg += 1.0f;
-	if (rotationDeg > 360)
-	{
-		rotationDeg = 0;
-	}
-	printf("\nRotation: %.1f", rotationDeg);
-	
-	const Matrix44 scaleMatrix = MathUtils::CreateScaleMatrix(1.0f);
+	const Matrix44 scaleMatrix = MathUtils::CreateScaleMatrix(scale);
 	
 	const Matrix44 translationMatrix = MathUtils::CreateTranslationMatrix(0.5f, 0.5f, 0);
 	
@@ -382,7 +352,6 @@ void Render()
 	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), bottomRight));
 	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), topRight));
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
-	
 	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), bottomRight));
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), bottomLeft));
@@ -456,6 +425,40 @@ void RunGame()
 //-----------------------------------------------------------------------------
 void ProcessInput()
 {
+	const bool left = SYS_KeyPressed(SYS_KEY_LEFT);
+	const bool right = SYS_KeyPressed(SYS_KEY_RIGHT);
+	const bool up = SYS_KeyPressed(SYS_KEY_UP);
+	const bool down = SYS_KeyPressed(SYS_KEY_DOWN);
+	
+	if (right)
+	{
+		rotationDeg -= 1.0f;
+		if (rotationDeg < 0)
+		{
+			rotationDeg = 360.0f;
+		}
+		printf("\nRotation: %.1f", rotationDeg);
+	}
+	else if (left)
+	{
+		rotationDeg += 1.0f;
+		if (rotationDeg > 360.0f)
+		{
+			rotationDeg = 0;
+		}
+		printf("\nRotation: %.1f", rotationDeg);
+	}
+	
+	if (up)
+	{
+		scale += 0.01f;
+		printf("\nScale: %.1f", scale);
+	}
+	else if (down)
+	{
+		scale -= 0.01f;
+		printf("\nScale: %.1f", scale);
+	}
 }
 
 //-----------------------------------------------------------------------------
