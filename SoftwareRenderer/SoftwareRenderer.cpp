@@ -20,7 +20,7 @@
 
 #include <cmath>
 
-#define USE_SLOW_TRIANGLE_METHOD 1
+#define USE_SLOW_TRIANGLE_METHOD 0
 
 namespace omb
 {
@@ -398,8 +398,12 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 	const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
 	
 	const int yValues[] = {aFB.y, bFB.y, cFB.y};
-	const int upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
-	const int lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
+	const int upperMostYTr = getBiggestValue(yValues, sizeofarray(yValues));
+	const int lowerMostYTr = getSmallestValue(yValues, sizeofarray(yValues));
+	
+	// Limit the paint area to the framebuffer, so we don't paint off screen
+	const int upperMostY = std::min(upperMostYTr, m_size.y - 1);
+	const int lowerMostY = std::max(lowerMostYTr, 0);
 	
 	const Vector2i* peak = nullptr;
 	const Vector2i* baseA = nullptr;
@@ -465,8 +469,12 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 	
 	for (int y = upperMostY; y >= lowerMostY; --y)
 	{
-		const int minX = ceil((slopePBA * y) + factorPBA);
-		const int maxX = floor((slopePBB * y) + factorPBB);
+		const int minXTr = ceil((slopePBA * y) + factorPBA);
+		const int maxXTr = floor((slopePBB * y) + factorPBB);
+		
+		// Again, check we're not off screen
+		const int maxX = std::min(maxXTr, m_size.x - 1);
+		const int minX = std::max(minXTr, 0);
 		
 		for (int x = minX; x <= maxX; ++x)
 		{
@@ -615,6 +623,7 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 	const int upperMostYTr = getBiggestValue(yValues, sizeofarray(yValues));
 	const int lowerMostYTr = getSmallestValue(yValues, sizeofarray(yValues));
 	
+	// Limits the bounding box to the framebuffer surface, so we don't try to paint off screen
 	const int leftMostX = std::max(leftMostXTr, 0);
 	const int rightMostX = std::min(rightMostXTr, m_size.x - 1);
 	const int upperMostY = std::min(upperMostYTr, m_size.y - 1);

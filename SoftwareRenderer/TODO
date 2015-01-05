@@ -1,4 +1,3 @@
--Clip triangles that are partially out of screen
 -Draw complex objects by creating an exporter/importer
 -Implement better triangle rasterization (read https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/)
 -Triangle strip with indices
