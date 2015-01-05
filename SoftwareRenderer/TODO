@@ -1,5 +1,5 @@
--Discard triangles completely out of screen
 -Clip triangles that are partially out of screen
--Triangle strip with indices
 -Draw complex objects by creating an exporter/importer
+-Implement better triangle rasterization (read https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/)
+-Triangle strip with indices
 -Wireframe/retro mode for fun

@@ -610,10 +610,15 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 	const int xValues[] = {aFB.x, bFB.x, cFB.x};
 	const int yValues[] = {aFB.y, bFB.y, cFB.y};
 	
-	const int leftMostX = getSmallestValue(xValues, sizeofarray(xValues));
-	const int rightMostX = getBiggestValue(xValues, sizeofarray(xValues));
-	const int upperMostY = getBiggestValue(yValues, sizeofarray(yValues));
-	const int lowerMostY = getSmallestValue(yValues, sizeofarray(yValues));
+	const int leftMostXTr = getSmallestValue(xValues, sizeofarray(xValues));
+	const int rightMostXTr = getBiggestValue(xValues, sizeofarray(xValues));
+	const int upperMostYTr = getBiggestValue(yValues, sizeofarray(yValues));
+	const int lowerMostYTr = getSmallestValue(yValues, sizeofarray(yValues));
+	
+	const int leftMostX = std::max(leftMostXTr, 0);
+	const int rightMostX = std::min(rightMostXTr, m_size.x - 1);
+	const int upperMostY = std::min(upperMostYTr, m_size.y - 1);
+	const int lowerMostY = std::max(lowerMostYTr, 0);
 	
 	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color, a.m_texCoord);
 	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color, b.m_texCoord);
