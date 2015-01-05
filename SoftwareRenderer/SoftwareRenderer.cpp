@@ -221,21 +221,30 @@ void SoftwareRenderer::drawTriangles(const std::vector<Vertex>& vertices)
 		const Vertex& b = vertices[i + 1];
 		const Vertex& c = vertices[i + 2];
 		
-		if (!isBackFace(a, b, c))
+		Vertex divA = a;
+		Vertex divB = b;
+		Vertex divC = c;
+		
+		divA.m_pos = divA.m_pos / divA.m_pos.w;
+		divB.m_pos = divB.m_pos / divB.m_pos.w;
+		divC.m_pos = divC.m_pos / divC.m_pos.w;
+		
+		if (!m_backFaceCullingEnabled || !isBackFace(divA, divB, divC))
 		{
-			Vertex divA = a;
-			Vertex divB = b;
-			Vertex divC = c;
-			
-			divA.m_pos = divA.m_pos / divA.m_pos.w;
-			divB.m_pos = divB.m_pos / divB.m_pos.w;
-			divC.m_pos = divC.m_pos / divC.m_pos.w;
-			
+			if (m_wireFrameModeEnabled)
+			{
+				drawLine(divA.m_pos, divB.m_pos, m_wireFrameModeColor);
+				drawLine(divA.m_pos, divC.m_pos, m_wireFrameModeColor);
+				drawLine(divB.m_pos, divC.m_pos, m_wireFrameModeColor);
+			}
+			else
+			{
 #if USE_SLOW_TRIANGLE_METHOD
-			drawTriangleSlow(divA, divB, divC);
+				drawTriangleSlow(divA, divB, divC);
 #else
-			drawTriangleFaster(divA, divB, divC);
+				drawTriangleFaster(divA, divB, divC);
 #endif
+			}
 		}
 	}
 }
@@ -300,6 +309,31 @@ void SoftwareRenderer::unbindTexture()
 {
 	m_bindedTextureId = SoftwareRendererConsts::kInvalidTextureId;
 }
+	
+void SoftwareRenderer::setWireFrameModeEnabled(bool enable)
+{
+	m_wireFrameModeEnabled = enable;
+}
+	
+bool SoftwareRenderer::getWireFrameModeEnabled() const
+{
+	return m_wireFrameModeEnabled;
+}
+	
+void SoftwareRenderer::setWireFrameModeColor(const Color& color)
+{
+	m_wireFrameModeColor = color;
+}
+	
+void SoftwareRenderer::setBackFaceCullingEnabled(bool enable)
+{
+	m_backFaceCullingEnabled = enable;
+}
+
+bool SoftwareRenderer::getBackFaceCullingEnabled() const
+{
+	return m_backFaceCullingEnabled;
+}
 
 void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices)
 {
@@ -311,21 +345,30 @@ void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices)
 		const Vertex& b = vertices[i + ((i % 2 == 0) ? 1 : 2)];
 		const Vertex& c = vertices[i + ((i % 2 == 0) ? 2 : 1)];
 		
-		if (!isBackFace(a, b, c))
+		Vertex divA = a;
+		Vertex divB = b;
+		Vertex divC = c;
+		
+		divA.m_pos = divA.m_pos / divA.m_pos.w;
+		divB.m_pos = divB.m_pos / divB.m_pos.w;
+		divC.m_pos = divC.m_pos / divC.m_pos.w;
+		
+		if (!m_backFaceCullingEnabled || !isBackFace(divA, divB, divC))
 		{
-			Vertex divA = a;
-			Vertex divB = b;
-			Vertex divC = c;
-			
-			divA.m_pos = divA.m_pos / divA.m_pos.w;
-			divB.m_pos = divB.m_pos / divB.m_pos.w;
-			divC.m_pos = divC.m_pos / divC.m_pos.w;
-			
+			if (m_wireFrameModeEnabled)
+			{
+				drawLine(divA.m_pos, divB.m_pos, m_wireFrameModeColor);
+				drawLine(divA.m_pos, divC.m_pos, m_wireFrameModeColor);
+				drawLine(divB.m_pos, divC.m_pos, m_wireFrameModeColor);
+			}
+			else
+			{
 #if USE_SLOW_TRIANGLE_METHOD
-			drawTriangleSlow(divA, divB, divC);
+				drawTriangleSlow(divA, divB, divC);
 #else
-			drawTriangleFaster(divA, divB, divC);
+				drawTriangleFaster(divA, divB, divC);
 #endif
+			}
 		}
 	}
 }
@@ -362,19 +405,29 @@ float SoftwareRenderer::getPixelZ(const Vector2i& pos)
 
 // This is not the function I'm using to draw lines, but can be interesting to implement at some point:
 // http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-void SoftwareRenderer::drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color)
+void SoftwareRenderer::drawLine(const Vector2f& a, const Vector2f& b, const Color& color)
 {
+	const Vector2f aFB = ndcCoordToFBCoord(a);
+	const Vector2f bFB = ndcCoordToFBCoord(b);
+	
 	Vector2f aToB = bFB - aFB;
 	const double aToBLength = aToB.getLength();
-	aToB.normalize();
 	
-	for (int i = 0; i <= aToBLength; ++i)
+	if (aToBLength > 0)
 	{
-		Vector2i fragment;
-		fragment.x = aFB.x + round(aToB.x * i);
-		fragment.y = aFB.y + round(aToB.y * i);
+		aToB.normalize();
 		
-		setPixelColor(fragment, color);
+		for (int i = 0; i <= aToBLength; ++i)
+		{
+			Vector2i fragment;
+			fragment.x = aFB.x + round(aToB.x * i);
+			fragment.y = aFB.y + round(aToB.y * i);
+			
+			if (fragment.x >= 0 && fragment.x < m_size.x && fragment.y >= 0 && fragment.y < m_size.y)
+			{
+				setPixelColor(fragment, color);
+			}
+		}
 	}
 }
 

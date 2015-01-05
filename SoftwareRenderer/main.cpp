@@ -423,6 +423,8 @@ void ProcessInput()
 	const bool rotateCCW = SYS_KeyPressed('A');
 	const bool rotateCW = SYS_KeyPressed('D');
 	const bool swPerspective = SYS_KeyPressed('P');
+	const bool swWireframe = SYS_KeyPressed('1');
+	const bool swBackFaceCulling = SYS_KeyPressed('2');
 	
 	if (rotateCW)
 	{
@@ -490,7 +492,19 @@ void ProcessInput()
 		}
 	}
 	
-	keyPressedLastFrame = up || down || left || right || scaleUp || scaleDown || rotateCW || rotateCCW || swPerspective;
+	if (swWireframe && !keyPressedLastFrame)
+	{
+		renderer.setWireFrameModeEnabled(!renderer.getWireFrameModeEnabled());
+		printf("\nWireframe mode: %d", renderer.getWireFrameModeEnabled());
+	}
+	
+	if (swBackFaceCulling && !keyPressedLastFrame)
+	{
+		renderer.setBackFaceCullingEnabled(!renderer.getBackFaceCullingEnabled());
+		printf("\nBack face culling enabled: %d", renderer.getBackFaceCullingEnabled());
+	}
+	
+	keyPressedLastFrame = up || down || left || right || scaleUp || scaleDown || rotateCW || rotateCCW || swPerspective || swWireframe || swBackFaceCulling;
 }
 
 //-----------------------------------------------------------------------------

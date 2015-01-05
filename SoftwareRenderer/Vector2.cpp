@@ -38,6 +38,11 @@ void Vector2i::normalize()
 	x /= length;
 	y /= length;
 }
+	
+Vector2i::operator Vector2f() const
+{
+	return Vector2f(x, y);
+}
 
 Vector2i Vector2i::operator-(const Vector2i& rhs) const
 {

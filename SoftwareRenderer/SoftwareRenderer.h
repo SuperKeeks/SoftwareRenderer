@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Color.h"
 #include "Vector2.h"
 
 #include <stdint.h>
@@ -9,7 +10,6 @@ namespace omb
 {
 
 // Forward declarations
-struct Color;
 struct Vertex;
 	
 struct TextureInfo
@@ -44,11 +44,22 @@ public:
 	// Draws triangle using the "classic" OpenGL GL_TRIANGLE_STRIP primitive
 	void drawTriangleStrip(const std::vector<Vertex>& vertices);
 	
+	// Texture methods
 	int16_t loadTexture(const char* fileName);
 	void unloadTexture(int16_t textureId);
 	void bindTexture(int16_t textureId);
 	void unbindTexture();
 	
+	// Wireframe mode
+	void setWireFrameModeEnabled(bool enable);
+	bool getWireFrameModeEnabled() const;
+	void setWireFrameModeColor(const Color& color);
+	
+	// Backface culling
+	void setBackFaceCullingEnabled(bool enable);
+	bool getBackFaceCullingEnabled() const;
+	
+	// Returns the framebuffer, ready to show on screen
 	uint8_t* getFrameBuffer() { return m_frameBuffer; }
 
 private:
@@ -64,12 +75,15 @@ private:
 	Vector2i m_size;
 	Vector2i m_halfSize;
 	int16_t m_bindedTextureId = SoftwareRendererConsts::kInvalidTextureId;
+	bool m_wireFrameModeEnabled = false;
+	Color m_wireFrameModeColor = Color(0, 255, 0, 255);
+	bool m_backFaceCullingEnabled = true;
 	
 	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
 	void setPixelColor(const Vector2i& pos, const Color& color);
 	void setPixelZ(const Vector2i& pos, const float z);
 	float getPixelZ(const Vector2i& pos);
-	void drawLine(const Vector2f& aFB, const Vector2f& bFB, const Color& color);
+	void drawLine(const Vector2f& a, const Vector2f& b, const Color& color);
 	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c);
 	

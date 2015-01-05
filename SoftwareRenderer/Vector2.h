@@ -10,6 +10,8 @@
 
 namespace omb
 {
+	
+struct Vector2f;
 
 struct Vector2i
 {
@@ -21,6 +23,8 @@ struct Vector2i
 	
 	double getLength() const;
 	void normalize();
+	
+	operator Vector2f() const;
 	
 	Vector2i operator-(const Vector2i& rhs) const;
 };
