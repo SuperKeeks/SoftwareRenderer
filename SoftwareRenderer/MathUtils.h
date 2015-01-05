@@ -17,6 +17,7 @@ namespace MathUtils
 {
 	float DegToRad(float deg);
 	
+	Matrix44 CreateIdentityMatrix();
 	Matrix44 CreateScaleMatrix(const float scale);
 	Matrix44 CreateTranslationMatrix(const float transX, const float transY, const float transZ);
 }

@@ -20,6 +20,18 @@ float MathUtils::DegToRad(float deg)
 	return deg * M_PI / 180;
 }
 	
+Matrix44 MathUtils::CreateIdentityMatrix()
+{
+	Matrix44 identity;
+	
+	identity(0, 0) = 1;
+	identity(1, 1) = 1;
+	identity(2, 2) = 1;
+	identity(3, 3) = 1;
+	
+	return identity;
+}
+	
 Matrix44 MathUtils::CreateScaleMatrix(const float scale)
 {
 	Matrix44 scaleMatrix;

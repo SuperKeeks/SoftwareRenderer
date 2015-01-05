@@ -24,6 +24,9 @@ const dword width = 512;
 const sdword height = 512;
 float rotationDeg = 0;
 float scale = 1.0f;
+Vector3f posOffset(0, 0, 0);
+bool usePerspective = false;
+bool keyPressedLastFrame = false;
 
 //-----------------------------------------------------------------------------
 void StartGame()
@@ -64,23 +67,13 @@ void Render()
 	persMatrix(2, 2) = (zFar + zNear) / (zNear - zFar);
 	persMatrix(2, 3) = (2 * zFar * zNear) / (zNear - zFar);
 	persMatrix(3, 2) = -1.0f;
-	/*persMatrix(0, 0) = 1.0f;
-	persMatrix(1, 1) = 1.0f;
-	persMatrix(2, 2) = 1.0f;
-	persMatrix(3, 3) = 1.0f;*/
-	
-	/*static GLubyte colorValue = 255;
-	++colorValue;*/
 	
 	const Matrix44 scaleMatrix = MathUtils::CreateScaleMatrix(scale);
 	
-	const Matrix44 translationMatrix = MathUtils::CreateTranslationMatrix(0.5f, 0.5f, 0);
+	const Matrix44 translationMatrix = MathUtils::CreateTranslationMatrix(posOffset.x, posOffset.y, posOffset.z);
 	
 	Quaternion rotationTrans(Vector3f(0, 0, 1.0f), MathUtils::DegToRad(rotationDeg));
 	const Matrix44 rotationMatrix = rotationTrans;
-	
-	//const Matrix44 transMatrix = translationMatrix;// * scaleMatrix;
-	
 	
 	std::vector<Vertex> vertices;
 	/*vertices.push_back(Vertex(Vector4f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
@@ -334,7 +327,7 @@ void Render()
 	}
 	renderer.drawTriangleStrip(vertices);*/
 	
-	const Matrix44 finalTransMatrix = persMatrix * translationMatrix * rotationMatrix * scaleMatrix;
+	const Matrix44 finalTransMatrix = (usePerspective ? persMatrix : MathUtils::CreateIdentityMatrix()) * translationMatrix * rotationMatrix * scaleMatrix;
 	
 	const Vector2f topLeft(0, 0);
 	const Vector2f topRight(1.0f, 0);
@@ -395,10 +388,6 @@ void Render()
 	for (int i = 0; i < vertices.size(); ++i)
 	{
 		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
-//		vertices[i].m_pos = scaleMatrix * vertices[i].m_pos;
-//		vertices[i].m_pos = rotationMatrix * vertices[i].m_pos;
-//		vertices[i].m_pos = translationMatrix * vertices[i].m_pos;
-//		vertices[i].m_pos = persMatrix * vertices[i].m_pos;
 	}
 	
 	renderer.drawTriangles(vertices);
@@ -429,8 +418,13 @@ void ProcessInput()
 	const bool right = SYS_KeyPressed(SYS_KEY_RIGHT);
 	const bool up = SYS_KeyPressed(SYS_KEY_UP);
 	const bool down = SYS_KeyPressed(SYS_KEY_DOWN);
+	const bool scaleUp = SYS_KeyPressed('W');
+	const bool scaleDown = SYS_KeyPressed('S');
+	const bool rotateCCW = SYS_KeyPressed('A');
+	const bool rotateCW = SYS_KeyPressed('D');
+	const bool swPerspective = SYS_KeyPressed('P');
 	
-	if (right)
+	if (rotateCW)
 	{
 		rotationDeg -= 1.0f;
 		if (rotationDeg < 0)
@@ -439,7 +433,7 @@ void ProcessInput()
 		}
 		printf("\nRotation: %.1f", rotationDeg);
 	}
-	else if (left)
+	else if (rotateCCW)
 	{
 		rotationDeg += 1.0f;
 		if (rotationDeg > 360.0f)
@@ -449,16 +443,54 @@ void ProcessInput()
 		printf("\nRotation: %.1f", rotationDeg);
 	}
 	
-	if (up)
+	if (scaleUp)
 	{
 		scale += 0.01f;
 		printf("\nScale: %.1f", scale);
 	}
-	else if (down)
+	else if (scaleDown)
 	{
 		scale -= 0.01f;
 		printf("\nScale: %.1f", scale);
 	}
+	
+	const float kOffsetInc = 0.01f;
+	
+	if (left)
+	{
+		posOffset.x -= kOffsetInc;
+	}
+	
+	if (right)
+	{
+		posOffset.x += kOffsetInc;
+	}
+	
+	if (up)
+	{
+		posOffset.y += kOffsetInc;
+	}
+	
+	if (down)
+	{
+		posOffset.y -= kOffsetInc;
+	}
+	
+	if (swPerspective && !keyPressedLastFrame)
+	{
+		usePerspective = !usePerspective;
+		
+		if (usePerspective)
+		{
+			printf("\nProjection: Perspective");
+		}
+		else
+		{
+			printf("\nProjection: Orthogonal");
+		}
+	}
+	
+	keyPressedLastFrame = up || down || left || right || scaleUp || scaleDown || rotateCW || rotateCCW || swPerspective;
 }
 
 //-----------------------------------------------------------------------------
