@@ -556,9 +556,9 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 	{
 		// The triangle has a flat surface on top or bottom
 		/*                        ______
-					/\            \    /
-				   /  \     or     \  /
-				  /____\            \/
+		            /\            \    /
+		           /  \     or     \  /
+		          /____\            \/
 		*/
 		
 		drawSubTriangle(a, b, c);
@@ -573,10 +573,10 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 		              A                   A
 		             /|                  /|
 		            / |                 / |
-		           /  |		           /  |                   A          B ______ auxPoint
-		          /   |               /   |                  /|		       \    |
+		           /  |                /  |                   A          B ______ auxPoint
+		          /   |               /   |                  /|            \    |
 		       B /    |      =>    B /____| auxPoint =>     / |      +      \   |
-		         \    |		         \    |		           /  |              \  |
+		         \    |              \    |                /  |              \  |
 		          \   |               \   |               /   |               \ |
 		           \  |                \  |            B /____| auxPoint       \|
 		            \ |                 \ |                                     C
