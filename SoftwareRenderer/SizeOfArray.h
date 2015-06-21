@@ -7,10 +7,5 @@
 //
 
 #pragma once
-
-namespace omb
-{
 	
 #define sizeofarray(x) (sizeof(x) / sizeof(x[0]))
-
-}

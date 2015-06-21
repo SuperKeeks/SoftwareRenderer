@@ -556,9 +556,9 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 	{
 		// The triangle has a flat surface on top or bottom
 		/*                        ______
-					/\            \    /
-				   /  \     or     \  /
-				  /____\            \/
+		            /\            \    /
+		           /  \     or     \  /
+		          /____\            \/
 		*/
 		
 		drawSubTriangle(a, b, c);
@@ -570,18 +570,18 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 		   (the line formed by the union of the other 2 vertices). We call the projection "auxPoint"
 		   Once that projected point is calculated, we can use it as a 4th vertex to draw 2 triangles with flat bottom and flat top respectively
 		   
-					  A                   A
-					 /|                  /|
-					/ |                 / |
-				   /  |		           /  |                   A          B ______ auxPoint
-				  /   |               /   |                  /|		       \    |
-			   B /    |      =>    B /____| auxPoint =>     / |      +      \   |
-				 \    |		         \    |		           /  |              \  |
-				  \   |               \   |               /   |               \ |
-				   \  |                \  |            B /____| auxPoint       \|
-					\ |                 \ |                                     C
-					 \|                  \|
-					  C                   C
+		              A                   A
+		             /|                  /|
+		            / |                 / |
+		           /  |                /  |                   A          B ______ auxPoint
+		          /   |               /   |                  /|            \    |
+		       B /    |      =>    B /____| auxPoint =>     / |      +      \   |
+		         \    |              \    |                /  |              \  |
+		          \   |               \   |               /   |               \ |
+		           \  |                \  |            B /____| auxPoint       \|
+		            \ |                 \ |                                     C
+		             \|                  \|
+		              C                   C
 		*/
 		
 		
