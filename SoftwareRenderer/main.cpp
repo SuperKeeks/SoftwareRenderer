@@ -342,13 +342,6 @@ void Render()
 	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), bottomLeft));
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
 	
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), bottomRight));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), topRight));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), bottomRight));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), bottomLeft));
-	
 	for (int i = 0; i < vertices.size(); ++i)
 	{
 		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
@@ -377,7 +370,12 @@ void Render()
 	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), yellow));
 	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), yellow));
 	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), yellow));
-	
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), orange));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), orange));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), orange));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), orange));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), orange));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), orange));
 	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), pink));
 	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), pink));
 	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), pink));
@@ -504,7 +502,7 @@ void ProcessInput()
 		printf("\nBack face culling enabled: %d", renderer.getBackFaceCullingEnabled());
 	}
 	
-	keyPressedLastFrame = up || down || left || right || scaleUp || scaleDown || rotateCW || rotateCCW || swPerspective || swWireframe || swBackFaceCulling;
+	keyPressedLastFrame = swPerspective || swWireframe || swBackFaceCulling;
 }
 
 //-----------------------------------------------------------------------------

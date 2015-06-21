@@ -20,7 +20,7 @@
 
 #include <cmath>
 
-#define USE_SLOW_TRIANGLE_METHOD 0
+#define USE_SLOW_TRIANGLE_METHOD 1
 
 namespace omb
 {
