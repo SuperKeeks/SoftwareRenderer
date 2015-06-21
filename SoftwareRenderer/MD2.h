@@ -12,7 +12,10 @@
 
 #pragma once
 
+#include "Vector3.h"
+
 #include <stdint.h>
+#include <vector>
 
 namespace omb
 {
@@ -41,10 +44,49 @@ struct MD2Header
 	int32_t m_offsetGLCmds;    // Offset to OpenGL commands
 	int32_t m_offsetEnd;       // Offset to end of file
 };
+	
+struct MD2TextureName
+{
+	char m_name[64];
+};
+	
+struct MD2TexCoord
+{
+	// MD2 texture coordinates come as short values, as opposed as floats (used by OpenGL and this software renderer)
+	// In order to get the OpenGL equivalent value, 's' needs to be divided by textureWidth and 't' by textureHeight
+	short m_s;
+	short m_t;
+};
+	
+struct MD2Triangle
+{
+	unsigned short m_vertexIdxs[3];
+	unsigned short m_texCoordIdxs[3];
+};
+	
+struct MD2Vertex
+{
+	unsigned char m_position[3];
+	unsigned char m_normalIndex;
+};
+	
+struct MD2Frame
+{
+	Vector3f m_scale;
+	Vector3f m_translate;
+	char m_name[16];
+	std::vector<MD2Vertex> m_vertices;
+};
 
 struct MD2Model
 {
 	MD2Header m_header;
+	
+	std::vector<MD2TextureName> m_textures;
+	std::vector<MD2TexCoord> m_texCoords;
+	std::vector<MD2Triangle> m_triangles;
+	std::vector<MD2Frame> m_frames;
+	std::vector<int> m_glCmds;
 };
 
 namespace MD2Utils
