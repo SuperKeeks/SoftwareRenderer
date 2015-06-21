@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2105FC721B37480700F9092F /* MD2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2105FC701B37480700F9092F /* MD2.cpp */; };
 		216CABFE19E967D200AFF1DF /* MathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 216CABFC19E967D200AFF1DF /* MathUtils.cpp */; };
 		217D0D5C1A2B9AA600620485 /* Vector4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 217D0D5A1A2B9AA600620485 /* Vector4.cpp */; };
 		2183CFB819E07F2300B1F481 /* Vector2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2183CFB719E07F2300B1F481 /* Vector2.cpp */; };
@@ -26,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2105FC701B37480700F9092F /* MD2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MD2.cpp; sourceTree = "<group>"; };
+		2105FC711B37480700F9092F /* MD2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MD2.h; sourceTree = "<group>"; };
 		213292E019EAE38F00E46D4A /* Matrix33.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrix33.h; sourceTree = "<group>"; };
 		216CABFC19E967D200AFF1DF /* MathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtils.cpp; sourceTree = "<group>"; };
 		216CABFD19E967D200AFF1DF /* MathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtils.h; sourceTree = "<group>"; };
@@ -102,6 +105,8 @@
 				217D0D5B1A2B9AA600620485 /* Vector4.h */,
 				217D0D5A1A2B9AA600620485 /* Vector4.cpp */,
 				2183CFBB19E080C700B1F481 /* Vertex.h */,
+				2105FC711B37480700F9092F /* MD2.h */,
+				2105FC701B37480700F9092F /* MD2.cpp */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -263,6 +268,7 @@
 				216CABFE19E967D200AFF1DF /* MathUtils.cpp in Sources */,
 				21CBB23D19EAEAF500E6E4ED /* Matrix33.cpp in Sources */,
 				21CBB23F19EAEB0300E6E4ED /* Matrix44.cpp in Sources */,
+				2105FC721B37480700F9092F /* MD2.cpp in Sources */,
 				EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */,
 				EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */,
 				2183CFB819E07F2300B1F481 /* Vector2.cpp in Sources */,

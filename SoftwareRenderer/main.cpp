@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "Matrix44.h"
 #include "MathUtils.h"
+#include "MD2.h"
 #include "Quaternion.h"
 #include "SoftwareRenderer.h"
 #include "Vector3.h"
@@ -33,6 +34,9 @@ void StartGame()
 {
 	renderer.init(width, height);
 	avatarTexId = renderer.loadTexture("Resources/avatar.png");
+	
+	MD2Model* model = MD2Utils::LoadModel("Resources/Cyber.md2");
+	OMBAssert(model, "Can't load model!");
 	
 	glGenTextures(1, &openGLTexId);
 	glBindTexture(GL_TEXTURE_2D, openGLTexId);
