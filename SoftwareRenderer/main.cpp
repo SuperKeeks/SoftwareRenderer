@@ -19,12 +19,16 @@ using namespace omb;
 GLuint openGLTexId = 1;
 SoftwareRenderer renderer;
 uint16_t avatarTexId;
+uint16_t cyberDemonTexId;
+MD2Model* cyberDemonModel;
 const dword width_pow2 = 512;
 const dword height_pow2 = 512;
 const dword width = 512;
 const sdword height = 512;
-float rotationDeg = 0;
-float scale = 1.0f;
+float rotationDegX = 0;
+float rotationDegY = 0;
+float rotationDegZ = 0;
+float scale = -0.009f;
 Vector3f posOffset(0, 0, 0);
 bool usePerspective = false;
 bool keyPressedLastFrame = false;
@@ -35,8 +39,10 @@ void StartGame()
 	renderer.init(width, height);
 	avatarTexId = renderer.loadTexture("Resources/avatar.png");
 	
-	MD2Model* model = MD2Utils::LoadModel("Resources/Cyber.md2");
-	OMBAssert(model, "Can't load model!");
+	cyberDemonModel = MD2Utils::LoadModel("Resources/Cyber.md2");
+	OMBAssert(cyberDemonModel, "Can't load model!");
+	
+	cyberDemonTexId = renderer.loadTexture("Resources/cyber.jpg");
 	
 	glGenTextures(1, &openGLTexId);
 	glBindTexture(GL_TEXTURE_2D, openGLTexId);
@@ -76,8 +82,12 @@ void Render()
 	
 	const Matrix44 translationMatrix = MathUtils::CreateTranslationMatrix(posOffset.x, posOffset.y, posOffset.z);
 	
-	Quaternion rotationTrans(Vector3f(0, 0, 1.0f), MathUtils::DegToRad(rotationDeg));
-	const Matrix44 rotationMatrix = rotationTrans;
+	Quaternion rotationTransX(Vector3f(1.0f, 0, 0), MathUtils::DegToRad(rotationDegX));
+	Quaternion rotationTransY(Vector3f(0, 1.0f, 0), MathUtils::DegToRad(rotationDegY));
+	Quaternion rotationTransZ(Vector3f(0, 0, 1.0f), MathUtils::DegToRad(rotationDegZ));
+	
+	Quaternion allRotations = rotationTransX * rotationTransY * rotationTransZ;
+	const Matrix44 allRotationsMatrix = allRotations;
 	
 	std::vector<Vertex> vertices;
 	/*vertices.push_back(Vertex(Vector4f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
@@ -331,9 +341,9 @@ void Render()
 	}
 	renderer.drawTriangleStrip(vertices);*/
 	
-	const Matrix44 finalTransMatrix = (usePerspective ? persMatrix : MathUtils::CreateIdentityMatrix()) * translationMatrix * rotationMatrix * scaleMatrix;
+	const Matrix44 finalTransMatrix = (usePerspective ? persMatrix : MathUtils::CreateIdentityMatrix()) * translationMatrix * allRotationsMatrix * scaleMatrix;
 	
-	const Vector2f topLeft(0, 0);
+	/*const Vector2f topLeft(0, 0);
 	const Vector2f topRight(1.0f, 0);
 	const Vector2f bottomLeft(0, 1.0f);
 	const Vector2f bottomRight(1.0f, 1.0f);
@@ -392,7 +402,40 @@ void Render()
 		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
 	}
 	
+	renderer.drawTriangles(vertices);*/
+	
+	// Cyberdemon
+	vertices.clear();
+	
+	const MD2Frame& frame = cyberDemonModel->m_frames[0];
+	for (int i = 0; i < cyberDemonModel->m_header.m_numTriangles; ++i)
+	{
+		const MD2Triangle& triangle = cyberDemonModel->m_triangles[i];
+		for (int j = 0; j < 3; ++j)
+		{
+			const MD2Vertex& md2Vertex = frame.m_vertices[triangle.m_vertexIdxs[j]];
+			
+			Vector4f pos;
+			pos.x = (md2Vertex.m_position[0] * frame.m_scale.x) + frame.m_translate.x;
+			pos.y = (md2Vertex.m_position[1] * frame.m_scale.y) + frame.m_translate.y;
+			pos.z = (md2Vertex.m_position[2] * frame.m_scale.z) + frame.m_translate.z;
+			pos.w = 1.0f;
+			pos = finalTransMatrix * pos;
+			
+			Vector2f texCoord;
+			texCoord.x = (float)cyberDemonModel->m_texCoords[triangle.m_texCoordIdxs[j]].m_s / cyberDemonModel->m_header.m_textureWidth;
+			texCoord.y = (float)cyberDemonModel->m_texCoords[triangle.m_texCoordIdxs[j]].m_t / cyberDemonModel->m_header.m_textureHeight;
+			
+			vertices.push_back(Vertex(pos, texCoord));
+		}
+	}
+	
+	renderer.bindTexture(cyberDemonTexId);
 	renderer.drawTriangles(vertices);
+	renderer.unbindTexture();
+	
+	
+	
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);
@@ -422,40 +465,82 @@ void ProcessInput()
 	const bool down = SYS_KeyPressed(SYS_KEY_DOWN);
 	const bool scaleUp = SYS_KeyPressed('W');
 	const bool scaleDown = SYS_KeyPressed('S');
-	const bool rotateCCW = SYS_KeyPressed('A');
-	const bool rotateCW = SYS_KeyPressed('D');
+	const bool rotateCCWX = SYS_KeyPressed('A');
+	const bool rotateCWX = SYS_KeyPressed('D');
+	const bool rotateCCWY = SYS_KeyPressed('Q');
+	const bool rotateCWY = SYS_KeyPressed('E');
+	const bool rotateCCWZ = SYS_KeyPressed('Z');
+	const bool rotateCWZ = SYS_KeyPressed('C');
 	const bool swPerspective = SYS_KeyPressed('P');
 	const bool swWireframe = SYS_KeyPressed('1');
 	const bool swBackFaceCulling = SYS_KeyPressed('2');
 	
-	if (rotateCW)
+	if (rotateCWX)
 	{
-		rotationDeg -= 1.0f;
-		if (rotationDeg < 0)
+		rotationDegX -= 1.0f;
+		if (rotationDegX < 0)
 		{
-			rotationDeg = 360.0f;
+			rotationDegX = 360.0f;
 		}
-		printf("\nRotation: %.1f", rotationDeg);
+		printf("\nRotationX: %.1f", rotationDegX);
 	}
-	else if (rotateCCW)
+	else if (rotateCCWX)
 	{
-		rotationDeg += 1.0f;
-		if (rotationDeg > 360.0f)
+		rotationDegX += 1.0f;
+		if (rotationDegX > 360.0f)
 		{
-			rotationDeg = 0;
+			rotationDegX = 0;
 		}
-		printf("\nRotation: %.1f", rotationDeg);
+		printf("\nRotationX: %.1f", rotationDegX);
+	}
+	
+	if (rotateCWY)
+	{
+		rotationDegY -= 1.0f;
+		if (rotationDegY < 0)
+		{
+			rotationDegY = 360.0f;
+		}
+		printf("\nRotationY: %.1f", rotationDegY);
+	}
+	else if (rotateCCWY)
+	{
+		rotationDegY += 1.0f;
+		if (rotationDegY > 360.0f)
+		{
+			rotationDegY = 0;
+		}
+		printf("\nRotationY: %.1f", rotationDegY);
+	}
+	
+	if (rotateCWZ)
+	{
+		rotationDegZ -= 1.0f;
+		if (rotationDegZ < 0)
+		{
+			rotationDegZ = 360.0f;
+		}
+		printf("\nRotationZ: %.1f", rotationDegZ);
+	}
+	else if (rotateCCWZ)
+	{
+		rotationDegZ += 1.0f;
+		if (rotationDegZ > 360.0f)
+		{
+			rotationDegZ = 0;
+		}
+		printf("\nRotationZ: %.1f", rotationDegZ);
 	}
 	
 	if (scaleUp)
 	{
 		scale += 0.01f;
-		printf("\nScale: %.1f", scale);
+		printf("\nScale: %.2f", scale);
 	}
 	else if (scaleDown)
 	{
 		scale -= 0.01f;
-		printf("\nScale: %.1f", scale);
+		printf("\nScale: %.2f", scale);
 	}
 	
 	const float kOffsetInc = 0.01f;
