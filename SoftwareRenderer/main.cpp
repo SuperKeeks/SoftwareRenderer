@@ -19,26 +19,34 @@ using namespace omb;
 GLuint openGLTexId = 1;
 SoftwareRenderer renderer;
 uint16_t avatarTexId;
+uint16_t chessPatternTexId;
 uint16_t cyberDemonTexId;
 MD2Model* cyberDemonModel;
 const dword width_pow2 = 512;
 const dword height_pow2 = 512;
 const dword width = 512;
 const sdword height = 512;
-float rotationDegX = 0;
+float rotationDegX = 310.0f;
 float rotationDegY = 0;
 float rotationDegZ = 0;
-float scale = -0.009f;
-Vector3f posOffset(0, 0, 0);
-bool usePerspective = false;
+//float scale = -0.009f; // Use this one for cyberdemon
+float scale = 1.0f;
+Vector3f posOffset(0, 0.5f, -1.25);
+//Vector3f posOffset(0, 0,0);
+bool usePerspective = true;
 bool keyPressedLastFrame = false;
+
+void DrawAvatar(const Matrix44&);
+void DrawCube(const Matrix44&);
+void DrawCyberDemon(const Matrix44&);
+void DrawColouredTriangle(const Matrix44&);
 
 //-----------------------------------------------------------------------------
 void StartGame()
 {
 	renderer.init(width, height);
 	avatarTexId = renderer.loadTexture("Resources/avatar.png");
-	
+	chessPatternTexId = renderer.loadTexture("Resources/chess_pattern.png");
 	cyberDemonModel = MD2Utils::LoadModel("Resources/Cyber.md2");
 	OMBAssert(cyberDemonModel, "Can't load model!");
 	
@@ -89,353 +97,10 @@ void Render()
 	Quaternion allRotations = rotationTransX * rotationTransY * rotationTransZ;
 	const Matrix44 allRotationsMatrix = allRotations;
 	
-	std::vector<Vertex> vertices;
-	/*vertices.push_back(Vertex(Vector4f(-1.0f, 0, 0), Color(colorValue, 0, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0, 0, 0), Color(colorValue, 0, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(-0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0.5f, -1.0f, 0), Color(colorValue, 0, 0, 255)));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.5f, -1.0f, 0), Color(0, colorValue, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0, 0, 0), Color(0, colorValue, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(1.0f, 0, 0), Color(0, colorValue, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0.5f, 1.0f, 0), Color(0, colorValue, 0, 255)));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.5f, 1.0f, 0), Color(0, 0, colorValue, 255)));
-	vertices.push_back(Vertex(Vector4f(0, 0, 0), Color(0, 0, colorValue, 255)));
-	vertices.push_back(Vertex(Vector4f(-0.5f, 1.0f, 0), Color(0, 0, colorValue, 255)));
-	vertices.push_back(Vertex(Vector4f(-1.0f, 0, 0), Color(0, 0, colorValue, 255)));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);*/
-	
-	/*vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.3f, 0), Color(0, 255, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);*/
-	
-	// Beautiful triangle
-	/*vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));*/
-	/*vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
-	vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);*/
-	
-	const Vector4f offset(0, 0, 0, 0);
-	
-	// Cube
-	const Color red(255, 0, 0, 255);
-	const Color green(0, 255, 0, 255);
-	const Color blue(0, 0, 255, 255);
-	const Color yellow(255, 255, 0, 255);
-	const Color orange(255, 69, 0, 255);
-	const Color pink(255, 20, 147, 255);
-	// Front
-	/*vertices.push_back(Vertex(Vector4f(-0.5f, -0.5f, 0.5f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(0.5f, -0.5f, 0.5f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0.5f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0.5f) + offset, red));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	// Top
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0.5f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0.5f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, -0.5f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, -0.5f) + offset, blue));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	// Back
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.5f, -0.5f, -0.5f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.5f, -0.5f, -0.5f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, -0.5f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, -0.5f) + offset, green));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	// Bottom
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(-0.5f, -0.5f, -0.5f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.5f, -0.5f, -0.5f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(-0.5f, -0.5f, 0.5f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.5f, -0.5f, 0.5f) + offset, yellow));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	// Left
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(-0.5f, -0.5f, -0.5f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.5f, -0.5f, 0.5f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, -0.5f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0.5f) + offset, orange));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	// Right
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.5f, -0.5f, 0.5f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(0.5f, -0.5f, -0.5f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0.5f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, -0.5f) + offset, pink));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);*/
-	
-	
-	
-	/*vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, blue));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, blue));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, red));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, red));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, green));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, green));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, green));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, yellow));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, yellow));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f) + offset, orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f) + offset, orange));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f) + offset, pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f) + offset, pink));
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = transMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);*/
-	
 	const Matrix44 finalTransMatrix = (usePerspective ? persMatrix : MathUtils::CreateIdentityMatrix()) * translationMatrix * allRotationsMatrix * scaleMatrix;
 	
-	/*const Vector2f topLeft(0, 0);
-	const Vector2f topRight(1.0f, 0);
-	const Vector2f bottomLeft(0, 1.0f);
-	const Vector2f bottomRight(1.0f, 1.0f);
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), topRight));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), bottomRight));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), bottomRight));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), bottomLeft));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
-	
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
-	}
-	
-	renderer.bindTexture(avatarTexId);
-	renderer.drawTriangles(vertices);
-	renderer.unbindTexture();
-	
-	vertices.clear();
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), red));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), red));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), red));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), red));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), red));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), red));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), green));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), green));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), green));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), green));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), yellow));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), orange));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), orange));
-	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), orange));
-	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), orange));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), pink));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), pink));
-	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), pink));
-	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), pink));
-	
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
-	}
-	
-	renderer.drawTriangles(vertices);*/
-	
-	// Cyberdemon
-	vertices.clear();
-	
-	const MD2Frame& frame = cyberDemonModel->m_frames[0];
-	for (int i = 0; i < cyberDemonModel->m_header.m_numTriangles; ++i)
-	{
-		const MD2Triangle& triangle = cyberDemonModel->m_triangles[i];
-		for (int j = 0; j < 3; ++j)
-		{
-			const MD2Vertex& md2Vertex = frame.m_vertices[triangle.m_vertexIdxs[j]];
-			
-			Vector4f pos;
-			pos.x = (md2Vertex.m_position[0] * frame.m_scale.x) + frame.m_translate.x;
-			pos.y = (md2Vertex.m_position[1] * frame.m_scale.y) + frame.m_translate.y;
-			pos.z = (md2Vertex.m_position[2] * frame.m_scale.z) + frame.m_translate.z;
-			pos.w = 1.0f;
-			pos = finalTransMatrix * pos;
-			
-			Vector2f texCoord;
-			texCoord.x = (float)cyberDemonModel->m_texCoords[triangle.m_texCoordIdxs[j]].m_s / cyberDemonModel->m_header.m_textureWidth;
-			texCoord.y = (float)cyberDemonModel->m_texCoords[triangle.m_texCoordIdxs[j]].m_t / cyberDemonModel->m_header.m_textureHeight;
-			
-			vertices.push_back(Vertex(pos, texCoord));
-		}
-	}
-	
-	renderer.bindTexture(cyberDemonTexId);
-	renderer.drawTriangles(vertices);
-	renderer.unbindTexture();
-	
-	
-	
+	DrawAvatar(finalTransMatrix);
+	//DrawCube(finalTransMatrix);
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);
@@ -475,9 +140,25 @@ void ProcessInput()
 	const bool swWireframe = SYS_KeyPressed('1');
 	const bool swBackFaceCulling = SYS_KeyPressed('2');
 	
+	float keyPressedThisFrame = left || right || up || down ||
+		scaleUp || scaleDown ||
+		rotateCCWX || rotateCWX ||
+		rotateCCWY || rotateCWY ||
+		rotateCCWZ || rotateCWZ ||
+		swPerspective || swWireframe || swBackFaceCulling;
+	
+	if (keyPressedLastFrame)
+	{
+		keyPressedLastFrame = keyPressedThisFrame;
+		return;
+	}
+	
+	const float rotationInc = 5.0f;
+	const float scaleInc = 0.5f;
+	
 	if (rotateCWX)
 	{
-		rotationDegX -= 1.0f;
+		rotationDegX -= rotationInc;
 		if (rotationDegX < 0)
 		{
 			rotationDegX = 360.0f;
@@ -486,7 +167,7 @@ void ProcessInput()
 	}
 	else if (rotateCCWX)
 	{
-		rotationDegX += 1.0f;
+		rotationDegX += rotationInc;
 		if (rotationDegX > 360.0f)
 		{
 			rotationDegX = 0;
@@ -496,7 +177,7 @@ void ProcessInput()
 	
 	if (rotateCWY)
 	{
-		rotationDegY -= 1.0f;
+		rotationDegY -= rotationInc;
 		if (rotationDegY < 0)
 		{
 			rotationDegY = 360.0f;
@@ -505,7 +186,7 @@ void ProcessInput()
 	}
 	else if (rotateCCWY)
 	{
-		rotationDegY += 1.0f;
+		rotationDegY += rotationInc;
 		if (rotationDegY > 360.0f)
 		{
 			rotationDegY = 0;
@@ -515,7 +196,7 @@ void ProcessInput()
 	
 	if (rotateCWZ)
 	{
-		rotationDegZ -= 1.0f;
+		rotationDegZ -= rotationInc;
 		if (rotationDegZ < 0)
 		{
 			rotationDegZ = 360.0f;
@@ -524,7 +205,7 @@ void ProcessInput()
 	}
 	else if (rotateCCWZ)
 	{
-		rotationDegZ += 1.0f;
+		rotationDegZ += rotationInc;
 		if (rotationDegZ > 360.0f)
 		{
 			rotationDegZ = 0;
@@ -534,12 +215,12 @@ void ProcessInput()
 	
 	if (scaleUp)
 	{
-		scale += 0.01f;
+		scale += scaleInc;
 		printf("\nScale: %.2f", scale);
 	}
 	else if (scaleDown)
 	{
-		scale -= 0.01f;
+		scale -= scaleInc;
 		printf("\nScale: %.2f", scale);
 	}
 	
@@ -591,7 +272,8 @@ void ProcessInput()
 		printf("\nBack face culling enabled: %d", renderer.getBackFaceCullingEnabled());
 	}
 	
-	keyPressedLastFrame = swPerspective || swWireframe || swBackFaceCulling;
+	//keyPressedLastFrame = swPerspective || swWireframe || swBackFaceCulling;
+	keyPressedLastFrame = keyPressedThisFrame;
 }
 
 //-----------------------------------------------------------------------------
@@ -631,4 +313,152 @@ int Main(void)
 	EndGame();
 	
 	return 0;
+}
+
+void DrawAvatar(const Matrix44& finalTransMatrix)
+{
+	const Vector2f topLeft(0, 0);
+	const Vector2f topRight(1.0f, 0);
+	const Vector2f bottomLeft(0, 1.0f);
+	const Vector2f bottomRight(1.0f, 1.0f);
+	
+	std::vector<Vertex> vertices;
+	vertices.push_back(Vertex(Vector4f(1.0f,  1.0f, 0, 1.0f), topRight));
+	vertices.push_back(Vertex(Vector4f(1.0f, -1.0f, 0, 1.0f), bottomRight));
+	vertices.push_back(Vertex(Vector4f(-1.0f,  1.0f, 0, 1.0f), topLeft));
+	vertices.push_back(Vertex(Vector4f(1.0f, -1.0f, 0, 1.0f), bottomRight));
+	vertices.push_back(Vertex(Vector4f(-1.0f, -1.0f, 0, 1.0f), bottomLeft));
+	vertices.push_back(Vertex(Vector4f(-1.0f,  1.0f, 0, 1.0f), topLeft));
+	
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
+	}
+	
+	renderer.bindTexture(avatarTexId);
+	renderer.drawTriangles(vertices);
+	renderer.unbindTexture();
+}
+
+void DrawCube(const Matrix44& finalTransMatrix)
+{
+	const Color red(255, 0, 0, 255);
+	const Color green(0, 255, 0, 255);
+	const Color blue(0, 0, 255, 255);
+	const Color yellow(255, 255, 0, 255);
+	const Color orange(255, 69, 0, 255);
+	const Color pink(255, 20, 147, 255);
+	
+	const Vector2f topLeft(0, 0);
+	const Vector2f topRight(1.0f, 0);
+	const Vector2f bottomLeft(0, 1.0f);
+	const Vector2f bottomRight(1.0f, 1.0f);
+	
+	std::vector<Vertex> vertices;
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), topRight));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), bottomRight));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), bottomRight));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), bottomLeft));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
+	
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), bottomRight));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), topRight));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
+	
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), bottomRight));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), bottomLeft));
+	
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
+	}
+	
+	renderer.bindTexture(avatarTexId);
+	renderer.drawTriangles(vertices);
+	renderer.unbindTexture();
+	
+	vertices.clear();
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), red));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), red));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), red));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), red));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), red));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), red));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), green));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), green));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), green));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), green));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), green));
+	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), green));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -1.25f, 1.0f), yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f,  0.25f, -2.75f, 1.0f), yellow));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), yellow));
+	
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), pink));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), pink));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -1.25f, 1.0f), pink));
+	vertices.push_back(Vertex(Vector4f(0.25f, -0.25f, -2.75f, 1.0f), pink));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), pink));
+	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), pink));
+	
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
+	}
+	
+	renderer.drawTriangles(vertices);
+}
+
+void DrawCyberDemon(const Matrix44& finalTransMatrix)
+{
+	std::vector<Vertex> vertices;
+	
+	const MD2Frame& frame = cyberDemonModel->m_frames[0];
+	for (int i = 0; i < cyberDemonModel->m_header.m_numTriangles; ++i)
+	{
+		const MD2Triangle& triangle = cyberDemonModel->m_triangles[i];
+		for (int j = 0; j < 3; ++j)
+		{
+			const MD2Vertex& md2Vertex = frame.m_vertices[triangle.m_vertexIdxs[j]];
+			
+			Vector4f pos;
+			pos.x = (md2Vertex.m_position[0] * frame.m_scale.x) + frame.m_translate.x;
+			pos.y = (md2Vertex.m_position[1] * frame.m_scale.y) + frame.m_translate.y;
+			pos.z = (md2Vertex.m_position[2] * frame.m_scale.z) + frame.m_translate.z;
+			pos.w = 1.0f;
+			pos = finalTransMatrix * pos;
+			
+			Vector2f texCoord;
+			texCoord.x = (float)cyberDemonModel->m_texCoords[triangle.m_texCoordIdxs[j]].m_s / cyberDemonModel->m_header.m_textureWidth;
+			texCoord.y = (float)cyberDemonModel->m_texCoords[triangle.m_texCoordIdxs[j]].m_t / cyberDemonModel->m_header.m_textureHeight;
+			
+			vertices.push_back(Vertex(pos, texCoord));
+		}
+	}
+	
+	renderer.bindTexture(cyberDemonTexId);
+	renderer.drawTriangles(vertices);
+	renderer.unbindTexture();
+}
+
+void DrawColouredTriangle(const Matrix44& finalTransMatrix)
+{
+	std::vector<Vertex> vertices;
+	
+	vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
+	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
+	vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
+	/*vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
+	 vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
+	 vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));*/
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
+	}
+	renderer.drawTriangleStrip(vertices);
 }

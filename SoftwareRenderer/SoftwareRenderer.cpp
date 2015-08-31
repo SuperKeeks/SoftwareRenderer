@@ -84,6 +84,26 @@ namespace
 		return result;
 	}
 	
+	struct VertexInterpInfo
+	{
+		const Vector2f& m_fbPos; // Position in FB coordinates
+		const float m_z;
+		const Color& m_color;
+		const float m_uOverW;
+		const float m_vOverW;
+		const float m_1OverW;
+		
+		VertexInterpInfo(const Vector2f& fbPos, float z, const Color& color, float uOverW, float vOverW, float oneOverW)
+		: m_fbPos(fbPos)
+		, m_z(z)
+		, m_color(color)
+		, m_uOverW(uOverW)
+		, m_vOverW(vOverW)
+		, m_1OverW(oneOverW)
+		{
+		}
+	};
+	
 	struct InterpolateResult
 	{
 		Color m_color;
@@ -97,21 +117,25 @@ namespace
 		}
 	};
 	
-	InterpolateResult interpolate(const Vector2f& point, const Vertex& a, const Vertex& b, const Vertex& c, const TextureInfo& texInfo)
+	InterpolateResult interpolate(const Vector2f& point, const VertexInterpInfo& a, const VertexInterpInfo& b, const VertexInterpInfo& c, const TextureInfo& texInfo)
 	{
 		InterpolateResult res;
 		
 		// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
-		const float totalArea = fabsf((a.m_pos.x*(b.m_pos.y - c.m_pos.y) + b.m_pos.x*(c.m_pos.y - a.m_pos.y) + c.m_pos.x*(a.m_pos.y - b.m_pos.y))/2);
-		const float pabArea = fabsf((point.x*(a.m_pos.y - b.m_pos.y) + a.m_pos.x*(b.m_pos.y - point.y) + b.m_pos.x*(point.y - a.m_pos.y))/2);
-		const float pacArea = fabsf((point.x*(a.m_pos.y - c.m_pos.y) + a.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - a.m_pos.y))/2);
-		const float pbcArea = fabsf((point.x*(b.m_pos.y - c.m_pos.y) + b.m_pos.x*(c.m_pos.y - point.y) + c.m_pos.x*(point.y - b.m_pos.y))/2);
+		const float totalArea = fabsf((a.m_fbPos.x*(b.m_fbPos.y - c.m_fbPos.y) + b.m_fbPos.x*(c.m_fbPos.y - a.m_fbPos.y) + c.m_fbPos.x*(a.m_fbPos.y - b.m_fbPos.y))/2);
+		const float pabArea = fabsf((point.x*(a.m_fbPos.y - b.m_fbPos.y) + a.m_fbPos.x*(b.m_fbPos.y - point.y) + b.m_fbPos.x*(point.y - a.m_fbPos.y))/2);
+		const float pacArea = fabsf((point.x*(a.m_fbPos.y - c.m_fbPos.y) + a.m_fbPos.x*(c.m_fbPos.y - point.y) + c.m_fbPos.x*(point.y - a.m_fbPos.y))/2);
+		const float pbcArea = fabsf((point.x*(b.m_fbPos.y - c.m_fbPos.y) + b.m_fbPos.x*(c.m_fbPos.y - point.y) + c.m_fbPos.x*(point.y - b.m_fbPos.y))/2);
 		
-		if (texInfo.m_data)
+		if (texInfo.isValid())
 		{
-			res.m_texCoord.x = pbcArea/totalArea * a.m_texCoord.x + pacArea/totalArea * b.m_texCoord.x + pabArea/totalArea * c.m_texCoord.x;
-			res.m_texCoord.y = pbcArea/totalArea * a.m_texCoord.y + pacArea/totalArea * b.m_texCoord.y + pabArea/totalArea * c.m_texCoord.y;
+			const float interpUOverW = pbcArea/totalArea * a.m_uOverW + pacArea/totalArea * b.m_uOverW + pabArea/totalArea * c.m_uOverW;
+			const float interpVOverW = pbcArea/totalArea * a.m_vOverW + pacArea/totalArea * b.m_vOverW + pabArea/totalArea * c.m_vOverW;
+			const float interp1OverW = pbcArea/totalArea * a.m_1OverW + pacArea/totalArea * b.m_1OverW + pabArea/totalArea * c.m_1OverW;
 			
+			res.m_texCoord.x = interpUOverW / interp1OverW;
+			res.m_texCoord.y = interpVOverW / interp1OverW;
+
 			const int xCoordAbs = clamp((texInfo.m_size.x - 1) * res.m_texCoord.x, 0, texInfo.m_size.x - 1);
 			const int yCoordAbs = clamp((texInfo.m_size.y - 1) * res.m_texCoord.y, 0, texInfo.m_size.y - 1);
 			
@@ -129,20 +153,16 @@ namespace
 			res.m_color.a = pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a;
 		}
 		
-		res.m_z = pbcArea/totalArea * a.m_pos.z + pacArea/totalArea * b.m_pos.z + pabArea/totalArea * c.m_pos.z;
+		res.m_z = pbcArea/totalArea * a.m_z + pacArea/totalArea * b.m_z + pabArea/totalArea * c.m_z;
 		
 		return res;
 	}
 	
-	bool isBackFace(const Vertex& a, const Vertex& b, const Vertex& c)
+	bool isBackFace(const Vector2f& a, const Vector2f& b, const Vector2f& c)
 	{
-		const Vector4f& posA = a.m_pos;
-		const Vector4f& posB = b.m_pos;
-		const Vector4f& posC = c.m_pos;
-		
 		// Omit back faces based on triangle winding based on the sign of the determinant of vectors
 		// For more info check: http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
-		const float position = (posB.x - posA.x) * (posC.y - posA.y) - (posB.y - posA.y) * (posC.x - posA.x);
+		const float position = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
 		// CW (Clock Wise) winding
 #if 1
 		if (position > 0)
@@ -221,30 +241,17 @@ void SoftwareRenderer::drawTriangles(const std::vector<Vertex>& vertices)
 		const Vertex& b = vertices[i + 1];
 		const Vertex& c = vertices[i + 2];
 		
-		Vertex divA = a;
-		Vertex divB = b;
-		Vertex divC = c;
-		
-		divA.m_pos = divA.m_pos / divA.m_pos.w;
-		divB.m_pos = divB.m_pos / divB.m_pos.w;
-		divC.m_pos = divC.m_pos / divC.m_pos.w;
-		
-		if (!m_backFaceCullingEnabled || !isBackFace(divA, divB, divC))
+		if (m_wireFrameModeEnabled)
 		{
-			if (m_wireFrameModeEnabled)
-			{
-				drawLine(divA.m_pos, divB.m_pos, m_wireFrameModeColor);
-				drawLine(divA.m_pos, divC.m_pos, m_wireFrameModeColor);
-				drawLine(divB.m_pos, divC.m_pos, m_wireFrameModeColor);
-			}
-			else
-			{
+			drawTriangleWireframe(a, b, c);
+		}
+		else
+		{
 #if USE_SLOW_TRIANGLE_METHOD
-				drawTriangleSlow(divA, divB, divC);
+			drawTriangleSlow(a, b, c);
 #else
-				drawTriangleFaster(divA, divB, divC);
+			drawTriangleFaster(a, b, c);
 #endif
-			}
 		}
 	}
 }
@@ -345,30 +352,17 @@ void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices)
 		const Vertex& b = vertices[i + ((i % 2 == 0) ? 1 : 2)];
 		const Vertex& c = vertices[i + ((i % 2 == 0) ? 2 : 1)];
 		
-		Vertex divA = a;
-		Vertex divB = b;
-		Vertex divC = c;
-		
-		divA.m_pos = divA.m_pos / divA.m_pos.w;
-		divB.m_pos = divB.m_pos / divB.m_pos.w;
-		divC.m_pos = divC.m_pos / divC.m_pos.w;
-		
-		if (!m_backFaceCullingEnabled || !isBackFace(divA, divB, divC))
+		if (m_wireFrameModeEnabled)
 		{
-			if (m_wireFrameModeEnabled)
-			{
-				drawLine(divA.m_pos, divB.m_pos, m_wireFrameModeColor);
-				drawLine(divA.m_pos, divC.m_pos, m_wireFrameModeColor);
-				drawLine(divB.m_pos, divC.m_pos, m_wireFrameModeColor);
-			}
-			else
-			{
+			drawTriangleWireframe(a, b, c);
+		}
+		else
+		{
 #if USE_SLOW_TRIANGLE_METHOD
-				drawTriangleSlow(divA, divB, divC);
+			drawTriangleSlow(a, b, c);
 #else
-				drawTriangleFaster(divA, divB, divC);
+			drawTriangleFaster(a, b, c);
 #endif
-			}
 		}
 	}
 }
@@ -516,10 +510,6 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		factorPBB = std::min(baseB->x, peak->x);
 	}
 	
-	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color, a.m_texCoord);
-	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color, b.m_texCoord);
-	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color, c.m_texCoord);
-	
 	for (int y = upperMostY; y >= lowerMostY; --y)
 	{
 		const int minXTr = ceil((slopePBA * y) + factorPBA);
@@ -537,7 +527,12 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 			{
 				texInfo = m_textures[m_bindedTextureId];
 			}
-			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aFBAsVertex, bFBAsVertex, cFBAsVertex, texInfo);
+			
+			const VertexInterpInfo aInfo(Vector2f(aFB.x, aFB.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+			const VertexInterpInfo bInfo(Vector2f(bFB.x, bFB.y), b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+			const VertexInterpInfo cInfo(Vector2f(cFB.x, cFB.y), c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+			
+			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aInfo, bInfo, cInfo, texInfo);
 			
 			if (intRes.m_z < getPixelZ(position))
 			{
@@ -548,8 +543,25 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 	}
 }
 
-void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c)
+void SoftwareRenderer::drawTriangleFaster(const Vertex& aRaw, const Vertex& bRaw, const Vertex& cRaw)
 {
+	Vertex a = aRaw;
+	Vertex b = bRaw;
+	Vertex c = cRaw;
+	
+	a.m_pos.x = a.m_pos.x / aRaw.m_pos.w;
+	a.m_pos.y = a.m_pos.y / aRaw.m_pos.w;
+	b.m_pos.x = b.m_pos.x / bRaw.m_pos.w;
+	b.m_pos.y = b.m_pos.y / bRaw.m_pos.w;
+	c.m_pos.x = c.m_pos.x / cRaw.m_pos.w;
+	c.m_pos.y = c.m_pos.y / cRaw.m_pos.w;
+	
+	// Skip back faces if needed
+	if (m_backFaceCullingEnabled && isBackFace((Vector2f)a.m_pos, (Vector2f)b.m_pos, (Vector2f)c.m_pos))
+	{
+		return;
+	}
+	
 	if (a.m_pos.y == b.m_pos.y ||
 		a.m_pos.y == c.m_pos.y ||
 		b.m_pos.y == c.m_pos.y)
@@ -583,7 +595,6 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 		             \|                  \|
 		              C                   C
 		*/
-		
 		
 		const Vertex* top;
 		const Vertex* middle;
@@ -646,7 +657,15 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& a, const Vertex& b, cons
 		{
 			texInfo = m_textures[m_bindedTextureId];
 		}
-		const InterpolateResult intRes = interpolate(Vector2f(auxPointX, middle->m_pos.y), a, b, c, texInfo);
+		
+		// TODO(Kike): This is broken, some values are not being correctly interpolated. Use slow mode only for now.
+		OMBAssert(false, "TODO: Broken");
+		
+		const VertexInterpInfo aInfo(Vector2f(a.m_pos.x, b.m_pos.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+		const VertexInterpInfo bInfo(Vector2f(b.m_pos.x, b.m_pos.y), b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+		const VertexInterpInfo cInfo(Vector2f(c.m_pos.x, c.m_pos.y), c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+		
+		const InterpolateResult intRes = interpolate(Vector2f(auxPointX, middle->m_pos.y), aInfo, bInfo, cInfo, texInfo);
 		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, intRes.m_z), intRes.m_color, intRes.m_texCoord);
 		
 		drawSubTriangle(*top, auxVertex, *middle);
@@ -663,9 +682,15 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 		This method is fine to draw a triangle, but it is extremely inefficient.
 	*/
 
-	const Vector2i aFB = ndcCoordToFBCoord((Vector2f)a.m_pos);
-	const Vector2i bFB = ndcCoordToFBCoord((Vector2f)b.m_pos);
-	const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos);
+	const Vector2i aFB = ndcCoordToFBCoord((Vector2f)a.m_pos / a.m_pos.w);
+	const Vector2i bFB = ndcCoordToFBCoord((Vector2f)b.m_pos / b.m_pos.w);
+	const Vector2i cFB = ndcCoordToFBCoord((Vector2f)c.m_pos / c.m_pos.w);
+	
+	// Skip back faces if needed
+	if (m_backFaceCullingEnabled && isBackFace(aFB, bFB, cFB))
+	{
+		return;
+	}
 	
 	// In order to avoid checking all the points in the surface, we just check those inside the imaginary bounding box surrounding the triangle
 	const int xValues[] = {aFB.x, bFB.x, cFB.x};
@@ -682,10 +707,6 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 	const int upperMostY = std::min(upperMostYTr, m_size.y - 1);
 	const int lowerMostY = std::max(lowerMostYTr, 0);
 	
-	const Vertex aFBAsVertex(Vector4f(aFB.x, aFB.y, a.m_pos.z), a.m_color, a.m_texCoord);
-	const Vertex bFBAsVertex(Vector4f(bFB.x, bFB.y, b.m_pos.z), b.m_color, b.m_texCoord);
-	const Vertex cFBAsVertex(Vector4f(cFB.x, cFB.y, c.m_pos.z), c.m_color, c.m_texCoord);
-	
 	TextureInfo texInfo;
 	if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
 	{
@@ -699,7 +720,11 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 			Vector2i candidate(j, k);
 			if (isPointInTriangle(candidate, aFB, bFB, cFB))
 			{
-				const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aFBAsVertex, bFBAsVertex, cFBAsVertex, texInfo);
+				const VertexInterpInfo aInfo(Vector2f(aFB.x, aFB.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+				const VertexInterpInfo bInfo(Vector2f(bFB.x, bFB.y), b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+				const VertexInterpInfo cInfo(Vector2f(cFB.x, cFB.y), c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+				
+				const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aInfo, bInfo, cInfo, texInfo);
 				if (intRes.m_z < getPixelZ(candidate))
 				{
 					setPixelColor(candidate, intRes.m_color);
@@ -707,6 +732,20 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 				}
 			}
 		}
+	}
+}
+	
+void SoftwareRenderer::drawTriangleWireframe(const Vertex& a, const Vertex& b, const Vertex& c)
+{
+	Vector2f divA = (Vector2f)a.m_pos / a.m_pos.w;
+	Vector2f divB = (Vector2f)b.m_pos / b.m_pos.w;
+	Vector2f divC = (Vector2f)c.m_pos / c.m_pos.w;
+	
+	if (!m_backFaceCullingEnabled || !isBackFace(divA, divB, divC))
+	{
+		drawLine(divA, divB, m_wireFrameModeColor);
+		drawLine(divA, divC, m_wireFrameModeColor);
+		drawLine(divB, divC, m_wireFrameModeColor);
 	}
 }
 

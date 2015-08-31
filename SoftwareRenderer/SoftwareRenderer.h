@@ -17,6 +17,11 @@ struct TextureInfo
 	unsigned char* m_data = nullptr;
 	Vector2i m_size;
 	uint8_t m_bytesPerPixel = 0;
+	
+	bool isValid() const
+	{
+		return m_data;
+	}
 };
 	
 namespace SoftwareRendererConsts
@@ -86,6 +91,7 @@ private:
 	void drawLine(const Vector2f& a, const Vector2f& b, const Color& color);
 	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c);
+	void drawTriangleWireframe(const Vertex& a, const Vertex& b, const Vertex& c);
 	
 	// This is for being used with drawTriangleFaster
 	// The only condition is that 2 points have to share the same Y coordinate (flat top or flat bottom of the triangle)
