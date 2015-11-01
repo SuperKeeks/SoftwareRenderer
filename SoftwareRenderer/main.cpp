@@ -161,7 +161,7 @@ void ProcessInput()
 		rotationDegX -= rotationInc;
 		if (rotationDegX < 0)
 		{
-			rotationDegX = 360.0f;
+			rotationDegX = 360.0f - rotationInc;
 		}
 		printf("\nRotationX: %.1f", rotationDegX);
 	}
@@ -170,7 +170,7 @@ void ProcessInput()
 		rotationDegX += rotationInc;
 		if (rotationDegX > 360.0f)
 		{
-			rotationDegX = 0;
+			rotationDegX = rotationInc;
 		}
 		printf("\nRotationX: %.1f", rotationDegX);
 	}
@@ -180,7 +180,7 @@ void ProcessInput()
 		rotationDegY -= rotationInc;
 		if (rotationDegY < 0)
 		{
-			rotationDegY = 360.0f;
+			rotationDegY = 360.0f - rotationInc;
 		}
 		printf("\nRotationY: %.1f", rotationDegY);
 	}
@@ -189,7 +189,7 @@ void ProcessInput()
 		rotationDegY += rotationInc;
 		if (rotationDegY > 360.0f)
 		{
-			rotationDegY = 0;
+			rotationDegY = rotationInc;
 		}
 		printf("\nRotationY: %.1f", rotationDegY);
 	}
@@ -199,7 +199,7 @@ void ProcessInput()
 		rotationDegZ -= rotationInc;
 		if (rotationDegZ < 0)
 		{
-			rotationDegZ = 360.0f;
+			rotationDegZ = 360.0f - rotationInc;
 		}
 		printf("\nRotationZ: %.1f", rotationDegZ);
 	}
@@ -208,7 +208,7 @@ void ProcessInput()
 		rotationDegZ += rotationInc;
 		if (rotationDegZ > 360.0f)
 		{
-			rotationDegZ = 0;
+			rotationDegZ = rotationInc;
 		}
 		printf("\nRotationZ: %.1f", rotationDegZ);
 	}
