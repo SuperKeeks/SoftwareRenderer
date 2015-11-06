@@ -300,14 +300,14 @@ int Main(void)
 	// Main game loop! ======================================================================
 	while (!SYS_GottaQuit())
 	{
-		const clock_t startTime = clock();
+		//const clock_t startTime = clock();
 		Render();
 		ProcessInput();
 		RunGame();
 		SYS_Show();
 		SYS_Pump();
 		g_time += 1.f/60.f;
-		const clock_t endTime = clock();
+		//const clock_t endTime = clock();
 		//printf("\nFPS: %.1f", 1/(((float)(endTime - startTime)) / CLOCKS_PER_SEC));
 	}
 	EndGame();

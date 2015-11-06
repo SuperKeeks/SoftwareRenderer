@@ -19,7 +19,8 @@ MD2Model* MD2Utils::LoadModel(const char* filePath)
 {
 	MD2Model* model = nullptr;
 	
-	FILE* file = fopen(filePath, "r");
+	FILE* file;
+	fopen_s(&file, filePath, "r");
 	if (file != NULL)
 	{
 		model = new MD2Model();

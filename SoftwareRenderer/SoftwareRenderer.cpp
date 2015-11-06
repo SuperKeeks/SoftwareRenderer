@@ -18,6 +18,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "externals/stb_image.h"
 
+#include <algorithm>
 #include <cmath>
 
 #define USE_SLOW_TRIANGLE_METHOD 1

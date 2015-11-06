@@ -12,8 +12,8 @@
 #include <windows.h>
 #include <gl/gl.h>
 #include <GL/glu.h>
-#include <al.h>
-#include <alc.h>
+//#include <al.h>
+//#include <alc.h>
 #include <io.h>
 
 //=============================================================================

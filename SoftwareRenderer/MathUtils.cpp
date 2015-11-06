@@ -10,7 +10,8 @@
 
 #include "Matrix44.h"
 
-#include <math.h>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 namespace omb
 {
