@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <cmath>
 
-#define USE_SLOW_TRIANGLE_METHOD 1
+#define USE_SLOW_TRIANGLE_METHOD 0
 
 namespace omb
 {
@@ -110,10 +110,12 @@ namespace
 		Color m_color;
 		Vector2f m_texCoord;
 		float m_z;
+		float m_w;
 		
 		InterpolateResult()
 		: m_color(0, 0, 0, 0)
 		, m_z(0)
+		, m_w(0)
 		{
 		}
 	};
@@ -128,11 +130,12 @@ namespace
 		const float pacArea = fabsf((point.x*(a.m_fbPos.y - c.m_fbPos.y) + a.m_fbPos.x*(c.m_fbPos.y - point.y) + c.m_fbPos.x*(point.y - a.m_fbPos.y))/2);
 		const float pbcArea = fabsf((point.x*(b.m_fbPos.y - c.m_fbPos.y) + b.m_fbPos.x*(c.m_fbPos.y - point.y) + c.m_fbPos.x*(point.y - b.m_fbPos.y))/2);
 		
+		const float interp1OverW = pbcArea/totalArea * a.m_1OverW + pacArea/totalArea * b.m_1OverW + pabArea/totalArea * c.m_1OverW;
+		
 		if (texInfo.isValid())
 		{
 			const float interpUOverW = pbcArea/totalArea * a.m_uOverW + pacArea/totalArea * b.m_uOverW + pabArea/totalArea * c.m_uOverW;
 			const float interpVOverW = pbcArea/totalArea * a.m_vOverW + pacArea/totalArea * b.m_vOverW + pabArea/totalArea * c.m_vOverW;
-			const float interp1OverW = pbcArea/totalArea * a.m_1OverW + pacArea/totalArea * b.m_1OverW + pabArea/totalArea * c.m_1OverW;
 			
 			res.m_texCoord.x = interpUOverW / interp1OverW;
 			res.m_texCoord.y = interpVOverW / interp1OverW;
@@ -155,6 +158,7 @@ namespace
 		}
 		
 		res.m_z = pbcArea/totalArea * a.m_z + pacArea/totalArea * b.m_z + pabArea/totalArea * c.m_z;
+		res.m_w = 1.0f / interp1OverW;
 		
 		return res;
 	}
@@ -659,15 +663,12 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& aRaw, const Vertex& bRaw
 			texInfo = m_textures[m_bindedTextureId];
 		}
 		
-		// TODO(Kike): This is broken, some values are not being correctly interpolated. Use slow mode only for now.
-		OMBAssert(false, "TODO: Broken");
-		
-		const VertexInterpInfo aInfo(Vector2f(a.m_pos.x, b.m_pos.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+		const VertexInterpInfo aInfo(Vector2f(a.m_pos.x, a.m_pos.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
 		const VertexInterpInfo bInfo(Vector2f(b.m_pos.x, b.m_pos.y), b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
 		const VertexInterpInfo cInfo(Vector2f(c.m_pos.x, c.m_pos.y), c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
 		
 		const InterpolateResult intRes = interpolate(Vector2f(auxPointX, middle->m_pos.y), aInfo, bInfo, cInfo, texInfo);
-		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, intRes.m_z), intRes.m_color, intRes.m_texCoord);
+		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, intRes.m_z, intRes.m_w), intRes.m_color, intRes.m_texCoord);
 		
 		drawSubTriangle(*top, auxVertex, *middle);
 		drawSubTriangle(auxVertex, *bottom, *middle);
