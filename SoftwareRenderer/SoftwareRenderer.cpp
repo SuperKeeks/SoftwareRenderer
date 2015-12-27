@@ -532,10 +532,13 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 			{
 				texInfo = m_textures[m_bindedTextureId];
 			}
-			
-			const VertexInterpInfo aInfo(Vector2f(aFB.x, aFB.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
-			const VertexInterpInfo bInfo(Vector2f(bFB.x, bFB.y), b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
-			const VertexInterpInfo cInfo(Vector2f(cFB.x, cFB.y), c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+
+			Vector2f aPosAsV2f(aFB.x, aFB.y);
+			Vector2f bPosAsV2f(bFB.x, bFB.y);
+			Vector2f cPosAsV2f(cFB.x, cFB.y);
+			const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+			const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+			const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
 			
 			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aInfo, bInfo, cInfo, texInfo);
 			
