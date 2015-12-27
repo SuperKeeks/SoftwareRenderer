@@ -665,10 +665,13 @@ void SoftwareRenderer::drawTriangleFaster(const Vertex& aRaw, const Vertex& bRaw
 		{
 			texInfo = m_textures[m_bindedTextureId];
 		}
-		
-		const VertexInterpInfo aInfo(Vector2f(a.m_pos.x, a.m_pos.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
-		const VertexInterpInfo bInfo(Vector2f(b.m_pos.x, b.m_pos.y), b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
-		const VertexInterpInfo cInfo(Vector2f(c.m_pos.x, c.m_pos.y), c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+
+		Vector2f aPosAsV2f(a.m_pos.x, a.m_pos.y);
+		Vector2f bPosAsV2f(b.m_pos.x, b.m_pos.y);
+		Vector2f cPosAsV2f(c.m_pos.x, c.m_pos.y);
+		const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+		const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+		const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
 		
 		const InterpolateResult intRes = interpolate(Vector2f(auxPointX, middle->m_pos.y), aInfo, bInfo, cInfo, texInfo);
 		const Vertex auxVertex(Vector4f(auxPointX, middle->m_pos.y, intRes.m_z, intRes.m_w), intRes.m_color, intRes.m_texCoord);
@@ -725,9 +728,12 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 			Vector2i candidate(j, k);
 			if (isPointInTriangle(candidate, aFB, bFB, cFB))
 			{
-				const VertexInterpInfo aInfo(Vector2f(aFB.x, aFB.y), a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
-				const VertexInterpInfo bInfo(Vector2f(bFB.x, bFB.y), b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
-				const VertexInterpInfo cInfo(Vector2f(cFB.x, cFB.y), c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+				Vector2f aPosAsV2f(aFB.x, aFB.y);
+				Vector2f bPosAsV2f(bFB.x, bFB.y);
+				Vector2f cPosAsV2f(cFB.x, cFB.y);
+				const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+				const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+				const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
 				
 				const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aInfo, bInfo, cInfo, texInfo);
 				if (intRes.m_z < getPixelZ(candidate))
