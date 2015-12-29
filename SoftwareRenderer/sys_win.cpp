@@ -52,7 +52,7 @@ bool WIN_InitInstance()
 {
   RECT r; r.left = 0; r.right = SYS_WIDTH; r.top = 0; r.bottom = SYS_HEIGHT;
   AdjustWindowRect(&r, WS_OVERLAPPEDWINDOW, FALSE);
-  WIN_hWnd = CreateWindow("WIN_WindowClass", "Gamecrash Window", WS_OVERLAPPEDWINDOW,
+  WIN_hWnd = CreateWindow("WIN_WindowClass", "Software Renderer", WS_OVERLAPPEDWINDOW,
           0, 0, r.right-r.left, r.bottom-r.top, NULL, NULL, WIN_hInst, NULL);
 
   if (!WIN_hWnd)
