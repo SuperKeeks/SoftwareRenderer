@@ -41,8 +41,6 @@ public:
 
 	void setViewProjectionMatrix(const Matrix44& viewProjectionMatrix);
 	
-	// All drawing functions expect vertices in NDC [-1, 1] range
-	
 	// Draws a set of single pixel points
 	void drawPoints(std::vector<Vertex> vertices, const Matrix44& transform);
 	
@@ -88,10 +86,10 @@ private:
 	Color m_wireFrameModeColor = Color(0, 255, 0, 255);
 	bool m_backFaceCullingEnabled = true;
 
-	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
+	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord) const;
 	void setPixelColor(const Vector2i& pos, const Color& color);
 	void setPixelZ(const Vector2i& pos, const float z);
-	float getPixelZ(const Vector2i& pos);
+	float getPixelZ(const Vector2i& pos) const;
 	void drawLine(const Vector2f& a, const Vector2f& b, const Color& color);
 	void clipAndDrawTriangle(const Vertex& a, const Vertex& b, const Vertex& c, const Matrix44& finalTransform);
 	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);

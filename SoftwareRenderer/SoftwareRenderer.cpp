@@ -403,7 +403,7 @@ void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices, co
 	}
 }
 
-Vector2i SoftwareRenderer::ndcCoordToFBCoord(const Vector2f& ndcCoord)
+Vector2i SoftwareRenderer::ndcCoordToFBCoord(const Vector2f& ndcCoord) const
 {
 	Vector2i fbCoord;
 	fbCoord.x = round(m_halfSize.x + ndcCoord.x * m_halfSize.x);
@@ -428,7 +428,7 @@ void SoftwareRenderer::setPixelZ(const Vector2i& pos, const float z)
 	m_zBuffer[pos.y * m_size.x + pos.x] = z;
 }
 
-float SoftwareRenderer::getPixelZ(const Vector2i& pos)
+float SoftwareRenderer::getPixelZ(const Vector2i& pos) const
 {
 	return m_zBuffer[pos.y * m_size.x + pos.x];
 }
