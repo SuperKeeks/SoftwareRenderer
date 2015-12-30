@@ -27,8 +27,9 @@ namespace MathUtils
 
 	bool IsVertexInViewFrustum(const Vector4f& vertex);
 	bool IsTriangleInViewFrustum(const Vector4f& a, const Vector4f& b, const Vector4f& c);
-	std::vector<Vertex> ClipVerticesInAxis(const std::vector<Vertex>& vertices, int axisIndex, int sign);
-	std::vector<Vertex> ClipVerticesToFrustum(const std::vector<Vertex>& vertices);
+	void ClipVerticesInAxis(const std::vector<Vertex>& vertices, int axisIndex, int sign, std::vector<Vertex>& result);
+	void ClipVerticesToFrustum(std::vector<Vertex>& vertices);
+	void TransformVertices(std::vector<Vertex>& vertices, const Matrix44 transform);
 }
 	
 }

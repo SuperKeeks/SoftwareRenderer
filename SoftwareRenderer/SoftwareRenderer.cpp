@@ -232,7 +232,8 @@ void SoftwareRenderer::drawPoints(std::vector<Vertex> vertices, const Matrix44& 
 {
 	OMBAssert(m_initialised, "Uninitialized!");
 
-	transformVertices(vertices, transform);
+	Matrix44 finalTransMatrix = m_viewProjectionMatrix * transform;
+	MathUtils::TransformVertices(vertices, finalTransMatrix);
 	
 	for (int i = 0; i < vertices.size(); ++i)
 	{
@@ -245,30 +246,32 @@ void SoftwareRenderer::drawPoints(std::vector<Vertex> vertices, const Matrix44& 
 	}
 }
 
-void SoftwareRenderer::drawTriangles(std::vector<Vertex> vertices, const Matrix44& transform)
+void SoftwareRenderer::drawTriangles(const std::vector<Vertex>& vertices, const Matrix44& transform)
 {
 	OMBAssert(m_initialised, "Uninitialized!");
 	OMBAssert(vertices.size() % 3 == 0, "Total number of vertices is not a multiple of 3!");
 
-	transformVertices(vertices, transform);
+	Matrix44 finalTransMatrix = m_viewProjectionMatrix * transform;
 	
 	for (int i = 0; i < vertices.size() - 2; i += 3)
 	{
-		clipAndDrawTriangle(vertices[i + 0], vertices[i + 1], vertices[i + 2]);
+		clipAndDrawTriangle(vertices[i + 0], vertices[i + 1], vertices[i + 2], finalTransMatrix);
 	}
 }
 
-void SoftwareRenderer::clipAndDrawTriangle(const Vertex& a, const Vertex& b, const Vertex& c)
+void SoftwareRenderer::clipAndDrawTriangle(const Vertex& a, const Vertex& b, const Vertex& c, const Matrix44& finalTransform)
 {
-	std::vector<Vertex> auxVertices;
-	auxVertices.push_back(a);
-	auxVertices.push_back(b);
-	auxVertices.push_back(c);
+	std::vector<Vertex> vertices;
+	vertices.push_back(a);
+	vertices.push_back(b);
+	vertices.push_back(c);
+
+	MathUtils::TransformVertices(vertices, finalTransform);
 
 	if (!MathUtils::IsTriangleInViewFrustum(a.m_pos, b.m_pos, c.m_pos))
 	{
-		auxVertices = MathUtils::ClipVerticesToFrustum(auxVertices);
-		if (auxVertices.size() == 0)
+		MathUtils::ClipVerticesToFrustum(vertices);
+		if (vertices.size() == 0)
 		{
 			// Triangle was completely out of the frustum
 			return;
@@ -277,11 +280,11 @@ void SoftwareRenderer::clipAndDrawTriangle(const Vertex& a, const Vertex& b, con
 
 	// When triangles are clipped, they have to be drawn in a "triangle fan" way.
 	// When they're not, it doesn't make a difference to do it this way.
-	const Vertex& v0 = auxVertices[0];
-	for (int j = 1; j < auxVertices.size() - 1; ++j)
+	const Vertex& v0 = vertices[0];
+	for (int j = 1; j < vertices.size() - 1; ++j)
 	{
-		const Vertex& v1 = auxVertices[j];
-		const Vertex& v2 = auxVertices[j + 1];
+		const Vertex& v1 = vertices[j];
+		const Vertex& v2 = vertices[j + 1];
 
 		if (m_wireFrameModeEnabled)
 		{
@@ -384,11 +387,11 @@ bool SoftwareRenderer::getBackFaceCullingEnabled() const
 	return m_backFaceCullingEnabled;
 }
 
-void SoftwareRenderer::drawTriangleStrip(std::vector<Vertex> vertices, const Matrix44& transform)
+void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices, const Matrix44& transform)
 {
 	OMBAssert(m_initialised, "Uninitialized!");
 
-	transformVertices(vertices, transform);
+	Matrix44 finalTransMatrix = m_viewProjectionMatrix * transform;
 	
 	for (int i = 0; i < vertices.size() - 2; ++i)
 	{
@@ -396,17 +399,7 @@ void SoftwareRenderer::drawTriangleStrip(std::vector<Vertex> vertices, const Mat
 		const Vertex& b = vertices[i + ((i % 2 == 0) ? 1 : 2)];
 		const Vertex& c = vertices[i + ((i % 2 == 0) ? 2 : 1)];
 
-		clipAndDrawTriangle(a, b, c);
-	}
-}
-
-void SoftwareRenderer::transformVertices(std::vector<Vertex>& vertices, const Matrix44& modelTransform)
-{
-	Matrix44 finalTransMatrix = m_viewProjectionMatrix * modelTransform;
-
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
+		clipAndDrawTriangle(a, b, c, finalTransMatrix);
 	}
 }
 

@@ -47,10 +47,10 @@ public:
 	void drawPoints(std::vector<Vertex> vertices, const Matrix44& transform);
 	
 	// Draws triangle using the "classic" OpenGL GL_TRIANGLES primitive
-	void drawTriangles(std::vector<Vertex> vertices, const Matrix44& transform);
+	void drawTriangles(const std::vector<Vertex>& vertices, const Matrix44& transform);
 	
 	// Draws triangle using the "classic" OpenGL GL_TRIANGLE_STRIP primitive
-	void drawTriangleStrip(std::vector<Vertex> vertices, const Matrix44& transform);
+	void drawTriangleStrip(const std::vector<Vertex>& vertices, const Matrix44& transform);
 	
 	// Texture methods
 	int16_t loadTexture(const char* fileName);
@@ -87,14 +87,13 @@ private:
 	bool m_wireFrameModeEnabled = false;
 	Color m_wireFrameModeColor = Color(0, 255, 0, 255);
 	bool m_backFaceCullingEnabled = true;
-	
-	void transformVertices(std::vector<Vertex>& vertices, const Matrix44& modelTransform);
+
 	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
 	void setPixelColor(const Vector2i& pos, const Color& color);
 	void setPixelZ(const Vector2i& pos, const float z);
 	float getPixelZ(const Vector2i& pos);
 	void drawLine(const Vector2f& a, const Vector2f& b, const Color& color);
-	void clipAndDrawTriangle(const Vertex& a, const Vertex& b, const Vertex& c);
+	void clipAndDrawTriangle(const Vertex& a, const Vertex& b, const Vertex& c, const Matrix44& finalTransform);
 	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleWireframe(const Vertex& a, const Vertex& b, const Vertex& c);

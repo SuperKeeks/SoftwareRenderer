@@ -74,9 +74,9 @@ bool MathUtils::IsTriangleInViewFrustum(const Vector4f& a, const Vector4f& b, co
 		   MathUtils::IsVertexInViewFrustum(c);
 }
 
-std::vector<Vertex> MathUtils::ClipVerticesInAxis(const std::vector<Vertex>& vertices, int axisIndex, int sign)
+void MathUtils::ClipVerticesInAxis(const std::vector<Vertex>& vertices, int axisIndex, int sign, std::vector<Vertex>& result)
 {
-	std::vector<Vertex> result;
+	result.clear();
 	for (int i = 0; i < vertices.size(); ++i)
 	{
 		const Vertex& previous = (i == 0) ? vertices[vertices.size() - 1] : vertices[i - 1];
@@ -100,23 +100,26 @@ std::vector<Vertex> MathUtils::ClipVerticesInAxis(const std::vector<Vertex>& ver
 			result.push_back(current);
 		}
 	}
-
-	return result;
 }
 
-std::vector<Vertex> MathUtils::ClipVerticesToFrustum(const std::vector<Vertex>& vertices)
+void MathUtils::ClipVerticesToFrustum(std::vector<Vertex>& vertices)
 {
-	std::vector<Vertex> result = vertices;
+	std::vector<Vertex> aux;
 
-	// For x, y, z...
-	for (int i = 0; i < 3; ++i)
+	ClipVerticesInAxis(vertices, 0, 1, aux);
+	ClipVerticesInAxis(aux, 0, -1, vertices);
+	ClipVerticesInAxis(vertices, 1, 1, aux);
+	ClipVerticesInAxis(aux, 1, -1, vertices);
+	ClipVerticesInAxis(vertices, 2, 1, aux);
+	ClipVerticesInAxis(aux, 2, -1, vertices);
+}
+
+void MathUtils::TransformVertices(std::vector<Vertex>& vertices, const Matrix44 transform)
+{
+	for (int i = 0; i < vertices.size(); ++i)
 	{
-		// For both signs
-		result = ClipVerticesInAxis(result, i, 1);
-		result = ClipVerticesInAxis(result, i, -1);
+		vertices[i].m_pos = transform * vertices[i].m_pos;
 	}
-
-	return result;
 }
 
 }

@@ -2,6 +2,7 @@
 
 #include "Assert.h"
 #include "Color.h"
+#include "LogUtils.h"
 #include "Matrix44.h"
 #include "MathUtils.h"
 #include "MD2.h"
@@ -13,6 +14,8 @@
 #include "stdafx.h"
 #include "base.h"
 #include "sys.h"
+
+#include <ctime>
 
 using namespace omb;
 
@@ -302,15 +305,15 @@ int Main(void)
 	// Main game loop! ======================================================================
 	while (!SYS_GottaQuit())
 	{
-		//const clock_t startTime = clock();
+		const clock_t startTime = clock();
 		Render();
 		ProcessInput();
 		RunGame();
 		SYS_Show();
 		SYS_Pump();
 		g_time += 1.f/60.f;
-		//const clock_t endTime = clock();
-		//printf("\nFPS: %.1f", 1/(((float)(endTime - startTime)) / CLOCKS_PER_SEC));
+		const clock_t endTime = clock();
+		Log::Debug("\nFPS: %.1f", 1/(((float)(endTime - startTime)) / CLOCKS_PER_SEC));
 	}
 	EndGame();
 	
