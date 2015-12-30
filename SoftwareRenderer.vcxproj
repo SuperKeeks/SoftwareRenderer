@@ -178,6 +178,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SoftwareRenderer\Color.cpp" />
     <ClCompile Include="SoftwareRenderer\main.cpp" />
     <ClCompile Include="SoftwareRenderer\MathUtils.cpp" />
     <ClCompile Include="SoftwareRenderer\Matrix33.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="SoftwareRenderer\Vector2.cpp" />
     <ClCompile Include="SoftwareRenderer\Vector3.cpp" />
     <ClCompile Include="SoftwareRenderer\Vector4.cpp" />
+    <ClCompile Include="SoftwareRenderer\Vertex.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

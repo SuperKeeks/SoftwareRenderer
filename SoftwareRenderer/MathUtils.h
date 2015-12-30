@@ -8,10 +8,14 @@
 
 #pragma once
 
+#include <vector>
+
 namespace omb
 {
 
 struct Matrix44;
+struct Vector4f;
+struct Vertex;
 
 namespace MathUtils
 {
@@ -20,6 +24,11 @@ namespace MathUtils
 	Matrix44 CreateIdentityMatrix();
 	Matrix44 CreateScaleMatrix(const float scale);
 	Matrix44 CreateTranslationMatrix(const float transX, const float transY, const float transZ);
+
+	bool IsVertexInViewFrustum(const Vector4f& vertex);
+	bool IsTriangleInViewFrustum(const Vector4f& a, const Vector4f& b, const Vector4f& c);
+	std::vector<Vertex> ClipVerticesInAxis(const std::vector<Vertex>& vertices, int axisIndex, int sign);
+	std::vector<Vertex> ClipVerticesToFrustum(const std::vector<Vertex>& vertices);
 }
 	
 }

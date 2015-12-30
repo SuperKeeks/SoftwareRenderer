@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Color.h"
+#include "Matrix44.h"
 #include "Vector2.h"
 
 #include <stdint.h>
@@ -37,17 +38,19 @@ public:
 	
 	void init(const int width, const int height);
 	void clear(const Color& clearColor);
+
+	void setViewProjectionMatrix(const Matrix44& viewProjectionMatrix);
 	
 	// All drawing functions expect vertices in NDC [-1, 1] range
 	
 	// Draws a set of single pixel points
-	void drawPoints(const std::vector<Vertex>& vertices);
+	void drawPoints(std::vector<Vertex> vertices, const Matrix44& transform);
 	
 	// Draws triangle using the "classic" OpenGL GL_TRIANGLES primitive
-	void drawTriangles(const std::vector<Vertex>& vertices);
+	void drawTriangles(std::vector<Vertex> vertices, const Matrix44& transform);
 	
 	// Draws triangle using the "classic" OpenGL GL_TRIANGLE_STRIP primitive
-	void drawTriangleStrip(const std::vector<Vertex>& vertices);
+	void drawTriangleStrip(std::vector<Vertex> vertices, const Matrix44& transform);
 	
 	// Texture methods
 	int16_t loadTexture(const char* fileName);
@@ -76,6 +79,7 @@ private:
 	bool m_initialised = false;
 	uint8_t m_frameBuffer[kMaxWidth * kMaxHeight * kBytesPerPixel];
 	float m_zBuffer[kMaxWidth * kMaxHeight];
+	Matrix44 m_viewProjectionMatrix;
 	TextureInfo m_textures[kMaxTextures];
 	Vector2i m_size;
 	Vector2i m_halfSize;
@@ -84,11 +88,13 @@ private:
 	Color m_wireFrameModeColor = Color(0, 255, 0, 255);
 	bool m_backFaceCullingEnabled = true;
 	
+	void transformVertices(std::vector<Vertex>& vertices, const Matrix44& modelTransform);
 	Vector2i ndcCoordToFBCoord(const Vector2f& ndcCoord);
 	void setPixelColor(const Vector2i& pos, const Color& color);
 	void setPixelZ(const Vector2i& pos, const float z);
 	float getPixelZ(const Vector2i& pos);
 	void drawLine(const Vector2f& a, const Vector2f& b, const Color& color);
+	void clipAndDrawTriangle(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleSlow(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleFaster(const Vertex& a, const Vertex& b, const Vertex& c);
 	void drawTriangleWireframe(const Vertex& a, const Vertex& b, const Vertex& c);

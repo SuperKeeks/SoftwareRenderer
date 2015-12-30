@@ -1,5 +1,5 @@
 //
-//  Vector3.cpp
+//  Vector4.cpp
 //  SoftwareRenderer
 //
 //  Created by Enrique Alcor Martín on 30/11/14.
@@ -8,6 +8,7 @@
 
 #include "Vector4.h"
 
+#include "Assert.h"
 #include "Vector2.h"
 #include "Vector3.h"
 
@@ -43,6 +44,29 @@ void Vector4f::normalize()
 	y /= length;
 	z /= length;
 	w /= length;
+}
+
+float Vector4f::getComponent(int index) const
+{
+	switch (index)
+	{
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		case 3:
+			return w;
+		default:
+			OMBAssert(false, "Invalid component index %d", index);
+			return 0;
+	}
+}
+
+Vector4f Vector4f::lerp(const Vector4f& rhs, float t) const
+{
+	return (*this) * (1.0f - t) + rhs * t;
 }
 
 Vector4f::operator Vector2f() const

@@ -9,16 +9,15 @@
 #include "MathUtils.h"
 
 #include "Matrix44.h"
-
-#define _USE_MATH_DEFINES
-#include <cmath>
+#include "Vector4.h"
+#include "Vertex.h"
 
 namespace omb
 {
 
 float MathUtils::DegToRad(float deg)
 {
-	return deg * M_PI / 180;
+	return deg * 3.14159265358979323846 / 180;
 }
 	
 Matrix44 MathUtils::CreateIdentityMatrix()
@@ -59,6 +58,65 @@ Matrix44 MathUtils::CreateTranslationMatrix(const float transX, const float tran
 	translateMatrix(2, 3) = transZ;
 	
 	return translateMatrix;
+}
+
+bool MathUtils::IsVertexInViewFrustum(const Vector4f& vertex)
+{
+	return fabsf(vertex.x) <= fabsf(vertex.w) &&
+		   fabsf(vertex.y) <= fabsf(vertex.w) &&
+		   fabsf(vertex.z) <= fabsf(vertex.w);
+}
+
+bool MathUtils::IsTriangleInViewFrustum(const Vector4f& a, const Vector4f& b, const Vector4f& c)
+{
+	return MathUtils::IsVertexInViewFrustum(a) &&
+		   MathUtils::IsVertexInViewFrustum(b) &&
+		   MathUtils::IsVertexInViewFrustum(c);
+}
+
+std::vector<Vertex> MathUtils::ClipVerticesInAxis(const std::vector<Vertex>& vertices, int axisIndex, int sign)
+{
+	std::vector<Vertex> result;
+	for (int i = 0; i < vertices.size(); ++i)
+	{
+		const Vertex& previous = (i == 0) ? vertices[vertices.size() - 1] : vertices[i - 1];
+		const float previousComponent = previous.m_pos.getComponent(axisIndex) * sign;
+		bool isPreviousInFrustum = previousComponent <= previous.m_pos.w;
+		
+		const Vertex& current = vertices[i];
+		const float currentComponent = current.m_pos.getComponent(axisIndex) * sign;
+		bool isCurrentInFrustum = currentComponent <= current.m_pos.w;
+
+		if (isPreviousInFrustum ^ isCurrentInFrustum)
+		{
+			float t = (previous.m_pos.w - previousComponent) /
+				((previous.m_pos.w - previousComponent) - (current.m_pos.w - currentComponent));
+			Vertex interpVertex = previous.lerp(current, t);
+			result.push_back(interpVertex);
+		}
+
+		if (isCurrentInFrustum)
+		{
+			result.push_back(current);
+		}
+	}
+
+	return result;
+}
+
+std::vector<Vertex> MathUtils::ClipVerticesToFrustum(const std::vector<Vertex>& vertices)
+{
+	std::vector<Vertex> result = vertices;
+
+	// For x, y, z...
+	for (int i = 0; i < 3; ++i)
+	{
+		// For both signs
+		result = ClipVerticesInAxis(result, i, 1);
+		result = ClipVerticesInAxis(result, i, -1);
+	}
+
+	return result;
 }
 
 }

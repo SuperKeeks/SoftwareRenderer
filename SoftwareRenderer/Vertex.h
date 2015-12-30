@@ -20,6 +20,10 @@ struct Vertex
 	Vector4f m_pos;
 	Color m_color;
 	Vector2f m_texCoord;
+
+	Vertex()
+	{
+	}
 	
 	Vertex(const Vector4f& pos, const Color& color)
 	: m_pos(pos)
@@ -40,6 +44,8 @@ struct Vertex
 	, m_texCoord(texCoord)
 	{
 	}
+
+	Vertex lerp(const Vertex& rhs, float t) const;
 };
 	
 }

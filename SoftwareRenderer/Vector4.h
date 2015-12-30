@@ -26,6 +26,8 @@ struct Vector4f
 	
 	double getLength() const;
 	void normalize();
+	float getComponent(int index) const;
+	Vector4f lerp(const Vector4f& rhs, float t) const;
 	
 	operator Vector2f() const;
 	operator Vector3f() const;

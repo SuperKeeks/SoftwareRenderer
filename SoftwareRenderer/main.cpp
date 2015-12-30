@@ -77,8 +77,8 @@ void Render()
 	
 	// Perspective matrix
 	const float frustumScale = 1.0f;
-	const float zNear = 0.5f;
-	const float zFar = 3.0f;
+	const float zNear = 0.1f;
+	const float zFar = 5.0f;
 	Matrix44 persMatrix;
 	persMatrix(0, 0) = frustumScale;
 	persMatrix(1, 1) = frustumScale;
@@ -97,10 +97,12 @@ void Render()
 	Quaternion allRotations = rotationTransX * rotationTransY * rotationTransZ;
 	const Matrix44 allRotationsMatrix = allRotations;
 	
-	const Matrix44 finalTransMatrix = (usePerspective ? persMatrix : MathUtils::CreateIdentityMatrix()) * translationMatrix * allRotationsMatrix * scaleMatrix;
+	const Matrix44 modelTransform =  translationMatrix * allRotationsMatrix * scaleMatrix;
 	
-	DrawAvatar(finalTransMatrix);
-	//DrawCube(finalTransMatrix);
+	renderer.setViewProjectionMatrix(usePerspective ? persMatrix : MathUtils::CreateIdentityMatrix());
+	DrawAvatar(modelTransform);
+	//DrawCube(modelTransform);
+	//DrawColouredTriangle(modelTransform);
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);
@@ -315,7 +317,7 @@ int Main(void)
 	return 0;
 }
 
-void DrawAvatar(const Matrix44& finalTransMatrix)
+void DrawAvatar(const Matrix44& modelMatrix)
 {
 	const Vector2f topLeft(0, 0);
 	const Vector2f topRight(1.0f, 0);
@@ -330,17 +332,12 @@ void DrawAvatar(const Matrix44& finalTransMatrix)
 	vertices.push_back(Vertex(Vector4f(-1.0f, -1.0f, 0, 1.0f), bottomLeft));
 	vertices.push_back(Vertex(Vector4f(-1.0f,  1.0f, 0, 1.0f), topLeft));
 	
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
-	}
-	
 	renderer.bindTexture(avatarTexId);
-	renderer.drawTriangles(vertices);
+	renderer.drawTriangles(vertices, modelMatrix);
 	renderer.unbindTexture();
 }
 
-void DrawCube(const Matrix44& finalTransMatrix)
+void DrawCube(const Matrix44& modelMatrix)
 {
 	const Color red(255, 0, 0, 255);
 	const Color green(0, 255, 0, 255);
@@ -370,13 +367,8 @@ void DrawCube(const Matrix44& finalTransMatrix)
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -1.25f, 1.0f), topLeft));
 	vertices.push_back(Vertex(Vector4f(-0.25f,  0.25f, -2.75f, 1.0f), bottomLeft));
 	
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
-	}
-	
 	renderer.bindTexture(avatarTexId);
-	renderer.drawTriangles(vertices);
+	renderer.drawTriangles(vertices, modelMatrix);
 	renderer.unbindTexture();
 	
 	vertices.clear();
@@ -406,15 +398,10 @@ void DrawCube(const Matrix44& finalTransMatrix)
 	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -2.75f, 1.0f), pink));
 	vertices.push_back(Vertex(Vector4f(-0.25f, -0.25f, -1.25f, 1.0f), pink));
 	
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
-	}
-	
-	renderer.drawTriangles(vertices);
+	renderer.drawTriangles(vertices, modelMatrix);
 }
 
-void DrawCyberDemon(const Matrix44& finalTransMatrix)
+void DrawCyberDemon(const Matrix44& modelMatrix)
 {
 	std::vector<Vertex> vertices;
 	
@@ -431,7 +418,6 @@ void DrawCyberDemon(const Matrix44& finalTransMatrix)
 			pos.y = (md2Vertex.m_position[1] * frame.m_scale.y) + frame.m_translate.y;
 			pos.z = (md2Vertex.m_position[2] * frame.m_scale.z) + frame.m_translate.z;
 			pos.w = 1.0f;
-			pos = finalTransMatrix * pos;
 			
 			Vector2f texCoord;
 			texCoord.x = (float)cyberDemonModel->m_texCoords[triangle.m_texCoordIdxs[j]].m_s / cyberDemonModel->m_header.m_textureWidth;
@@ -442,11 +428,11 @@ void DrawCyberDemon(const Matrix44& finalTransMatrix)
 	}
 	
 	renderer.bindTexture(cyberDemonTexId);
-	renderer.drawTriangles(vertices);
+	renderer.drawTriangles(vertices, modelMatrix);
 	renderer.unbindTexture();
 }
 
-void DrawColouredTriangle(const Matrix44& finalTransMatrix)
+void DrawColouredTriangle(const Matrix44& modelMatrix)
 {
 	std::vector<Vertex> vertices;
 	
@@ -454,11 +440,8 @@ void DrawColouredTriangle(const Matrix44& finalTransMatrix)
 	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
 	vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
 	/*vertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
-	 vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
-	 vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));*/
-	for (int i = 0; i < vertices.size(); ++i)
-	{
-		vertices[i].m_pos = finalTransMatrix * vertices[i].m_pos;
-	}
-	renderer.drawTriangleStrip(vertices);
+	vertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
+	vertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));*/
+
+	renderer.drawTriangleStrip(vertices, modelMatrix);
 }

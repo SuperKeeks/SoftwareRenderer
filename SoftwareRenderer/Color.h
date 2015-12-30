@@ -35,6 +35,11 @@ struct Color
 	, a(a)
 	{
 	}
+
+	Color lerp(const Color& rhs, float t) const;
+
+	Color operator+(const Color& rhs) const;
+	Color operator*(const float rhs) const;
 };
 	
 }
