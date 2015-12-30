@@ -12,6 +12,8 @@
 #include "Vector4.h"
 #include "Vertex.h"
 
+#include <math.h>
+
 namespace omb
 {
 
