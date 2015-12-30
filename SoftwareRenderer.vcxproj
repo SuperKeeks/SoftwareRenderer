@@ -161,6 +161,7 @@
     <ClInclude Include="SoftwareRenderer\Assert.h" />
     <ClInclude Include="SoftwareRenderer\base.h" />
     <ClInclude Include="SoftwareRenderer\Color.h" />
+    <ClInclude Include="SoftwareRenderer\LogUtils.h" />
     <ClInclude Include="SoftwareRenderer\MathUtils.h" />
     <ClInclude Include="SoftwareRenderer\Matrix33.h" />
     <ClInclude Include="SoftwareRenderer\Matrix44.h" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SoftwareRenderer\Color.cpp" />
+    <ClCompile Include="SoftwareRenderer\LogUtils.cpp" />
     <ClCompile Include="SoftwareRenderer\main.cpp" />
     <ClCompile Include="SoftwareRenderer\MathUtils.cpp" />
     <ClCompile Include="SoftwareRenderer\Matrix33.cpp" />
