@@ -29,13 +29,20 @@ const dword width_pow2 = 512;
 const dword height_pow2 = 512;
 const dword width = 512;
 const sdword height = 512;
-float rotationDegX = 310.0f;
+/*float rotationDegX = 310.0f;
 float rotationDegY = 0;
 float rotationDegZ = 0;
-//float scale = -0.009f; // Use this one for cyberdemon
 float scale = 1.0f;
-Vector3f posOffset(0, 0.5f, -1.25);
-//Vector3f posOffset(0, 0,0);
+Vector3f posOffset(0, 0.5f, -1.25);*/
+
+
+// Cyberdemon values
+float rotationDegX = 285.0f;
+float rotationDegY = 0;
+float rotationDegZ = 265.0f;
+float scale = 0.005f;
+Vector3f posOffset(0, -0.5f, -1.25);
+
 bool usePerspective = true;
 bool keyPressedLastFrame = false;
 
@@ -103,9 +110,10 @@ void Render()
 	const Matrix44 modelTransform =  translationMatrix * allRotationsMatrix * scaleMatrix;
 	
 	renderer.setViewProjectionMatrix(usePerspective ? persMatrix : MathUtils::CreateIdentityMatrix());
-	DrawAvatar(modelTransform);
+	//DrawAvatar(modelTransform);
 	//DrawCube(modelTransform);
 	//DrawColouredTriangle(modelTransform);
+	DrawCyberDemon(modelTransform);
 	
 	const vec2 p0 = vmake(0, 0);
 	const vec2 p1 = vmake(G_WIDTH,G_HEIGHT);
@@ -313,7 +321,7 @@ int Main(void)
 		SYS_Pump();
 		g_time += 1.f/60.f;
 		const clock_t endTime = clock();
-		Log::Debug("\nFPS: %.1f", 1/(((float)(endTime - startTime)) / CLOCKS_PER_SEC));
+		//Log::Debug("\nFPS: %.1f", 1/(((float)(endTime - startTime)) / CLOCKS_PER_SEC));
 	}
 	EndGame();
 	
