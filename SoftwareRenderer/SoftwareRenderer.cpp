@@ -268,7 +268,7 @@ void SoftwareRenderer::clipAndDrawTriangle(const Vertex& a, const Vertex& b, con
 
 	MathUtils::TransformVertices(vertices, finalTransform);
 
-	if (!MathUtils::IsTriangleInViewFrustum(a.m_pos, b.m_pos, c.m_pos))
+	if (!MathUtils::IsTriangleInViewFrustum(vertices[0].m_pos, vertices[1].m_pos, vertices[2].m_pos))
 	{
 		MathUtils::ClipVerticesToFrustum(vertices);
 		if (vertices.size() == 0)
