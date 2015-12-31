@@ -415,6 +415,7 @@ void DrawCube(const Matrix44& modelMatrix)
 void DrawCyberDemon(const Matrix44& modelMatrix)
 {
 	std::vector<Vertex> vertices;
+	vertices.reserve(cyberDemonModel->m_header.m_numTriangles * 3);
 	
 	const MD2Frame& frame = cyberDemonModel->m_frames[0];
 	for (int i = 0; i < cyberDemonModel->m_header.m_numTriangles; ++i)

@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <cmath>
 
-#define USE_SLOW_TRIANGLE_METHOD 0
+#define USE_SLOW_TRIANGLE_METHOD 1
 
 namespace omb
 {
@@ -262,6 +262,7 @@ void SoftwareRenderer::drawTriangles(const std::vector<Vertex>& vertices, const 
 void SoftwareRenderer::clipAndDrawTriangle(const Vertex& a, const Vertex& b, const Vertex& c, const Matrix44& finalTransform)
 {
 	std::vector<Vertex> vertices;
+	vertices.reserve(3);
 	vertices.push_back(a);
 	vertices.push_back(b);
 	vertices.push_back(c);
@@ -546,6 +547,19 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		factorPBB = std::min(baseB->x, peak->x);
 	}
 	
+	Vector2f aPosAsV2f(aFB.x, aFB.y);
+	Vector2f bPosAsV2f(bFB.x, bFB.y);
+	Vector2f cPosAsV2f(cFB.x, cFB.y);
+	const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+	const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+	const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+	
+	TextureInfo texInfo;
+	if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
+	{
+		texInfo = m_textures[m_bindedTextureId];
+	}
+	
 	for (int y = upperMostY; y >= lowerMostY; --y)
 	{
 		const int minXTr = ceil((slopePBA * y) + factorPBA);
@@ -558,19 +572,6 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		for (int x = minX; x <= maxX; ++x)
 		{
 			const Vector2i position(x, y);
-			TextureInfo texInfo;
-			if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
-			{
-				texInfo = m_textures[m_bindedTextureId];
-			}
-
-			Vector2f aPosAsV2f(aFB.x, aFB.y);
-			Vector2f bPosAsV2f(bFB.x, bFB.y);
-			Vector2f cPosAsV2f(cFB.x, cFB.y);
-			const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
-			const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
-			const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
-			
 			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aInfo, bInfo, cInfo, texInfo);
 			
 			if (intRes.m_z < getPixelZ(position))
@@ -746,6 +747,13 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 	const int upperMostY = std::min(upperMostYTr, m_size.y - 1);
 	const int lowerMostY = std::max(lowerMostYTr, 0);
 	
+	Vector2f aPosAsV2f(aFB.x, aFB.y);
+	Vector2f bPosAsV2f(bFB.x, bFB.y);
+	Vector2f cPosAsV2f(cFB.x, cFB.y);
+	const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
+	const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
+	const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+	
 	TextureInfo texInfo;
 	if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
 	{
@@ -759,13 +767,6 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 			Vector2i candidate(j, k);
 			if (isPointInTriangle(candidate, aFB, bFB, cFB))
 			{
-				Vector2f aPosAsV2f(aFB.x, aFB.y);
-				Vector2f bPosAsV2f(bFB.x, bFB.y);
-				Vector2f cPosAsV2f(cFB.x, cFB.y);
-				const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
-				const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
-				const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
-				
 				const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aInfo, bInfo, cInfo, texInfo);
 				if (intRes.m_z < getPixelZ(candidate))
 				{
