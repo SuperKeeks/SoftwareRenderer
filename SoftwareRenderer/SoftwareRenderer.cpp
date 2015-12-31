@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <cmath>
 
-#define USE_SLOW_TRIANGLE_METHOD 1
+#define USE_SLOW_TRIANGLE_METHOD 0
 
 namespace omb
 {
@@ -140,7 +140,46 @@ namespace
 			
 			res.m_texCoord.x = interpUOverW / interp1OverW;
 			res.m_texCoord.y = interpVOverW / interp1OverW;
-
+		}
+		else
+		{
+			res.m_color.r = pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r;
+			res.m_color.g = pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g;
+			res.m_color.b = pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b;
+			res.m_color.a = pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a;
+		}
+		
+		res.m_z = pbcArea/totalArea * a.m_z + pacArea/totalArea * b.m_z + pabArea/totalArea * c.m_z;
+		res.m_w = 1.0f / interp1OverW;
+		
+		return res;
+	}
+	
+	InterpolateResult calculateFinalColorAndZ(const Vector2f& point,
+											  const VertexInterpInfo& a,
+											  const VertexInterpInfo& b,
+											  const VertexInterpInfo& c,
+											  const TextureInfo& texInfo,
+											  const float totalArea)
+	{
+		InterpolateResult res;
+		
+		// Barycentric color interpolation. For more info: http://classes.soe.ucsc.edu/cmps160/Fall10/resources/barycentricInterpolation.pdf
+		// NOTE: totalArea not calculated here to gain some extra performance, as it's the same for all pixels in a triangle
+		const float pabArea = fabsf((point.x*(a.m_fbPos.y - b.m_fbPos.y) + a.m_fbPos.x*(b.m_fbPos.y - point.y) + b.m_fbPos.x*(point.y - a.m_fbPos.y))/2);
+		const float pacArea = fabsf((point.x*(a.m_fbPos.y - c.m_fbPos.y) + a.m_fbPos.x*(c.m_fbPos.y - point.y) + c.m_fbPos.x*(point.y - a.m_fbPos.y))/2);
+		const float pbcArea = fabsf((point.x*(b.m_fbPos.y - c.m_fbPos.y) + b.m_fbPos.x*(c.m_fbPos.y - point.y) + c.m_fbPos.x*(point.y - b.m_fbPos.y))/2);
+		
+		const float interp1OverW = pbcArea/totalArea * a.m_1OverW + pacArea/totalArea * b.m_1OverW + pabArea/totalArea * c.m_1OverW;
+		
+		if (texInfo.isValid())
+		{
+			const float interpUOverW = pbcArea/totalArea * a.m_uOverW + pacArea/totalArea * b.m_uOverW + pabArea/totalArea * c.m_uOverW;
+			const float interpVOverW = pbcArea/totalArea * a.m_vOverW + pacArea/totalArea * b.m_vOverW + pabArea/totalArea * c.m_vOverW;
+			
+			res.m_texCoord.x = interpUOverW / interp1OverW;
+			res.m_texCoord.y = interpVOverW / interp1OverW;
+			
 			const int xCoordAbs = clamp((texInfo.m_size.x - 1) * res.m_texCoord.x, 0, texInfo.m_size.x - 1);
 			const int yCoordAbs = clamp((texInfo.m_size.y - 1) * res.m_texCoord.y, 0, texInfo.m_size.y - 1);
 			
@@ -159,7 +198,6 @@ namespace
 		}
 		
 		res.m_z = pbcArea/totalArea * a.m_z + pacArea/totalArea * b.m_z + pabArea/totalArea * c.m_z;
-		res.m_w = 1.0f / interp1OverW;
 		
 		return res;
 	}
@@ -553,6 +591,7 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 	const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
 	const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
 	const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+	const float totalArea = fabsf((aPosAsV2f.x*(bPosAsV2f.y - cPosAsV2f.y) + bPosAsV2f.x*(cPosAsV2f.y - aPosAsV2f.y) + cPosAsV2f.x*(aPosAsV2f.y - bPosAsV2f.y))/2);
 	
 	TextureInfo texInfo;
 	if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
@@ -572,7 +611,7 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 		for (int x = minX; x <= maxX; ++x)
 		{
 			const Vector2i position(x, y);
-			const InterpolateResult intRes = interpolate(Vector2f(position.x, position.y), aInfo, bInfo, cInfo, texInfo);
+			const InterpolateResult intRes = calculateFinalColorAndZ(Vector2f(position.x, position.y), aInfo, bInfo, cInfo, texInfo, totalArea);
 			
 			if (intRes.m_z < getPixelZ(position))
 			{
@@ -753,6 +792,7 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 	const VertexInterpInfo aInfo(aPosAsV2f, a.m_pos.z, a.m_color, a.m_texCoord.x / a.m_pos.w, a.m_texCoord.y / a.m_pos.w, 1.0f / a.m_pos.w);
 	const VertexInterpInfo bInfo(bPosAsV2f, b.m_pos.z, b.m_color, b.m_texCoord.x / b.m_pos.w, b.m_texCoord.y / b.m_pos.w, 1.0f / b.m_pos.w);
 	const VertexInterpInfo cInfo(cPosAsV2f, c.m_pos.z, c.m_color, c.m_texCoord.x / c.m_pos.w, c.m_texCoord.y / c.m_pos.w, 1.0f / c.m_pos.w);
+	const float totalArea = fabsf((aPosAsV2f.x*(bPosAsV2f.y - cPosAsV2f.y) + bPosAsV2f.x*(cPosAsV2f.y - aPosAsV2f.y) + cPosAsV2f.x*(aPosAsV2f.y - bPosAsV2f.y))/2);
 	
 	TextureInfo texInfo;
 	if (m_bindedTextureId != SoftwareRendererConsts::kInvalidTextureId)
@@ -767,7 +807,7 @@ void SoftwareRenderer::drawTriangleSlow(const Vertex& a, const Vertex& b, const 
 			Vector2i candidate(j, k);
 			if (isPointInTriangle(candidate, aFB, bFB, cFB))
 			{
-				const InterpolateResult intRes = interpolate(Vector2f(candidate.x, candidate.y), aInfo, bInfo, cInfo, texInfo);
+				const InterpolateResult intRes = calculateFinalColorAndZ(Vector2f(candidate.x, candidate.y), aInfo, bInfo, cInfo, texInfo, totalArea);
 				if (intRes.m_z < getPixelZ(candidate))
 				{
 					setPixelColor(candidate, intRes.m_color);
