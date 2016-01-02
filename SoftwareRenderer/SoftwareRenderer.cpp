@@ -601,8 +601,8 @@ void SoftwareRenderer::drawSubTriangle(const Vertex& a, const Vertex& b, const V
 	
 	for (int y = upperMostY; y >= lowerMostY; --y)
 	{
-		const int minXTr = ceil((slopePBA * y) + factorPBA);
-		const int maxXTr = floor((slopePBB * y) + factorPBB);
+		const int minXTr = floor((slopePBA * y) + factorPBA);
+		const int maxXTr = ceil((slopePBB * y) + factorPBB);
 		
 		// Again, check we're not off screen
 		const int maxX = std::min(maxXTr, m_size.x - 1);

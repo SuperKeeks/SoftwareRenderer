@@ -1,3 +1,11 @@
+Short term
+==========
+-Refactor main, better handling of model transforms
+-Fix issues with "faster" rasterizer
+-Add animation support for MD2 models
+
+Long term
+=========
 -Implement better triangle rasterization (read https://fgiesen.wordpress.com/2013/02/08/triangle-rasterization-in-practice/)
 -Triangle strip with indices
 -Improve performance by interpolating texcoords, colors and z by calculating the values of them at the edges and then getting deltas to add as we paint a line (inspired by http://archive.gamedev.net/archive/reference/articles/article331.html)
