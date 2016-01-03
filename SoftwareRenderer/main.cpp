@@ -47,6 +47,8 @@ float timeInCurrentAnim;
 bool usePerspective = true;
 bool keyPressedLastFrame = false;
 clock_t prevFrameTime;
+Vector2i prevMousePos;
+bool mouseWasPressed;
 
 void DrawAvatar(const Matrix44&);
 void DrawCube(const Matrix44&);
@@ -155,8 +157,28 @@ void ProcessInput()
 	const bool swPerspective = SYS_KeyPressed('P');
 	const bool swWireframe = SYS_KeyPressed('1');
 	const bool swBackFaceCulling = SYS_KeyPressed('2');
+	const bool mousePressed = SYS_MouseButonPressed(0);
 	
-	float keyPressedThisFrame = left || right || up || down ||
+	const ivec2 mousePosIVec2 = SYS_MousePos();
+	const Vector2i mousePos(mousePosIVec2.x, mousePosIVec2.y);
+	const float mouseRotationFactor = 0.5f;
+	
+	if (!mouseWasPressed && mousePressed)
+	{
+		prevMousePos = mousePos;
+	}
+	
+	if (mousePressed)
+	{
+		const Vector2i mousePosDiff = mousePos - prevMousePos;
+		rotationDegZ += mousePosDiff.x * mouseRotationFactor;
+		rotationDegX += mousePosDiff.y * mouseRotationFactor;
+	}
+	
+	prevMousePos = mousePos;
+	mouseWasPressed = mousePressed;
+	
+	bool keyPressedThisFrame = left || right || up || down ||
 		scaleUp || scaleDown ||
 		rotateCCWX || rotateCWX ||
 		rotateCCWY || rotateCWY ||
