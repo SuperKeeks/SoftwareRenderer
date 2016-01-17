@@ -8,18 +8,18 @@
 
 #include <ctime>
 
-clock_t prevFrameTime;
+double prevFrameTime;
 
 DemoController demoController;
 
 int Main(void)
 {
-	prevFrameTime = clock();
+	prevFrameTime = glfwGetTime();
 	demoController.init();
 	while (!SYS_GottaQuit())
 	{
-		const clock_t currentTime = clock();
-		const float dt = (((float)(currentTime - prevFrameTime)) / CLOCKS_PER_SEC);
+		const double currentTime = glfwGetTime();
+		const float dt = currentTime - prevFrameTime;
 		//Log::Debug("\ndt: %.5f", dt);
 		demoController.update(dt);
 		demoController.draw();
