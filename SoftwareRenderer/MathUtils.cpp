@@ -36,11 +36,16 @@ Matrix44 MathUtils::CreateIdentityMatrix()
 	
 Matrix44 MathUtils::CreateScaleMatrix(const float scale)
 {
+	return CreateScaleMatrix(scale, scale, scale);
+}
+	
+Matrix44 MathUtils::CreateScaleMatrix(const float scaleX, const float scaleY, const float scaleZ)
+{
 	Matrix44 scaleMatrix;
 	
-	scaleMatrix(0, 0) = scale;
-	scaleMatrix(1, 1) = scale;
-	scaleMatrix(2, 2) = scale;
+	scaleMatrix(0, 0) = scaleX;
+	scaleMatrix(1, 1) = scaleY;
+	scaleMatrix(2, 2) = scaleZ;
 	scaleMatrix(3, 3) = 1;
 	
 	return scaleMatrix;
@@ -60,6 +65,18 @@ Matrix44 MathUtils::CreateTranslationMatrix(const float transX, const float tran
 	translateMatrix(2, 3) = transZ;
 	
 	return translateMatrix;
+}
+	
+Matrix44 MathUtils::CreatePerspectiveMatrix(const float frustumScale, const float near, const float far)
+{
+	Matrix44 persMatrix;
+	persMatrix(0, 0) = frustumScale;
+	persMatrix(1, 1) = frustumScale;
+	persMatrix(2, 2) = (far + near) / (near - far);
+	persMatrix(2, 3) = (2 * far * near) / (near - far);
+	persMatrix(3, 2) = -1.0f;
+	
+	return persMatrix;
 }
 
 bool MathUtils::IsVertexInViewFrustum(const Vector4f& vertex)

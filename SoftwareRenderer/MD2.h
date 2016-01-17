@@ -94,6 +94,7 @@ namespace MD2Utils
 	// Loads a MD2 model. It is responsability of the caller to release the memory.
 	// Returns nullptr if the model couldn't be loaded
 	MD2Model* LoadModel(const char* filePath);
+	void UnloadMode(MD2Model* model);
 }
 
 }

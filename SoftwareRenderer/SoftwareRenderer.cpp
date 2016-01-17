@@ -22,8 +22,6 @@
 #include <algorithm>
 #include <cmath>
 
-#define USE_SLOW_TRIANGLE_METHOD 0
-
 namespace omb
 {
 
@@ -331,11 +329,14 @@ void SoftwareRenderer::clipAndDrawTriangle(const Vertex& a, const Vertex& b, con
 		}
 		else
 		{
-#if USE_SLOW_TRIANGLE_METHOD
-			drawTriangleSlow(v0, v1, v2);
-#else
-			drawTriangleFaster(v0, v1, v2);
-#endif
+			if (m_renderMode == RenderMode::CheckPixelInTriangle)
+			{
+				drawTriangleSlow(v0, v1, v2);
+			}
+			else
+			{
+				drawTriangleFaster(v0, v1, v2);
+			}
 		}
 	}
 }
@@ -424,6 +425,16 @@ void SoftwareRenderer::setBackFaceCullingEnabled(bool enable)
 bool SoftwareRenderer::getBackFaceCullingEnabled() const
 {
 	return m_backFaceCullingEnabled;
+}
+	
+void SoftwareRenderer::setRenderMode(const RenderMode renderMode)
+{
+	m_renderMode = renderMode;
+}
+
+SoftwareRenderer::RenderMode SoftwareRenderer::getRenderMode() const
+{
+	return m_renderMode;
 }
 
 void SoftwareRenderer::drawTriangleStrip(const std::vector<Vertex>& vertices, const Matrix44& transform)

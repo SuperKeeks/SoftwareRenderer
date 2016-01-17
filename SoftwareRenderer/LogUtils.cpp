@@ -29,7 +29,7 @@ void Log::Debug(const char* fmt, ...)
 #ifdef _WINDOWS
 	OutputDebugString(buff);
 #elif defined(__APPLE__)
-	printf(buff);
+	printf("%s\n", buff);
 #endif
 	va_end(args);
 }

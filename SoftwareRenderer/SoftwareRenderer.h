@@ -1,3 +1,11 @@
+//
+//  SoftwareRenderer.h
+//  SoftwareRenderer
+//
+//  Created by Enrique Alcor Martín on 06/07/14.
+//  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
+//
+
 #pragma once
 
 #include "Color.h"
@@ -33,6 +41,12 @@ namespace SoftwareRendererConsts
 class SoftwareRenderer
 {
 public:
+	enum class RenderMode
+	{
+		CheckPixelInTriangle,
+		Scanlines
+	};
+	
 	SoftwareRenderer();
 	~SoftwareRenderer();
 	
@@ -65,6 +79,10 @@ public:
 	void setBackFaceCullingEnabled(bool enable);
 	bool getBackFaceCullingEnabled() const;
 	
+	// Rendering mode
+	void setRenderMode(const RenderMode renderMode);
+	RenderMode getRenderMode() const;
+	
 	// Returns the framebuffer, ready to show on screen
 	uint8_t* getFrameBuffer() { return m_frameBuffer; }
 
@@ -77,6 +95,7 @@ private:
 	bool m_initialised = false;
 	uint8_t m_frameBuffer[kMaxWidth * kMaxHeight * kBytesPerPixel];
 	float m_zBuffer[kMaxWidth * kMaxHeight];
+	RenderMode m_renderMode = RenderMode::Scanlines;
 	Matrix44 m_viewProjectionMatrix;
 	TextureInfo m_textures[kMaxTextures];
 	Vector2i m_size;

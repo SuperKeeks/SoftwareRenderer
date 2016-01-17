@@ -67,5 +67,10 @@ MD2Model* MD2Utils::LoadModel(const char* filePath)
 	
 	return model;
 }
+	
+void MD2Utils::UnloadMode(MD2Model* model)
+{
+	delete model;
+}
 
 }

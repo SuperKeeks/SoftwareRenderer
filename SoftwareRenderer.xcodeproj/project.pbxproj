@@ -18,6 +18,8 @@
 		21B5051519E95B4C0088E33B /* Quaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21B5051419E95B4C0088E33B /* Quaternion.cpp */; };
 		21CBB23D19EAEAF500E6E4ED /* Matrix33.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CBB23C19EAEAF500E6E4ED /* Matrix33.cpp */; };
 		21CBB23F19EAEB0300E6E4ED /* Matrix44.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21CBB23E19EAEB0300E6E4ED /* Matrix44.cpp */; };
+		21D8C77E1C4BAC91004480E8 /* DemoController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21D8C77C1C4BAC91004480E8 /* DemoController.cpp */; };
+		21D8C7811C4BB871004480E8 /* Transform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21D8C77F1C4BB871004480E8 /* Transform.cpp */; };
 		EB1CECD51C34930300E09499 /* Vertex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB1CECD41C34930300E09499 /* Vertex.cpp */; };
 		EB1CECD81C34932A00E09499 /* LogUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB1CECD71C34932A00E09499 /* LogUtils.cpp */; };
 		EB1CECDA1C34935300E09499 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB1CECD91C34935300E09499 /* Color.cpp */; };
@@ -60,6 +62,10 @@
 		21B5051419E95B4C0088E33B /* Quaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Quaternion.cpp; sourceTree = "<group>"; };
 		21CBB23C19EAEAF500E6E4ED /* Matrix33.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix33.cpp; sourceTree = "<group>"; };
 		21CBB23E19EAEB0300E6E4ED /* Matrix44.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix44.cpp; sourceTree = "<group>"; };
+		21D8C77C1C4BAC91004480E8 /* DemoController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DemoController.cpp; sourceTree = "<group>"; };
+		21D8C77D1C4BAC91004480E8 /* DemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoController.h; sourceTree = "<group>"; };
+		21D8C77F1C4BB871004480E8 /* Transform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Transform.cpp; sourceTree = "<group>"; };
+		21D8C7801C4BB871004480E8 /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
 		EB1CECD41C34930300E09499 /* Vertex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex.cpp; sourceTree = "<group>"; };
 		EB1CECD61C34931D00E09499 /* LogUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogUtils.h; sourceTree = "<group>"; };
 		EB1CECD71C34932A00E09499 /* LogUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogUtils.cpp; sourceTree = "<group>"; };
@@ -118,6 +124,8 @@
 				EB1CECD41C34930300E09499 /* Vertex.cpp */,
 				2105FC711B37480700F9092F /* MD2.h */,
 				2105FC701B37480700F9092F /* MD2.cpp */,
+				21D8C7801C4BB871004480E8 /* Transform.h */,
+				21D8C77F1C4BB871004480E8 /* Transform.cpp */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -187,6 +195,8 @@
 				21A06CAE1A569D3E008F321F /* Externals */,
 				21A06CB41A569EEE008F321F /* Resources */,
 				2183CFC119E0853100B1F481 /* Utils */,
+				21D8C77D1C4BAC91004480E8 /* DemoController.h */,
+				21D8C77C1C4BAC91004480E8 /* DemoController.cpp */,
 				218A900819696F6000F32339 /* SoftwareRenderer.h */,
 				218A900A19696F8F00F32339 /* SoftwareRenderer.cpp */,
 			);
@@ -288,6 +298,8 @@
 				EB1CECD81C34932A00E09499 /* LogUtils.cpp in Sources */,
 				21B5051519E95B4C0088E33B /* Quaternion.cpp in Sources */,
 				2183CFBA19E0804D00B1F481 /* Vector3.cpp in Sources */,
+				21D8C77E1C4BAC91004480E8 /* DemoController.cpp in Sources */,
+				21D8C7811C4BB871004480E8 /* Transform.cpp in Sources */,
 				217D0D5C1A2B9AA600620485 /* Vector4.cpp in Sources */,
 				218A900B19696F8F00F32339 /* SoftwareRenderer.cpp in Sources */,
 				EB1CECD51C34930300E09499 /* Vertex.cpp in Sources */,
