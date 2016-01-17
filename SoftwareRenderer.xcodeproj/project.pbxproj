@@ -249,7 +249,7 @@
 		218494D51958D21100E6FCF7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Enrique Alcor Martín";
 			};
 			buildConfigurationList = 218494D81958D21100E6FCF7 /* Build configuration list for PBXProject "SoftwareRenderer" */;
@@ -326,6 +326,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -394,6 +395,7 @@
 				INFOPLIST_FILE = "SoftwareRenderer/SoftwareRenderer-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = "-lglfw";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ohmybug.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -414,6 +416,7 @@
 				INFOPLIST_FILE = "SoftwareRenderer/SoftwareRenderer-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_LDFLAGS = "-lglfw";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ohmybug.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
