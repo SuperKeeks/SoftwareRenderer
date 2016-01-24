@@ -1,16 +1,9 @@
-// sys_osx.cpp
 #include "stdafx.h"
 #include "base.h"
 #include "sys.h"
 
-//========================================================================================
-// Has to be provided by the game
 extern int Main(void);
 
-//========================================================================================
-// Platform layer implementation
-
-//-----------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
 	int retval = -1;
@@ -27,37 +20,29 @@ int main(int argc, char *argv[])
 	return retval;
 }
 
-//-----------------------------------------------------------------------------
+namespace omb
+{
+
 void SYS_Pump()
 {
 	// GLFW takes care...
 }
 
-//-----------------------------------------------------------------------------
 void SYS_Show()
 {
 	glfwSwapBuffers();
 }
 
-//-----------------------------------------------------------------------------
 bool SYS_GottaQuit()
 {
 	return glfwGetKey(GLFW_KEY_ESC) || !glfwGetWindowParam(GLFW_OPENED);
 }
 
-//-----------------------------------------------------------------------------
-void SYS_Sleep(int ms)
-{
-    usleep(1000 * ms);
-}
-
-//-----------------------------------------------------------------------------
 bool SYS_KeyPressed(int key)
 {
 	return glfwGetKey(key);
 }
 
-//-----------------------------------------------------------------------------
 ivec2 SYS_MousePos()
 {
 	int x, y;
@@ -68,8 +53,14 @@ ivec2 SYS_MousePos()
 	return pos;
 }
 
-//-----------------------------------------------------------------------------
 bool SYS_MouseButonPressed(int button)
 {
 	return glfwGetMouseButton(button);
+}
+
+double SYS_GetTime()
+{
+	return glfwGetTime();
+}
+
 }

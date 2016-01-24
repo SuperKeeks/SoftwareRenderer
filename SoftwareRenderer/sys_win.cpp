@@ -1,7 +1,10 @@
-// sys_win.cpp
 #include "stdafx.h"
 #include "base.h"
 #include "sys.h"
+
+#include "Vector2.h"
+
+#include <ctime>
 
 extern int Main(void);
 
@@ -110,7 +113,9 @@ int APIENTRY WinMain(HINSTANCE hI, HINSTANCE hPrevI, LPSTR lpCmdLine, int nCS)
   return retval;
 }
 
-//-----------------------------------------------------------------------------
+namespace omb
+{
+
 void SYS_Pump()
 {
   MSG msg;
@@ -128,44 +133,40 @@ void SYS_Pump()
   }
 }
 
-//-----------------------------------------------------------------------------
 void SYS_Show()
 {
   glFlush();
   SwapBuffers( WIN_hDC );
 }
 
-//-----------------------------------------------------------------------------
 bool SYS_GottaQuit()
 {
   return WIN_bGottaQuit;
 }
 
-//-----------------------------------------------------------------------------
-void SYS_Sleep(int ms)
-{
-  Sleep(ms);
-}
-
-//-----------------------------------------------------------------------------
 bool SYS_KeyPressed(int key)
 {
   return GetFocus() == WIN_hWnd && (GetAsyncKeyState(key) & 0x8000) != 0;
 }
 
-//-----------------------------------------------------------------------------
-ivec2 SYS_MousePos()
+Vector2i SYS_MousePos()
 {
   POINT pt;
   GetCursorPos(&pt);
   ScreenToClient(WIN_hWnd, &pt);
 
-  ivec2 r = { pt.x, SYS_HEIGHT - pt.y };
-  return r;
+  Vector2i mousePos(pt.x, SYS_HEIGHT - pt.y);
+  return mousePos;
 }
 
-//-----------------------------------------------------------------------------
-bool  SYS_MouseButonPressed(int button)
+bool SYS_MouseButonPressed(int button)
 {
   return GetFocus() == WIN_hWnd && (GetAsyncKeyState(button) & 0x8000) != 0;
+}
+
+double SYS_GetTime()
+{
+	return clock() / (double)CLOCKS_PER_SEC;
+}
+
 }

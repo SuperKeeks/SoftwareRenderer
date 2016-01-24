@@ -161,6 +161,7 @@
     <ClInclude Include="SoftwareRenderer\Assert.h" />
     <ClInclude Include="SoftwareRenderer\base.h" />
     <ClInclude Include="SoftwareRenderer\Color.h" />
+    <ClInclude Include="SoftwareRenderer\DemoController.h" />
     <ClInclude Include="SoftwareRenderer\LogUtils.h" />
     <ClInclude Include="SoftwareRenderer\MathUtils.h" />
     <ClInclude Include="SoftwareRenderer\Matrix33.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="SoftwareRenderer\stdafx.h" />
     <ClInclude Include="SoftwareRenderer\sys.h" />
     <ClInclude Include="SoftwareRenderer\targetver.h" />
+    <ClInclude Include="SoftwareRenderer\Transform.h" />
     <ClInclude Include="SoftwareRenderer\Vector2.h" />
     <ClInclude Include="SoftwareRenderer\Vector3.h" />
     <ClInclude Include="SoftwareRenderer\Vector4.h" />
@@ -180,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SoftwareRenderer\Color.cpp" />
+    <ClCompile Include="SoftwareRenderer\DemoController.cpp" />
     <ClCompile Include="SoftwareRenderer\LogUtils.cpp" />
     <ClCompile Include="SoftwareRenderer\main.cpp" />
     <ClCompile Include="SoftwareRenderer\MathUtils.cpp" />
@@ -193,6 +196,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SoftwareRenderer\sys_win.cpp" />
+    <ClCompile Include="SoftwareRenderer\Transform.cpp" />
     <ClCompile Include="SoftwareRenderer\Vector2.cpp" />
     <ClCompile Include="SoftwareRenderer\Vector3.cpp" />
     <ClCompile Include="SoftwareRenderer\Vector4.cpp" />

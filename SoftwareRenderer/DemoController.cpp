@@ -60,7 +60,7 @@ void DemoController::updateInput(float dt)
 	updateInputRotation(dt);
 	updateInputScale(dt);
 	
-	glfwGetMousePos(&m_lastMousePos.x, &m_lastMousePos.y);
+	m_lastMousePos = SYS_MousePos();
 }
 
 void DemoController::updateInputSwitches(float dt)
@@ -89,7 +89,7 @@ void DemoController::updateInputSwitches(float dt)
 	bool switchKeyPressedThisFrame = false;
 	for (int i = 0; i < sizeofarray(kSwitchKeys); ++i)
 	{
-		if (glfwGetKey(kSwitchKeys[i]) == GLFW_PRESS)
+		if (SYS_KeyPressed(kSwitchKeys[i]))
 		{
 			switchKeyPressedThisFrame = true;
 		}
@@ -99,58 +99,58 @@ void DemoController::updateInputSwitches(float dt)
 	if (switchKeyPressedThisFrame && !m_switchKeyPressedLastFrame)
 	{
 		// Model selection
-		if (glfwGetKey(kCyberdemonKey) == GLFW_PRESS)
+		if (SYS_KeyPressed(kCyberdemonKey))
 		{
 			m_selectedModel = SelectedModel::Cyberdemon;
 			m_selectedTransform = &m_cyberDemonTransform;
 		}
-		else if (glfwGetKey(kAvatarKey) == GLFW_PRESS)
+		else if (SYS_KeyPressed(kAvatarKey))
 		{
 			m_selectedModel = SelectedModel::Avatar;
 			m_selectedTransform = &m_avatarTransform;
 		}
-		else if (glfwGetKey(kChesspatternKey) == GLFW_PRESS)
+		else if (SYS_KeyPressed(kChesspatternKey))
 		{
 			m_selectedModel = SelectedModel::ChessPattern;
 			m_selectedTransform = &m_avatarTransform;
 		}
-		else if (glfwGetKey(kTriangleKey) == GLFW_PRESS)
+		else if (SYS_KeyPressed(kTriangleKey))
 		{
 			m_selectedModel = SelectedModel::Triangle;
 			m_selectedTransform = &m_chessPatternTransform;
 		}
-		else if (glfwGetKey(kCubeKey) == GLFW_PRESS)
+		else if (SYS_KeyPressed(kCubeKey))
 		{
 			m_selectedModel = SelectedModel::Cube;
 			m_selectedTransform = &m_cubeTransform;
 		}
 		
 		// Projection switch
-		if (glfwGetKey(kSwitchPerspectiveKey) == GLFW_PRESS)
+		if (SYS_KeyPressed(kSwitchPerspectiveKey))
 		{
 			switchProjectionMode();
 		}
 		
 		// Wireframe mode
-		if (glfwGetKey(kSwitchWireframeModeKey) == GLFW_PRESS)
+		if (SYS_KeyPressed(kSwitchWireframeModeKey))
 		{
 			m_renderer.setWireFrameModeEnabled(!m_renderer.getWireFrameModeEnabled());
 		}
 		
 		// Backface culling
-		if (glfwGetKey(kSwitchBackfacecullingKey) == GLFW_PRESS)
+		if (SYS_KeyPressed(kSwitchBackfacecullingKey))
 		{
 			m_renderer.setBackFaceCullingEnabled(!m_renderer.getBackFaceCullingEnabled());
 		}
 		
 		// Animation interpolation
-		if (glfwGetKey(kSwitchAnimInterpKey) == GLFW_PRESS)
+		if (SYS_KeyPressed(kSwitchAnimInterpKey))
 		{
 			m_interpolateAnimations = !m_interpolateAnimations;
 		}
 		
 		// Render mode switching
-		if (glfwGetKey(kSwitchRenderModeKey) == GLFW_PRESS)
+		if (SYS_KeyPressed(kSwitchRenderModeKey))
 		{
 			if (m_renderer.getRenderMode() == SoftwareRenderer::RenderMode::Scanlines)
 			{
@@ -169,40 +169,40 @@ void DemoController::updateInputSwitches(float dt)
 
 void DemoController::updateInputMove(float dt)
 {
-	const int kMoveUpKey = GLFW_KEY_UP;
-	const int kMoveDownKey = GLFW_KEY_DOWN;
-	const int kMoveLeftKey = GLFW_KEY_RIGHT;
-	const int kMoveRightKey = GLFW_KEY_LEFT;
-	const int kMoveInKey = GLFW_KEY_PAGEUP;
-	const int kMoveOutKey = GLFW_KEY_PAGEDOWN;
+	const int kMoveUpKey = SYS_KEY_UP;
+	const int kMoveDownKey = SYS_KEY_DOWN;
+	const int kMoveLeftKey = SYS_KEY_RIGHT;
+	const int kMoveRightKey = SYS_KEY_LEFT;
+	const int kMoveInKey = SYS_KEY_PAGEUP;
+	const int kMoveOutKey = SYS_KEY_PAGEDOWN;
 	const float kMoveMult = 2.0f;
 	
-	if (glfwGetKey(kMoveUpKey) == GLFW_PRESS)
+	if (SYS_KeyPressed(kMoveUpKey))
 	{
 		m_selectedTransform->m_position.y += kMoveMult * dt;
 	}
 	
-	if (glfwGetKey(kMoveDownKey) == GLFW_PRESS)
+	if (SYS_KeyPressed(kMoveDownKey))
 	{
 		m_selectedTransform->m_position.y -= kMoveMult * dt;
 	}
 	
-	if (glfwGetKey(kMoveRightKey) == GLFW_PRESS)
+	if (SYS_KeyPressed(kMoveRightKey))
 	{
 		m_selectedTransform->m_position.x -= kMoveMult * dt;
 	}
 	
-	if (glfwGetKey(kMoveLeftKey) == GLFW_PRESS)
+	if (SYS_KeyPressed(kMoveLeftKey))
 	{
 		m_selectedTransform->m_position.x += kMoveMult * dt;
 	}
 	
-	if (glfwGetKey(kMoveInKey) == GLFW_PRESS)
+	if (SYS_KeyPressed(kMoveInKey))
 	{
 		m_selectedTransform->m_position.z -= kMoveMult * dt;
 	}
 	
-	if (glfwGetKey(kMoveOutKey) == GLFW_PRESS)
+	if (SYS_KeyPressed(kMoveOutKey))
 	{
 		m_selectedTransform->m_position.z += kMoveMult * dt;
 	}
@@ -211,10 +211,9 @@ void DemoController::updateInputMove(float dt)
 void DemoController::updateInputRotation(float dt)
 {
 	const float kMouseRotationFactor = 0.5f;
-	Vector2i newMousePos;
-	glfwGetMousePos(&newMousePos.x, &newMousePos.y);
+	const Vector2i newMousePos = SYS_MousePos();
 	
-	if (glfwGetMouseButton(0))
+	if (SYS_MouseButonPressed(0))
 	{
 		const Vector2i mousePosDiff = newMousePos - m_lastMousePos;
 		m_selectedTransform->m_rotation.z += mousePosDiff.x * kMouseRotationFactor;
@@ -224,11 +223,10 @@ void DemoController::updateInputRotation(float dt)
 
 void DemoController::updateInputScale(float dt)
 {
-	const double kScaleMult = 1.0f;
-	Vector2i newMousePos;
-	glfwGetMousePos(&newMousePos.x, &newMousePos.y);
+	const float kScaleMult = 1.0f;
+	const Vector2i newMousePos = SYS_MousePos();
 	
-	if (glfwGetMouseButton(1))
+	if (SYS_MouseButonPressed(1))
 	{
 		const Vector2i mousePosDiff = newMousePos - m_lastMousePos;
 		const float scaleDiff = m_selectedTransform->m_scale.x * kScaleMult * mousePosDiff.y * dt;
@@ -355,7 +353,7 @@ void DemoController::updateCyberDemon(float dt)
 		m_timeInCurrentAnim -= timeFullAnim;
 	}
 	const float currentCyberdemonFrameFloat = firstFrameIndex + (m_timeInCurrentAnim / timeFullAnim) * numberOfFrames;
-	const int currentFrameIndex = currentCyberdemonFrameFloat;
+	const int currentFrameIndex = (int)currentCyberdemonFrameFloat;
 	const float percentCurrentFrame = currentCyberdemonFrameFloat - currentFrameIndex;
 	const int nextFrameIndex = (currentFrameIndex < lastFrameIndex) ? currentFrameIndex + 1 : firstFrameIndex;
 	

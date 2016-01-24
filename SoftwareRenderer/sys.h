@@ -6,9 +6,13 @@
 //  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
 //
 
-// sys.h
 #ifndef _SYS_H_
 #define _SYS_H_
+
+namespace omb
+{
+
+struct Vector2i;
 
 //========================================================================================
 // Resolution (real & virtual)
@@ -25,13 +29,13 @@
 //========================================================================================
 // Platform layer
 
-void  SYS_Pump();
-void  SYS_Show();
-bool  SYS_GottaQuit();
-void  SYS_Sleep(int ms);
-bool  SYS_KeyPressed(int key);
-ivec2 SYS_MousePos();
-bool  SYS_MouseButonPressed(int button);
+void SYS_Pump();
+void SYS_Show();
+bool SYS_GottaQuit();
+bool SYS_KeyPressed(int key);
+Vector2i SYS_MousePos();
+bool SYS_MouseButonPressed(int button);
+double SYS_GetTime();
 
 //-----------------------------------------------------------------------------
 #ifdef _WINDOWS
@@ -40,6 +44,8 @@ bool  SYS_MouseButonPressed(int button);
 #define SYS_KEY_DOWN  VK_DOWN
 #define SYS_KEY_LEFT  VK_LEFT
 #define SYS_KEY_RIGHT VK_RIGHT
+#define SYS_KEY_PAGEUP VK_PRIOR
+#define SYS_KEY_PAGEDOWN VK_NEXT
 
 #define SYS_MB_LEFT   VK_LBUTTON
 #define SYS_MB_RIGHT  VK_RBUTTON
@@ -62,5 +68,5 @@ bool  SYS_MouseButonPressed(int button);
 #endif //defined(__MACH__) && TARGET_OS_MAC && !TARGET_OS_IPHONE
 #endif //defined(__APPLE__)
 //-----------------------------------------------------------------------------
-
+}
 #endif

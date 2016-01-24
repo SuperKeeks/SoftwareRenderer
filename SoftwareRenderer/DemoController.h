@@ -13,7 +13,7 @@
 #include "Transform.h"
 #include "Vertex.h"
 
-#include <OpenGL/gltypes.h>
+#include "stdafx.h"
 
 namespace omb
 {

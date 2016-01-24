@@ -29,7 +29,7 @@ struct TextureInfo
 	
 	bool isValid() const
 	{
-		return m_data;
+		return m_data != nullptr;
 	}
 };
 	
