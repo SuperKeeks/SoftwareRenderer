@@ -67,6 +67,20 @@ Matrix44 MathUtils::CreateTranslationMatrix(const float transX, const float tran
 	return translateMatrix;
 }
 	
+Matrix44 MathUtils::CreateOrthographicMatrix(const float left, const float right, const float bottom, const float top, const float near, const float far)
+{
+	Matrix44 orthoMatrix;
+	orthoMatrix(0, 0) = 2.0f/(right-left);
+	orthoMatrix(0, 3) = -((right+left)/(right-left));
+	orthoMatrix(1, 1) = 2.0f/(top-bottom);
+	orthoMatrix(1, 3) = -((top+bottom)/(top-bottom));
+	orthoMatrix(2, 2) = -2.0f/(far-near);
+	orthoMatrix(2, 3) = -((far+near)/(far-near));
+	orthoMatrix(3, 3) = 1.0f;
+	
+	return orthoMatrix;
+}
+	
 Matrix44 MathUtils::CreatePerspectiveMatrix(const float frustumScale, const float near, const float far)
 {
 	Matrix44 persMatrix;

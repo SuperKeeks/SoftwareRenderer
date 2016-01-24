@@ -117,7 +117,7 @@ void DemoController::updateInputSwitches(float dt)
 		else if (SYS_KeyPressed(kTriangleKey))
 		{
 			m_selectedModel = SelectedModel::Triangle;
-			m_selectedTransform = &m_chessPatternTransform;
+			m_selectedTransform = &m_TriangleTransform;
 		}
 		else if (SYS_KeyPressed(kCubeKey))
 		{
@@ -311,9 +311,10 @@ void DemoController::initModels()
 {
 	// Coloured triangle
 	m_TriangleVertices.reserve(3);
-	m_TriangleVertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0), Color(255, 0, 0, 255)));
-	m_TriangleVertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0), Color(0, 255, 0, 255)));
-	m_TriangleVertices.push_back(Vertex(Vector4f(0, -0.5f, 0), Color(0, 0, 255, 255)));
+	m_TriangleVertices.push_back(Vertex(Vector4f(-0.5f, 0.5f, 0, 1.0f), Color(255, 0, 0, 255)));
+	m_TriangleVertices.push_back(Vertex(Vector4f(0.5f, 0.5f, 0, 1.0f), Color(0, 255, 0, 255)));
+	m_TriangleVertices.push_back(Vertex(Vector4f(0, -0.5f, 0, 1.0f), Color(0, 0, 255, 255)));
+	m_TriangleTransform.m_position.z = -1.25f;
 	
 	// Avatar
 	m_avatarTexId = m_renderer.loadTexture("Resources/avatar.png");
@@ -334,6 +335,9 @@ void DemoController::initModels()
 	
 	// Chess pattern
 	m_chessPatternTexId = m_renderer.loadTexture("Resources/chess_pattern.png");
+	m_chessPatternTransform.m_position.y = 0.5f;
+	m_chessPatternTransform.m_position.z = -1.25f;
+	m_chessPatternTransform.m_rotation.x = 310.0f;
 	
 	// Cyberdemon
 	m_cyberDemonModel = MD2Utils::LoadModel("Resources/Cyber.md2");
@@ -347,6 +351,11 @@ void DemoController::initModels()
 	m_cyberDemonTransform.m_position.x = 0;
 	m_cyberDemonTransform.m_position.y = -0.6f;
 	m_cyberDemonTransform.m_position.z = -1.25f;
+	
+	// Cube
+	m_cubeTransform.m_position.x = 0.5f;
+	m_cubeTransform.m_position.y = 1.0f;
+	m_cubeTransform.m_rotation.x = 310.0f;
 }
 
 void DemoController::printUsage() const
@@ -525,7 +534,7 @@ void DemoController::switchProjectionMode()
 	}
 	else
 	{
-		m_renderer.setViewProjectionMatrix(MathUtils::CreateIdentityMatrix());
+		m_renderer.setViewProjectionMatrix(MathUtils::CreateOrthographicMatrix(-1.0f, 1.0f, -1.0f, 1.0f, kZNear, kZFar));
 		Log::Debug("Using orthogonal projection");
 	}
 }

@@ -25,6 +25,7 @@ namespace MathUtils
 	Matrix44 CreateScaleMatrix(const float scale);
 	Matrix44 CreateScaleMatrix(const float scaleX, const float scaleY, const float scaleZ);
 	Matrix44 CreateTranslationMatrix(const float transX, const float transY, const float transZ);
+	Matrix44 CreateOrthographicMatrix(const float left, const float right, const float bottom, const float top, const float near, const float far);
 	Matrix44 CreatePerspectiveMatrix(const float frustumScale, const float near, const float far);
 
 	bool IsVertexInViewFrustum(const Vector4f& vertex);
