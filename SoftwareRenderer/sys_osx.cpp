@@ -2,6 +2,8 @@
 #include "base.h"
 #include "sys.h"
 
+#include "Vector2.h"
+
 extern int Main(void);
 
 int main(int argc, char *argv[])
@@ -43,13 +45,11 @@ bool SYS_KeyPressed(int key)
 	return glfwGetKey(key);
 }
 
-ivec2 SYS_MousePos()
+Vector2i SYS_MousePos()
 {
-	int x, y;
-	ivec2 pos;
-	glfwGetMousePos(&x, &y);
-	pos.x = x;
-	pos.y = SYS_HEIGHT - y;
+	Vector2i pos;
+	glfwGetMousePos(&pos.x, &pos.y);
+	pos.y = SYS_HEIGHT - pos.y;
 	return pos;
 }
 
