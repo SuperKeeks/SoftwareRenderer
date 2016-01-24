@@ -349,7 +349,7 @@ void DemoController::initModels()
 	m_cyberDemonTransform.m_position.z = -1.25f;
 }
 
-void DemoController::printUsage()
+void DemoController::printUsage() const
 {
 	Log::Debug("Welcome to Kike's Software Renderer!");
 	Log::Debug("Usage:");

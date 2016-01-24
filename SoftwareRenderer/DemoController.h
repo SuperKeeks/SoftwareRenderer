@@ -81,7 +81,7 @@ private:
 	void initRenderer();
 	void initModels();
 	
-	void printUsage();
+	void printUsage() const;
 	
 	void updateInput(float dt);
 	void updateInputSwitches(float dt);
