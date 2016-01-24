@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "base.h"
 #include "sys.h"
 
 #include "Vector2.h"

@@ -117,9 +117,6 @@
     <ClCompile Include="SoftwareRenderer\SoftwareRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SoftwareRenderer\stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SoftwareRenderer\sys_win.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

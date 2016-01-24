@@ -191,10 +191,6 @@
     <ClCompile Include="SoftwareRenderer\MD2.cpp" />
     <ClCompile Include="SoftwareRenderer\Quaternion.cpp" />
     <ClCompile Include="SoftwareRenderer\SoftwareRenderer.cpp" />
-    <ClCompile Include="SoftwareRenderer\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="SoftwareRenderer\sys_win.cpp" />
     <ClCompile Include="SoftwareRenderer\Transform.cpp" />
     <ClCompile Include="SoftwareRenderer\Vector2.cpp" />
