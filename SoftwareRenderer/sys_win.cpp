@@ -155,7 +155,7 @@ Vector2i SYS_MousePos()
   GetCursorPos(&pt);
   ScreenToClient(WIN_hWnd, &pt);
 
-  Vector2i mousePos(pt.x, SYS_HEIGHT - pt.y);
+  Vector2i mousePos(pt.x, pt.y);
   return mousePos;
 }
 

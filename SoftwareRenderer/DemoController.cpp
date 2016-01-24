@@ -16,7 +16,6 @@
 #include "Vertex.h"
 
 #include "stdafx.h"
-#include "base.h"
 #include "sys.h"
 
 using namespace omb;
@@ -30,6 +29,7 @@ void DemoController::init()
 	initOpenGL();
 	initRenderer();
 	initModels();
+	printUsage();
 }
 
 void DemoController::end()
@@ -141,6 +141,14 @@ void DemoController::updateInputSwitches(float dt)
 		if (SYS_KeyPressed(kSwitchBackfacecullingKey))
 		{
 			m_renderer.setBackFaceCullingEnabled(!m_renderer.getBackFaceCullingEnabled());
+			if (m_renderer.getBackFaceCullingEnabled())
+			{
+				Log::Debug("Enabled Back Face Culling");
+			}
+			else
+			{
+				Log::Debug("Disabled Back Face Culling");
+			}
 		}
 		
 		// Animation interpolation
@@ -265,9 +273,9 @@ void DemoController::draw()
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kFrameBufferWidth, kFrameBufferHeight, GL_RGBA, GL_UNSIGNED_BYTE, m_renderer.getFrameBuffer());
 	glBegin(GL_QUADS);
 	glTexCoord2d(0.0, 0.0); glVertex2f(0, 0);
-	glTexCoord2d(1.0, 0.0); glVertex2f(G_WIDTH, 0);
-	glTexCoord2d(1.0, 1.0); glVertex2f(G_WIDTH, G_HEIGHT);
-	glTexCoord2d(0.0, 1.0); glVertex2f(0, G_HEIGHT);
+	glTexCoord2d(1.0, 0.0); glVertex2f(SYS_WIDTH, 0);
+	glTexCoord2d(1.0, 1.0); glVertex2f(SYS_WIDTH, SYS_HEIGHT);
+	glTexCoord2d(0.0, 1.0); glVertex2f(0, SYS_HEIGHT);
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -286,7 +294,7 @@ void DemoController::initOpenGL()
 	glClearColor( 0.0f, 0.1f, 0.3f, 0.0f );
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, G_WIDTH, 0.0, G_HEIGHT, 0.0, 1.0);
+	glOrtho(0.0, SYS_WIDTH, 0.0, SYS_HEIGHT, 0.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -339,6 +347,22 @@ void DemoController::initModels()
 	m_cyberDemonTransform.m_position.x = 0;
 	m_cyberDemonTransform.m_position.y = -0.6f;
 	m_cyberDemonTransform.m_position.z = -1.25f;
+}
+
+void DemoController::printUsage()
+{
+	Log::Debug("Welcome to Kike's Software Renderer!");
+	Log::Debug("Usage:");
+	Log::Debug("\t-Change the model with keys 1-5");
+	Log::Debug("\t-Move the model with the Up/Down/Left/Right keys");
+	Log::Debug("\t-Move closer with PageDown, Move away with PageUp");
+	Log::Debug("\t-Rotate model by left clicking and moving the mouse");
+	Log::Debug("\t-Scale model by right clicking and moving the mouse Up / Down");
+	Log::Debug("\t-'P' => Switch projection (Orthographic / Perspective)");
+	Log::Debug("\t-'W' => Enable/Disable Wireframe Mode");
+	Log::Debug("\t-'B' => Enable/Disable Backface Culling");
+	Log::Debug("\t-'I' => Enable/Disable MD2 animation interpolation");
+	Log::Debug("\t-'R' => Switch Render Mode (CheckPixelInTriangle / ScanLines)");
 }
 
 void DemoController::updateCyberDemon(float dt)

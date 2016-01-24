@@ -24,7 +24,6 @@
 		EB1CECD81C34932A00E09499 /* LogUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB1CECD71C34932A00E09499 /* LogUtils.cpp */; };
 		EB1CECDA1C34935300E09499 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB1CECD91C34935300E09499 /* Color.cpp */; };
 		EBAA7622195C4A0500534532 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7620195C4A0500534532 /* main.cpp */; };
-		EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7623195C4A5700534532 /* stdafx.cpp */; };
 		EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EBAA7626195C4A7500534532 /* sys_osx.cpp */; };
 		EBAA762A195C4AC500534532 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAA7629195C4AC500534532 /* OpenGL.framework */; };
 		EBAA762C195C4ACA00534532 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAA762B195C4ACA00534532 /* OpenAL.framework */; };
@@ -72,13 +71,11 @@
 		EB1CECD91C34935300E09499 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; };
 		EB64B6C01976ACFB00611ED0 /* Matrix44.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Matrix44.h; sourceTree = "<group>"; };
 		EBAA7620195C4A0500534532 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		EBAA7623195C4A5700534532 /* stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdafx.cpp; sourceTree = "<group>"; };
 		EBAA7624195C4A5700534532 /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
 		EBAA7626195C4A7500534532 /* sys_osx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sys_osx.cpp; sourceTree = "<group>"; };
 		EBAA7629195C4AC500534532 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		EBAA762B195C4ACA00534532 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		EBAA762D195C4AD200534532 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
-		EBAA7630195C4DDF00534532 /* base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = base.h; sourceTree = "<group>"; };
 		EBDD4D9A195AFB9800512D87 /* sys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sys.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -214,9 +211,7 @@
 		EBAA7631195C4F2500534532 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				EBAA7630195C4DDF00534532 /* base.h */,
 				EBAA7624195C4A5700534532 /* stdafx.h */,
-				EBAA7623195C4A5700534532 /* stdafx.cpp */,
 				EBDD4D9A195AFB9800512D87 /* sys.h */,
 				EBAA7626195C4A7500534532 /* sys_osx.cpp */,
 			);
@@ -290,7 +285,6 @@
 				21CBB23D19EAEAF500E6E4ED /* Matrix33.cpp in Sources */,
 				21CBB23F19EAEB0300E6E4ED /* Matrix44.cpp in Sources */,
 				2105FC721B37480700F9092F /* MD2.cpp in Sources */,
-				EBAA7625195C4A5700534532 /* stdafx.cpp in Sources */,
 				EBAA7628195C4A7500534532 /* sys_osx.cpp in Sources */,
 				2183CFB819E07F2300B1F481 /* Vector2.cpp in Sources */,
 				EB1CECDA1C34935300E09499 /* Color.cpp in Sources */,

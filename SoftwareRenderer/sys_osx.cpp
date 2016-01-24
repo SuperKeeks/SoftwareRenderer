@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "base.h"
 #include "sys.h"
 
 #include "Vector2.h"
@@ -49,7 +48,6 @@ Vector2i SYS_MousePos()
 {
 	Vector2i pos;
 	glfwGetMousePos(&pos.x, &pos.y);
-	pos.y = SYS_HEIGHT - pos.y;
 	return pos;
 }
 

@@ -12,8 +12,6 @@
 #include <windows.h>
 #include <gl/gl.h>
 #include <GL/glu.h>
-//#include <al.h>
-//#include <alc.h>
 #include <io.h>
 
 //=============================================================================
@@ -24,8 +22,6 @@
 #include <unistd.h>
 #include <GL/glfw.h>
 #define GL_BGRA_EXT GL_BGRA
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
 
 #endif
 #endif

@@ -81,6 +81,8 @@ private:
 	void initRenderer();
 	void initModels();
 	
+	void printUsage();
+	
 	void updateInput(float dt);
 	void updateInputSwitches(float dt);
 	void updateInputMove(float dt);

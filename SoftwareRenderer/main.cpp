@@ -3,7 +3,6 @@
 #include "LogUtils.h"
 
 #include "stdafx.h"
-#include "base.h"
 #include "sys.h"
 
 #include <ctime>
