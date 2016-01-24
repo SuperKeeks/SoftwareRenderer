@@ -189,10 +189,10 @@ namespace
 		}
 		else
 		{
-			res.m_color.r = pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r;
-			res.m_color.g = pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g;
-			res.m_color.b = pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b;
-			res.m_color.a = pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a;
+			res.m_color.r = clamp(pbcArea/totalArea * a.m_color.r + pacArea/totalArea * b.m_color.r + pabArea/totalArea * c.m_color.r, 0, 255);
+			res.m_color.g = clamp(pbcArea/totalArea * a.m_color.g + pacArea/totalArea * b.m_color.g + pabArea/totalArea * c.m_color.g, 0, 255);
+			res.m_color.b = clamp(pbcArea/totalArea * a.m_color.b + pacArea/totalArea * b.m_color.b + pabArea/totalArea * c.m_color.b, 0, 255);
+			res.m_color.a = clamp(pbcArea/totalArea * a.m_color.a + pacArea/totalArea * b.m_color.a + pabArea/totalArea * c.m_color.a, 0, 255);
 		}
 		
 		res.m_z = pbcArea/totalArea * a.m_z + pacArea/totalArea * b.m_z + pabArea/totalArea * c.m_z;
