@@ -1,0 +1,18 @@
+This software is licensed under a Creative Commons Attribution 4.0 International license. This means you are free to share and adapt the software for any purpose, 
+even commercially. However, you must give appropriate credit, provide a link to the license, and indicate if changes were made. For more information visit:
+
+https://creativecommons.org/licenses/by/4.0/
+
+
+Also, the project contains some 3rd party source and assets, some of them with a different license:
+
+- stb_image.h: Library to parse textures. Created by Sean Barrett (nothings). Source repository: https://github.com/nothings/stb. Distributed under public domain license.
+
+- stdafx.h, sys.h, sys_osx.cpp and sys_win.cpp: These files were mostly copied from a game course made my Jon Beltrán de Heredia. The course doesn't have a particular license.
+  You can check out the course, and download all the source from http://jonbho.net/2013/08/25/spacecrash-designing-a-one-week-game/
+
+- Cyber.md2 and cyber.jpg: Cyberdemon 3d model and its texture were downloaded from http://www.md2.sitters-electronics.nl/models.html The license is GNU and CC_attribution/by
+  For more info visit http://www.gnu.org/licenses/gpl-3.0.en.html and https://creativecommons.org/licenses/by/4.0/
+
+- GLFW: Even though it's source code is not directly included, this software uses GLFW in it's OSX version. GLFW is licensed under the zlib/libpng license. 
+  For more info visit http://www.glfw.org/license.html

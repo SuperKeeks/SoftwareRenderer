@@ -1,3 +1,14 @@
+//
+//  sys.h
+//  SoftwareRenderer
+//
+//  The contents of this file have been mostly copied from the skeleton source of the following course:
+//  http://jonbho.net/2013/08/25/spacecrash-designing-a-one-week-game/
+//
+//  Created by Enrique Alcor on 25/06/2014.
+//  Copyright (c) 2014 Enrique Alcor Martín. All rights reserved.
+//
+
 // stdafx.h
 #ifndef _STDAFX_H_
 #define _STDAFX_H_
