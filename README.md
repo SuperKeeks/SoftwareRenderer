@@ -9,7 +9,7 @@ I created this multiplatform (Windows and Mac) C++ software renderer during my s
 
 The main goal of this software renderer/rasterizer is to imitate the basic functionality of 3D APIs like OpenGL or Direct3D but doing all the processing in the CPU (instead of the GPU), the same way old games did before 3D acceleration was a standard. Ironically, the demo app uses OpenGL to display the final image on screen :)
 
-Please keep in mind that despite I've done some optimizations to the code, it wasn't created with performance as a main goal. I didn't hesitate in using STL data structures and there's probably way more transformations than needed.
+**Disclaimer:** Most of the code has been written from scratch without following any rasterization specific tutorial, papers, etc.. Because of this, there's probably (100% sure!) better ways of doing this. Please also keep in mind that despite I've done some optimizations to the code, it wasn't created with performance as a main objective and it is not intended to be used in "real world" applications.
 
 The SoftwareRenderer class is capable of:
 
