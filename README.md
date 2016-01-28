@@ -41,7 +41,7 @@ The DemoController class serves as an example of the different features of the r
 
 ## Mac ##
 
-(Tested with OSX El Capitan 10.11.3, Xcode 7.2 and GLFW 2.7.9)
+(Tested with **OSX El Capitan** 10.11.3, **Xcode 7.2** and **GLFW 2.7.9**)
 
 The project can be run directly from Xcode but it requires installing the GLFW library:
 
@@ -49,8 +49,8 @@ Download [GLFW 2.7.9](http://sourceforge.net/projects/glfw/files/glfw/2.7.9/), u
 
 ## Windows ##
 
-(Tested with Windows 10 and Visual Studio 2015 Professional)
+(Tested with **Windows 10** and **Visual Studio 2015 Professional**)
 
 Even though this project has been developed mainly on Mac with Xcode, it is also compatible with Windows.
 
-The only setup it requires is configuring the "Working Directory" (inside the project "Properties"->"Debugging") to "$(ProjectDir)\SoftwareRenderer"
+The only setup it requires is configuring the "**Working Directory**" (inside the project "Properties"->"Debugging") to "$(ProjectDir)\SoftwareRenderer" . Also, at the moment only the **x86** build works.
