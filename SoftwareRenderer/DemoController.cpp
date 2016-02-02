@@ -380,6 +380,7 @@ void DemoController::printUsage() const
 	Log::Debug("\t-'B' => Enable/Disable Backface Culling");
 	Log::Debug("\t-'I' => Enable/Disable MD2 animation interpolation");
 	Log::Debug("\t-'R' => Switch Render Mode (CheckPixelInTriangle / ScanLines)");
+	Log::Debug("\t-Space => Pause/Resume animation");
 }
 
 void DemoController::updateCyberDemon(float dt)
