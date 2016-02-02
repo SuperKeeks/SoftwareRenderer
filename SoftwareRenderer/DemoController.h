@@ -54,6 +54,7 @@ private:
 	bool m_perspectiveProjection;
 	float m_timeInCurrentAnim = 0;
 	bool m_interpolateAnimations = true;
+	bool m_playingAnimations = true;
 	
 	// Input data
 	bool m_switchKeyPressedLastFrame = false;

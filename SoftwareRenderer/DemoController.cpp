@@ -75,6 +75,7 @@ void DemoController::updateInputSwitches(float dt)
 	const int kSwitchBackfacecullingKey = 'B';
 	const int kSwitchAnimInterpKey = 'I';
 	const int kSwitchRenderModeKey = 'R';
+	const int kPlayAnimationsKey = SYS_KEY_SPACE;
 	const int kSwitchKeys[] = {
 		kCyberdemonKey,
 		kAvatarKey,
@@ -85,7 +86,8 @@ void DemoController::updateInputSwitches(float dt)
 		kSwitchWireframeModeKey,
 		kSwitchBackfacecullingKey,
 		kSwitchAnimInterpKey,
-		kSwitchRenderModeKey};
+		kSwitchRenderModeKey,
+		kPlayAnimationsKey};
 	bool switchKeyPressedThisFrame = false;
 	for (int i = 0; i < sizeofarray(kSwitchKeys); ++i)
 	{
@@ -170,6 +172,12 @@ void DemoController::updateInputSwitches(float dt)
 				m_renderer.setRenderMode(SoftwareRenderer::RenderMode::Scanlines);
 				Log::Debug("Switched to Scanlines render mode");
 			}
+		}
+		
+		// Play/Pause animation
+		if (SYS_KeyPressed(kPlayAnimationsKey))
+		{
+			m_playingAnimations = !m_playingAnimations;
 		}
 	}
 	m_switchKeyPressedLastFrame = switchKeyPressedThisFrame;
@@ -376,6 +384,11 @@ void DemoController::printUsage() const
 
 void DemoController::updateCyberDemon(float dt)
 {
+	if (!m_playingAnimations)
+	{
+		return;
+	}
+	
 	const float timeFullAnim = 2.0f;
 	const int numberOfFrames = 8;
 	const int firstFrameIndex = 2;
