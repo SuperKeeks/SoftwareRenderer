@@ -36,6 +36,7 @@ The DemoController class serves as an example of the different features of the r
 * 'B' => Enable/Disable Backface Culling
 * 'I' => Enable/Disable MD2 animation interpolation
 * 'R' => Switch Render Mode (CheckPixelInTriangle / ScanLines)
+* Space => Pause/Resume animation
 
 # Setup #
 
