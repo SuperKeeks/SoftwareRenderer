@@ -160,7 +160,7 @@ Vector2i SYS_MousePos()
 
 bool SYS_MouseButonPressed(int button)
 {
-  return GetFocus() == WIN_hWnd && (GetAsyncKeyState(button) & 0x8000) != 0;
+  return GetFocus() == WIN_hWnd && (GetAsyncKeyState(button + 1) & 0x8000) != 0;
 }
 
 double SYS_GetTime()
