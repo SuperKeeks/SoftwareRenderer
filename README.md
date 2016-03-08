@@ -48,7 +48,7 @@ The DemoController class serves as an example of the different features of the r
 
 The project can be run directly from Xcode but it requires installing the GLFW library:
 
-Download [GLFW 2.7.9](http://sourceforge.net/projects/glfw/files/glfw/2.7.9/), uncompress it, go there with the Terminal, and type â€œmake cocoaâ€, then â€œsudo make cocoa-installâ€.
+Download [GLFW 2.7.9](http://sourceforge.net/projects/glfw/files/glfw/2.7.9/), uncompress it, go there with the Terminal, and type "make cocoa", then "sudo make cocoa-install"
 
 ## Windows ##
 
