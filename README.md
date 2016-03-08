@@ -57,3 +57,7 @@ Download [GLFW 2.7.9](http://sourceforge.net/projects/glfw/files/glfw/2.7.9/), u
 Even though this project has been developed mainly on Mac with Xcode, it is also compatible with Windows.
 
 The only setup it requires is configuring the "**Working Directory**" (inside the project "Properties"->"Debugging") to "$(ProjectDir)\SoftwareRenderer" . Also, at the moment only the **x86** build works.
+
+# Contact #
+
+You can find me on Twitter [@gamezer0](https://twitter.com/gamezer0) or send me an email to ealcor(AT)gmail(DOTCOM)
