@@ -60,4 +60,4 @@ The only setup it requires is configuring the "**Working Directory**" (inside th
 
 # Contact #
 
-You can find me on Twitter [@gamezer0](https://twitter.com/gamezer0) or send me an email to ealcor(AT)gmail(DOTCOM)
+You can find me on Twitter [@KeeksAlcor](https://twitter.com/KeeksAlcor) or send me an email to ealcor(AT)gmail(DOTCOM)
