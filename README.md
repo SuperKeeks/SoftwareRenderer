@@ -1,4 +1,4 @@
-# Kike's Software Renderer #
+# SuperKeeks's Software Renderer #
 
 ![cyberdemon_250.gif](https://bitbucket.org/repo/GRAbBp/images/4235769937-cyberdemon_250.gif)
 ![cyberdemon_wireframe_250.gif](https://bitbucket.org/repo/GRAbBp/images/936188613-cyberdemon_wireframe_250.gif)
